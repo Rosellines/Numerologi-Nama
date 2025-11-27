@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kalkulator Numerologi Nama Jawa</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #2c003e 0%, #000000 100%);
+            margin: 0;
+            padding: 20px;
+            color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5), 0 0 40px rgba(138, 43, 226, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        h1 {
+            text-align: center;
+            color: #ffd700;
+            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #c0c0c0;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f0f0f0;
+            font-size: 16px;
+        }
+        input::placeholder, textarea::placeholder {
+            color: #aaa;
+        }
+        button {
+            background: linear-gradient(45deg, #8a2be2, #4b0082);
+            color: white;
+            padding: 12px 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+            font-weight: bold;
+            text-shadow: 0 0 5px #fff;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(45deg, #9932cc, #6a0dad);
+            box-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(138, 43, 226, 0.6);
+            transform: translateY(-2px);
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(255, 215, 0, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            color: #f0f0f0;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Numerologi nama</h1>
+        <form id="nameForm">
+            <div class="form-group">
+                <label for="firstName">Nama Depan / First Name:</label>
+                <input type="text" id="firstName" placeholder="Masukkan nama depan / Enter first name">
+            </div>
+            <div class="form-group">
+                <label for="middleName">Nama Tengah / Middle Name:</label>
+                <input type="text" id="middleName" placeholder="Masukkan nama tengah (opsional) / Enter middle name (optional)">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Nama Belakang / Last Name:</label>
+                <input type="text" id="lastName" placeholder="Masukkan nama belakang / Enter last name">
+            </div>
+            <div class="form-group">
+                <label for="combinedNames">Gabungan Nama (pisah dengan +) / Combined Names (separate with +):</label>
+                <textarea id="combinedNames" rows="4" placeholder="Contoh: Nama bapak + Nama ibu + nama anak pertama + nama anak kedua + seterus nya / Example: Ahmad Tayor + mishelle + Bianka Prissa Senja + callista cecillia senja"></textarea>
+            </div>
+            <button type="button" onclick="calculate()">Hitung Numerologi / Calculate Numerology</button>
+        </form>
+        <div id="result" class="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        function calculateUniqueLetters(name) {
+            if (!name) return 0;
+            const letters = new Set(name.toLowerCase().replace(/\s/g, '').split(''));
+            return letters.size;
+        }
+
+        function mapToJavaneseTerm(count) {
+            const terms = ['Sri', 'Lungguh', 'Pati', 'Dunia'];
+            const index = (count - 9) % 4;
+            return terms[index] || 'Tidak diketahui';
+        }
+
+        function getExplanation(term) {
+            const explanations = {
+                'Sri': {
+                    id: 'Sri dalam Aksara Kepercayaan Jawa melambangkan kemakmuran, kecantikan, dan keberuntungan. Ia sering dikaitkan dengan Dewi Sri, dewi padi dan kekayaan, yang membawa kelimpahan dan kesuburan.',
+                    en: 'Sri in Javanese Kepercayaan script symbolizes prosperity, beauty, and good fortune. It is often associated with Dewi Sri, the goddess of rice and wealth, bringing abundance and fertility.'
+                },
+                'Lungguh': {
+                    id: 'Lungguh berarti duduk atau menetap. Dalam konteks numerologi Jawa, ia menunjukkan stabilitas, fondasi yang kuat, dan kemampuan untuk bertahan dalam situasi apa pun.',
+                    en: 'Lungguh means sitting or settling. In the context of Javanese numerology, it indicates stability, a strong foundation, and the ability to endure in any situation.'
+                },
+                'Pati': {
+                    id: 'Pati dalam Aksara Kepercayaan Jawa adalah mati yang menandakan kesusahan, melambangkan tantangan, transisi besar, atau kesulitan dalam kehidupan.',
+                    en: 'Pati in Javanese Kepercayaan script is death that signifies hardship, symbolizing challenges, major transitions, or difficulties in life.'
+                },
+                'Dunia': {
+                    id: 'Dunia dalam Aksara Kepercayaan Jawa berarti kekayaan yang sangat melimpah, melambangkan kelimpahan materi, kesuksesan duniawi, dan kemakmuran.',
+                    en: 'Dunia in Javanese Kepercayaan script means immense wealth, symbolizing material abundance, worldly success, and prosperity.'
+                }
+            };
+            const exp = explanations[term];
+            if (exp) {
+                return `${exp.id}<br><em>${exp.en}</em>`;
+            }
+            return 'Penjelasan tidak tersedia. / Explanation not available.';
+        }
+
+        function calculate() {
+            const firstName = document.getElementById('firstName').value.trim();
+            const middleName = document.getElementById('middleName').value.trim();
+            const lastName = document.getElementById('lastName').value.trim();
+            const combinedNames = document.getElementById('combinedNames').value.trim();
+
+            let resultText = '';
+
+            // Calculate individual name
+            const fullName = [firstName, middleName, lastName].filter(n => n).join(' ');
+            if (fullName) {
+                const count = calculateUniqueLetters(fullName);
+                const term = mapToJavaneseTerm(count);
+                const explanation = getExplanation(term);
+                resultText += `<h3>Nama Lengkap: ${fullName}</h3>`;
+                resultText += `<p>Jumlah huruf unik: ${count}</p>`;
+                resultText += `<p>Jatuh di: ${term}</p>`;
+                resultText += `<p><em>Penjelasan: ${explanation}</em></p>`;
+            }
+
+            // Calculate combined names
+            if (combinedNames) {
+                const names = combinedNames.split('+').map(n => n.trim()).filter(n => n);
+                let totalCount = 0;
+                resultText += '<h3>Gabungan Nama:</h3>';
+                names.forEach(name => {
+                    const count = calculateUniqueLetters(name);
+                    const term = mapToJavaneseTerm(count);
+                    const explanation = getExplanation(term);
+                    totalCount += count;
+                    resultText += `<p>${name}: ${count} huruf unik → ${term}</p>`;
+                    resultText += `<p><em>Penjelasan: ${explanation}</em></p>`;
+                });
+                const totalTerm = mapToJavaneseTerm(totalCount);
+                const totalExplanation = getExplanation(totalTerm);
+                resultText += `<p><strong>Total: ${totalCount} → ${totalTerm}</strong></p>`;
+                resultText += `<p><em>Penjelasan Total: ${totalExplanation}</em></p>`;
+            }
+
+            document.getElementById('result').innerHTML = resultText;
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
