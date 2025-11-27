@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+u<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
@@ -78,6 +78,73 @@
             color: #f0f0f0;
             box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
         }
+        .zodiac-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .zodiac-section h2 {
+            color: #ffd700;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        select, #generateHoroscope {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #f0f0f0;
+            font-size: 16px;
+        }
+        select option {
+            background: #000;
+            color: #f0f0f0;
+        }
+        #horoscopeResult {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(138, 43, 226, 0.1);
+            border-radius: 8px;
+            border: 1px solid rgba(138, 43, 226, 0.3);
+            color: #f0f0f0;
+            box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+            opacity: 0;
+            animation: fadeIn 1s ease-in-out forwards;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        .sparkle {
+            position: relative;
+            overflow: hidden;
+        }
+        .sparkle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
+            animation: sparkle 2s ease-in-out infinite;
+            pointer-events: none;
+        }
+        @keyframes sparkle {
+            0%, 100% {
+                transform: scale(0.8) rotate(0deg);
+                opacity: 0.5;
+            }
+            50% {
+                transform: scale(1.2) rotate(180deg);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 <body>
@@ -103,9 +170,164 @@
             <button type="button" onclick="calculate()">Hitung Numerologi / Calculate Numerology</button>
         </form>
         <div id="result" class="result" style="display: none;"></div>
+
+        <div class="zodiac-section">
+            <h2>Horoskop Zodiac Hari Ini</h2>
+            <div class="form-group">
+                <label for="modelSelect">Pilih Model AI / Select AI Model:</label>
+                <select id="modelSelect" onchange="toggleApiKeyFields()">
+                    <option value="openai-gpt4mini">OpenAI GPT-4 Mini</option>
+                </select>
+            </div>
+            <div class="form-group" id="openaiKeyGroup">
+                <label for="openaiApiKey">Masukkan API Key OpenAI / Enter OpenAI API Key:</label>
+                <input type="password" id="openaiApiKey" placeholder="Masukkan API key kamu / Enter your API key">
+                <button type="button" onclick="saveApiKey('openai')" style="margin-top: 5px; width: auto; padding: 8px 12px;">Simpan API Key / Save API Key</button>
+            </div>
+
+            <label for="zodiacSelect">Pilih Zodiac / Select Zodiac:</label>
+            <select id="zodiacSelect">
+                <option value="">Pilih zodiac...</option>
+                <option value="Aries">Aries (21 Maret - 19 April)</option>
+                <option value="Taurus">Taurus (20 April - 20 Mei)</option>
+                <option value="Gemini">Gemini (21 Mei - 20 Juni)</option>
+                <option value="Cancer">Cancer (21 Juni - 22 Juli)</option>
+                <option value="Leo">Leo (23 Juli - 22 Agustus)</option>
+                <option value="Virgo">Virgo (23 Agustus - 22 September)</option>
+                <option value="Libra">Libra (23 September - 22 Oktober)</option>
+                <option value="Scorpio">Scorpio (23 Oktober - 21 November)</option>
+                <option value="Sagittarius">Sagittarius (22 November - 21 Desember)</option>
+                <option value="Capricorn">Capricorn (22 Desember - 19 Januari)</option>
+                <option value="Aquarius">Aquarius (20 Januari - 18 Februari)</option>
+                <option value="Pisces">Pisces (19 Februari - 20 Maret)</option>
+            </select>
+            <button id="generateHoroscope" onclick="generateHoroscope()">Generate Horoskop Hari Ini</button>
+            <div id="horoscopeResult" class="sparkle" style="display: none;"></div>
+        </div>
     </div>
 
     <script>
+        // Load API keys from localStorage on page load
+        window.onload = function() {
+            const savedOpenaiKey = localStorage.getItem('openaiApiKey');
+            if (savedOpenaiKey) {
+                document.getElementById('openaiApiKey').value = savedOpenaiKey;
+            }
+        };
+
+        function toggleApiKeyFields() {
+            const model = document.getElementById('modelSelect').value;
+            const openaiGroup = document.getElementById('openaiKeyGroup');
+            if (model.startsWith('openai-')) {
+                openaiGroup.style.display = 'block';
+            }
+        }
+
+        function saveApiKey(model) {
+            let apiKey;
+            if (model === 'openai') {
+                apiKey = document.getElementById('openaiApiKey').value.trim();
+            } else if (model === 'gemini') {
+                apiKey = document.getElementById('geminiApiKey').value.trim();
+            }
+            if (apiKey) {
+                localStorage.setItem(`${model}ApiKey`, apiKey);
+                alert('API key berhasil disimpan! / API key saved successfully!');
+            } else {
+                alert('Masukkan API key terlebih dahulu! / Please enter an API key first!');
+            }
+        }
+
+        async function generateHoroscope() {
+            const zodiac = document.getElementById('zodiacSelect').value;
+            const model = document.getElementById('modelSelect').value;
+            let apiKey;
+            let modelName;
+            if (model.startsWith('openai-')) {
+                apiKey = document.getElementById('openaiApiKey').value.trim();
+                if (model === 'openai-gpt3.5') {
+                    modelName = 'gpt-3.5-turbo';
+                } else if (model === 'openai-gpt4mini') {
+                    modelName = 'gpt-4o-mini';
+                }
+            } else if (model === 'gemini') {
+                apiKey = document.getElementById('geminiApiKey').value.trim();
+            }
+            if (!zodiac) {
+                alert('Pilih zodiac terlebih dahulu!');
+                return;
+            }
+            if (!apiKey) {
+                alert(`Masukkan API key ${model.startsWith('openai-') ? 'OpenAI' : 'Gemini'} terlebih dahulu!`);
+                return;
+            }
+
+            const prompt = `Buat horoskop harian untuk zodiac ${zodiac} hari ini. Sertakan bagian: Percintaan (single atau married), Keuangan/Ekonomi, Energi Hari Ini, dan Tips untuk hari ini. Buat dalam bahasa Indonesia, singkat dan akurat.`;
+
+            try {
+                let response;
+                if (model.startsWith('openai-')) {
+                    response = await fetch('https://api.openai.com/v1/chat/completions', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${apiKey}`
+                        },
+                        body: JSON.stringify({
+                            model: modelName,
+                            messages: [{ role: 'user', content: prompt }],
+                            max_tokens: 300
+                        })
+                    });
+                } else if (model === 'gemini') {
+                    response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{ text: prompt }]
+                            }]
+                        })
+                    });
+                }
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error:', errorData);
+                    let errorMessage = 'Unknown error';
+                    if (model.startsWith('openai-')) {
+                        errorMessage = errorData.error?.message || errorMessage;
+                    } else if (model === 'gemini') {
+                        errorMessage = errorData.error?.message || errorMessage;
+                    }
+                    document.getElementById('horoscopeResult').innerHTML = `<p>Gagal generate horoskop: ${errorMessage}. Periksa API key.</p>`;
+                    document.getElementById('horoscopeResult').style.display = 'block';
+                    return;
+                }
+
+                const data = await response.json();
+                let horoscopeText = '';
+                if (model.startsWith('openai-') && data.choices && data.choices[0]) {
+                    horoscopeText = data.choices[0].message.content;
+                } else if (model === 'gemini' && data.candidates && data.candidates[0]) {
+                    horoscopeText = data.candidates[0].content.parts[0].text;
+                } else {
+                    document.getElementById('horoscopeResult').innerHTML = '<p>Gagal generate horoskop. Coba lagi.</p>';
+                    document.getElementById('horoscopeResult').style.display = 'block';
+                    return;
+                }
+
+                document.getElementById('horoscopeResult').innerHTML = `<h3>Horoskop ${zodiac} Hari Ini</h3><p>${horoscopeText.replace(/\n/g, '<br>')}</p>`;
+                document.getElementById('horoscopeResult').style.display = 'block';
+            } catch (error) {
+                console.error('Error:', error);
+                document.getElementById('horoscopeResult').innerHTML = '<p>Terjadi kesalahan. Periksa API key dan koneksi internet.</p>';
+                document.getElementById('horoscopeResult').style.display = 'block';
+            }
+        }
+
         function calculateUniqueLetters(name) {
             if (!name) return 0;
             const letters = new Set(name.toLowerCase().replace(/\s/g, '').split(''));
