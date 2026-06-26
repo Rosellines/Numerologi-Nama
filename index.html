@@ -11,7 +11,6 @@
     <style>
         :root {
             --bg-deep: #0f1b2d;
-            --bg-mid: #17324f;
             --panel: rgba(10, 23, 39, 0.82);
             --panel-soft: rgba(255, 248, 231, 0.08);
             --line: rgba(255, 233, 187, 0.22);
@@ -171,6 +170,11 @@
             justify-content: center;
         }
 
+        .date-row .form-group {
+            width: min(100%, 320px);
+            margin-bottom: 0;
+        }
+
         #horoscopeResult {
             display: none;
             margin-top: 20px;
@@ -267,10 +271,6 @@
                 padding: 20px;
                 border-radius: 22px;
             }
-
-            .date-row {
-                grid-template-columns: 1fr;
-            }
         }
     </style>
 </head>
@@ -311,7 +311,7 @@
             <div class="date-row">
                 <div class="form-group">
                     <label for="horoscopeDate">Tanggal horoskop:</label>
-                    <input type="date" id="horoscopeDate" onchange="generateHoroscope()">
+                    <input type="date" id="horoscopeDate" onchange="generateHoroscope()" oninput="generateHoroscope()">
                 </div>
             </div>
             <div id="horoscopeResult" class="sparkle"></div>
@@ -386,19 +386,19 @@
 
         const termExplanations = {
             Sri: {
-                id: "Sri melambangkan berkah, kesuburan, kehalusan batin, dan daya tumbuh. Dalam pembacaan numerologi, Sri sering dibaca sebagai tanda bahwa sebuah nama membawa energi yang meneduhkan, memelihara relasi, dan menarik keberuntungan lewat sikap yang sabar serta selaras. Orang dengan hasil Sri cenderung kuat di area perawatan, diplomasi, keindahan, dan kemampuan mengundang rasa percaya.",
+                id: "Sri melambangkan berkah, kesuburan, kehalusan batin, dan daya tumbuh. Dalam pembacaan numerologi, Sri sering dibaca sebagai tanda bahwa sebuah nama membawa energi yang meneduhkan, memelihara relasi, dan menarik keberuntungan lewat sikap yang sabar serta selaras. Hidupnya cenderung rukun, tenang, dan tenteram, tetapi secara ekonomi sering terasa pas-pasan sehingga perlu pandai menjaga keseimbangan antara rasa syukur dan ikhtiar. Orang dengan hasil Sri biasanya kuat di area perawatan, diplomasi, keindahan, dan kemampuan mengundang rasa percaya.",
                 en: "Sri symbolizes blessing, fertility, inner grace, and the power to nurture growth. In numerology, it often marks a name that carries calming energy, supports relationships, and attracts fortune through patience and harmony."
             },
             Lungguh: {
-                id: "Lungguh berarti duduk, menetap, atau menempati posisi. Dalam numerologi Jawa, Lungguh menunjukkan fondasi yang mapan, kecenderungan hidup yang lebih terstruktur, dan potensi untuk memperoleh kedudukan atau tanggung jawab yang stabil. Energinya bukan tentang gerak cepat, melainkan ketahanan, wibawa, dan kemampuan menjaga sesuatu tetap berdiri lama.",
+                id: "Lungguh berarti duduk, menetap, atau menempati posisi. Dalam numerologi Jawa, Lungguh menunjukkan fondasi yang mapan, kecenderungan hidup yang lebih terstruktur, dan potensi untuk memperoleh kedudukan atau tanggung jawab yang stabil. Energinya bukan tentang gerak cepat, melainkan ketahanan, wibawa, dan kemampuan menjaga sesuatu tetap berdiri lama. Hasil ini juga kuat pada sisi kepemimpinan: ia cenderung mendominasi saat mengambil keputusan, dan suara atau penilaiannya lebih sering didengar orang lain.",
                 en: "Lungguh means sitting, settling, or holding a position. In Javanese numerology, it points to stability, structure, endurance, and the capacity to carry lasting responsibility."
             },
             Pati: {
-                id: "Pati tidak selalu harus dibaca sebagai kematian harfiah, tetapi sebagai simbol akhir dari satu fase dan ujian yang menuntut pelepasan. Dalam numerologi Jawa, Pati menandai energi perubahan besar, benturan ego, atau proses hidup yang memaksa seseorang menutup pola lama sebelum masuk ke tahap berikutnya. Hasil ini sering mengingatkan bahwa kekuatan muncul saat berani memangkas hal yang tidak lagi sehat.",
+                id: "Pati tidak selalu harus dibaca sebagai kematian harfiah, tetapi sebagai simbol akhir dari satu fase dan ujian yang menuntut pelepasan. Dalam numerologi Jawa, Pati menandai hidup yang cenderung sulit, penuh ujian pahit, dan banyak cobaan. Namun justru dari tempaan itu lahir mental baja: sejak kecil diasah keras, lalu ketika dewasa menjadi lebih tajam. Pola pikirnya sering logis, manusiawi, bijak, dan sabar karena ia belajar dari luka, kehilangan, dan proses yang panjang.",
                 en: "Pati should not always be read as literal death, but as the end of a phase and a test of release. It marks major transformation, friction, and the need to let go before moving forward."
             },
             Dunia: {
-                id: "Dunia melambangkan keluasan pengalaman, jaringan, peluang material, dan keterlibatan kuat dengan urusan nyata kehidupan. Dalam numerologi Jawa, Dunia sering dihubungkan dengan rezeki, akses, pengaruh sosial, dan kemampuan membaca keadaan secara praktis. Energi ini bagus untuk pertumbuhan usaha dan pencapaian duniawi, tetapi tetap perlu dijaga agar tidak berubah menjadi terlalu materialistis atau tercerai dari keseimbangan batin.",
+                id: "Dunia melambangkan keluasan pengalaman, jaringan, peluang material, dan keterlibatan kuat dengan urusan nyata kehidupan. Dalam numerologi Jawa, Dunia sering dihubungkan dengan rezeki, akses, pengaruh sosial, dan kemampuan membaca keadaan secara praktis. Dalam hidupnya, secara ekonomi apa yang ia inginkan sering hampir seluruhnya tercapai, cita-cita banyak yang tergapai, dan hidupnya tampak senang. Namun sisi lemahnya ada pada mental yang kadang ciut saat tekanan datang, dan ia bisa tumbang ketika terlalu takabur atau merasa semua akan selalu mudah.",
                 en: "Dunia symbolizes worldly reach, material opportunities, social influence, and practical intelligence. It supports business growth and visible achievement, while reminding the person not to lose inner balance."
             }
         };
@@ -422,7 +422,7 @@
 
             document.getElementById("horoscopeResult").innerHTML = `
                 <h3>Horoskop Semua Zodiac - ${formattedDate}</h3>
-                <p class="section-note">Prediksi disusun dari kombinasi hari, bulan, tahun, dan karakter dasar tiap zodiac. Jadi hasilnya akan ikut berubah secara konsisten saat tanggal diganti.</p>
+                <p class="section-note">Prediksi disusun dari kombinasi tanggal yang dipilih dan karakter dasar tiap zodiac, jadi saat tanggal berubah isi hasilnya ikut berubah.</p>
                 <div class="horoscope-grid">${cards}</div>
             `;
             document.getElementById("horoscopeResult").style.display = "block";
@@ -537,33 +537,35 @@
             return Math.floor(diff / 86400000);
         }
 
-        function hashString(value) {
-            let hash = 0;
-            for (let i = 0; i < value.length; i += 1) {
-                hash = ((hash << 5) - hash + value.charCodeAt(i)) | 0;
-            }
-            return Math.abs(hash);
+        function nameValue(text) {
+            return text.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
         }
 
-        function pickSegment(list, seed, shift) {
-            return list[(seed + shift) % list.length];
+        function pickByDate(list, profile, date, salt) {
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+            const zodiacValue = nameValue(profile.name);
+            const seed = (day * 17) + (month * 31) + (year * 13) + zodiacValue + (salt * 19);
+            return list[Math.abs(seed) % list.length];
         }
 
         function buildHoroscopeCard(profile, date) {
-            const dateKey = `${profile.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
-            const seed = hashString(dateKey);
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
             const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
             const monthName = date.toLocaleDateString("id-ID", { month: "long" });
-            const seasonalFocus = horoscopeSegments.focus[(getDayOfYear(date) + profile.name.length) % horoscopeSegments.focus.length];
+            const seasonalFocus = horoscopeSegments.focus[(getDayOfYear(date) + profile.name.length + month + day) % horoscopeSegments.focus.length];
 
-            const love = `Percintaan: Untuk ${profile.name} yang dikenal ${profile.trait}, ${pickSegment(horoscopeSegments.love, seed, 1)}.`;
-            const finance = `Keuangan: ${pickSegment(horoscopeSegments.finance, seed, 2)}.`;
-            const energy = `Energi hari ini: Pada ${weekday} di bulan ${monthName}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickSegment(horoscopeSegments.energy, seed, 3)}.`;
-            const tip = `Tips: Fokus utama ${profile.name.toLowerCase()} hari ini ada pada ${seasonalFocus}; ${pickSegment(horoscopeSegments.tips, seed, 4)}.`;
+            const love = `Percintaan: Untuk ${profile.name} yang dikenal ${profile.trait}, ${pickByDate(horoscopeSegments.love, profile, date, 1)}.`;
+            const finance = `Keuangan: ${pickByDate(horoscopeSegments.finance, profile, date, 2)}.`;
+            const energy = `Energi hari ini: Pada ${weekday}, ${day} ${monthName} ${year}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickByDate(horoscopeSegments.energy, profile, date, 3)}.`;
+            const tip = `Tips: Fokus utama ${profile.name.toLowerCase()} hari ini ada pada ${seasonalFocus}; ${pickByDate(horoscopeSegments.tips, profile, date, 4)}.`;
 
             return `
                 <article class="horoscope-card">
-                    <span class="pill">${profile.name} · ${profile.range}</span>
+                    <span class="pill">${profile.name} - ${profile.range}</span>
                     <h3>${profile.name}</h3>
                     <p>${love}</p>
                     <p>${finance}</p>
