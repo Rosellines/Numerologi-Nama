@@ -1,155 +1,286 @@
-u<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Kalkulator Numerologi Nama Jawa</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
     <style>
+        :root {
+            --bg-deep: #0f1b2d;
+            --bg-mid: #17324f;
+            --panel: rgba(10, 23, 39, 0.82);
+            --panel-soft: rgba(255, 248, 231, 0.08);
+            --line: rgba(255, 233, 187, 0.22);
+            --text: #f8f1df;
+            --muted: #d7c8a4;
+            --accent: #d9a441;
+            --accent-strong: #f0bf62;
+            --shadow: rgba(3, 10, 18, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background: linear-gradient(135deg, #2c003e 0%, #000000 100%);
             margin: 0;
-            padding: 20px;
-            color: #f0f0f0;
+            min-height: 100vh;
+            padding: 24px;
+            font-family: "Plus Jakarta Sans", "Segoe UI", Tahoma, sans-serif;
+            color: var(--text);
+            background-color: var(--bg-deep);
+            background-image:
+                linear-gradient(rgba(7, 16, 28, 0.45), rgba(7, 16, 28, 0.82)),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%2312223a'/%3E%3Cstop offset='1' stop-color='%2317424d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23g)'/%3E%3Ccircle cx='210' cy='160' r='120' fill='%23f3d08c' fill-opacity='.15'/%3E%3Ccircle cx='1220' cy='120' r='90' fill='%23f3d08c' fill-opacity='.13'/%3E%3Ccircle cx='1420' cy='700' r='160' fill='%23c18a2f' fill-opacity='.12'/%3E%3Cg stroke='%23f2d496' stroke-opacity='.14' fill='none'%3E%3Cpath d='M120 760C350 610 600 610 820 760'/%3E%3Cpath d='M280 710C520 540 880 540 1140 710'/%3E%3Cpath d='M540 790C790 630 1080 630 1340 790'/%3E%3C/g%3E%3Cg fill='%23fff7e4' fill-opacity='.55'%3E%3Ccircle cx='140' cy='120' r='2'/%3E%3Ccircle cx='300' cy='220' r='2'/%3E%3Ccircle cx='510' cy='120' r='1.8'/%3E%3Ccircle cx='660' cy='210' r='1.6'/%3E%3Ccircle cx='910' cy='180' r='2.2'/%3E%3Ccircle cx='1090' cy='250' r='1.8'/%3E%3Ccircle cx='1280' cy='180' r='2'/%3E%3Ccircle cx='1490' cy='240' r='1.5'/%3E%3Ccircle cx='1360' cy='100' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+            background-size: cover;
+            background-position: center;
         }
+
         .container {
-            max-width: 600px;
+            max-width: 980px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 20px;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.5), 0 0 40px rgba(138, 43, 226, 0.3);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 28px;
+            background: var(--panel);
+            border: 1px solid var(--line);
+            border-radius: 28px;
+            box-shadow: 0 20px 60px var(--shadow);
+            backdrop-filter: blur(14px);
         }
-        h1 {
+
+        .hero {
+            margin-bottom: 30px;
             text-align: center;
-            color: #ffd700;
-            text-shadow: 0 0 10px #ffd700, 0 0 20px #ffd700;
         }
+
+        h1 {
+            margin: 0;
+            color: var(--accent-strong);
+            font-family: "Cinzel", Georgia, serif;
+            font-size: clamp(2.3rem, 5.4vw, 4rem);
+            font-weight: 700;
+            line-height: 1.08;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-wrap: balance;
+            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+        }
+
+        h2 {
+            margin: 0 0 10px;
+            color: var(--accent-strong);
+            font-size: clamp(1.35rem, 3vw, 2rem);
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: 0.02em;
+            text-wrap: balance;
+        }
+
+        h3 {
+            line-height: 1.3;
+            letter-spacing: 0.01em;
+        }
+
+        .intro,
+        .section-note {
+            max-width: 760px;
+            margin: 14px auto 0;
+            text-align: center;
+            color: var(--muted);
+            font-size: 1rem;
+            line-height: 1.8;
+            text-wrap: pretty;
+        }
+
+        .section-heading {
+            margin-bottom: 18px;
+            text-align: center;
+        }
+
         .form-group {
             margin-bottom: 15px;
         }
+
         label {
             display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #c0c0c0;
+            margin-bottom: 7px;
+            font-weight: 700;
+            color: var(--muted);
         }
-        input, textarea {
+
+        input,
+        textarea {
             width: 100%;
-            padding: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.1);
-            color: #f0f0f0;
+            padding: 12px 14px;
+            border: 1px solid rgba(255, 233, 187, 0.2);
+            border-radius: 14px;
+            background: rgba(255, 248, 231, 0.08);
+            color: var(--text);
             font-size: 16px;
         }
-        input::placeholder, textarea::placeholder {
-            color: #aaa;
+
+        input::placeholder,
+        textarea::placeholder {
+            color: rgba(248, 241, 223, 0.55);
         }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            border-color: rgba(240, 191, 98, 0.72);
+            box-shadow: 0 0 0 3px rgba(240, 191, 98, 0.16);
+        }
+
         button {
-            background: linear-gradient(45deg, #8a2be2, #4b0082);
-            color: white;
-            padding: 12px 15px;
+            width: 100%;
+            padding: 14px 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, var(--accent) 0%, #8d5a14 100%);
+            color: #16100a;
+            font-size: 16px;
+            font-weight: 700;
             cursor: pointer;
-            width: 100%;
-            font-size: 16px;
-            font-weight: bold;
-            text-shadow: 0 0 5px #fff;
-            box-shadow: 0 0 10px rgba(138, 43, 226, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 12px 24px rgba(141, 90, 20, 0.28);
+            transition: transform 0.3s ease, background 0.3s ease;
         }
+
         button:hover {
-            background: linear-gradient(45deg, #9932cc, #6a0dad);
-            box-shadow: 0 0 20px rgba(138, 43, 226, 0.8), 0 0 30px rgba(138, 43, 226, 0.6);
             transform: translateY(-2px);
+            background: linear-gradient(135deg, #efbd60 0%, #a4681e 100%);
         }
-        .result {
-            margin-top: 20px;
-            padding: 15px;
-            background: rgba(255, 215, 0, 0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(255, 215, 0, 0.3);
-            color: #f0f0f0;
-            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
-        }
+
+        .result,
         .zodiac-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 24px;
+            padding: 22px;
+            background: var(--panel-soft);
+            border: 1px solid rgba(255, 233, 187, 0.18);
+            border-radius: 22px;
         }
-        .zodiac-section h2 {
-            color: #ffd700;
-            text-align: center;
-            margin-bottom: 15px;
+
+        .result {
+            display: none;
         }
-        select, #generateHoroscope {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            color: #f0f0f0;
-            font-size: 16px;
+
+        .date-row {
+            display: flex;
+            justify-content: center;
         }
-        select option {
-            background: #000;
-            color: #f0f0f0;
-        }
+
         #horoscopeResult {
+            display: none;
             margin-top: 20px;
-            padding: 15px;
-            background: rgba(138, 43, 226, 0.1);
-            border-radius: 8px;
-            border: 1px solid rgba(138, 43, 226, 0.3);
-            color: #f0f0f0;
-            box-shadow: 0 0 10px rgba(138, 43, 226, 0.2);
+            padding: 20px;
+            background: rgba(255, 248, 231, 0.05);
+            border: 1px solid rgba(255, 233, 187, 0.18);
+            border-radius: 18px;
             opacity: 0;
-            animation: fadeIn 1s ease-in-out forwards;
+            animation: fadeIn 0.9s ease-in-out forwards;
         }
-        @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
+
+        .horoscope-grid,
+        .term-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
         }
+
+        .horoscope-card,
+        .term-card {
+            position: relative;
+            overflow: hidden;
+            padding: 16px;
+            background: rgba(6, 15, 26, 0.58);
+            border: 1px solid rgba(255, 233, 187, 0.14);
+            border-radius: 18px;
+            box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .horoscope-card h3,
+        .term-card h3 {
+            margin: 6px 0 10px;
+            color: var(--accent-strong);
+        }
+
+        .horoscope-card p,
+        .term-card p,
+        .result p {
+            margin: 0 0 0.8em;
+            line-height: 1.65;
+            text-wrap: pretty;
+        }
+
+        .pill {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 999px;
+            background: rgba(240, 191, 98, 0.13);
+            color: var(--accent-strong);
+            font-size: 13px;
+        }
+
         .sparkle {
             position: relative;
             overflow: hidden;
         }
+
         .sparkle::before {
-            content: '';
+            content: "";
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 215, 0, 0.5) 0%, transparent 70%);
-            animation: sparkle 2s ease-in-out infinite;
+            background: radial-gradient(circle, rgba(240, 191, 98, 0.22) 0%, transparent 70%);
+            animation: sparkle 3.5s ease-in-out infinite;
             pointer-events: none;
         }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+
         @keyframes sparkle {
             0%, 100% {
                 transform: scale(0.8) rotate(0deg);
-                opacity: 0.5;
+                opacity: 0.4;
             }
+
             50% {
                 transform: scale(1.2) rotate(180deg);
                 opacity: 1;
+            }
+        }
+
+        @media (max-width: 720px) {
+            body {
+                padding: 16px;
+            }
+
+            .container {
+                padding: 20px;
+                border-radius: 22px;
+            }
+
+            .date-row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Numerologi nama</h1>
+        <div class="hero">
+            <h1>Numerologi Nama</h1>
+            <p class="intro">Kalkulator ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
+        </div>
+
         <form id="nameForm">
             <div class="form-group">
                 <label for="firstName">Nama Depan / First Name:</label>
@@ -165,248 +296,281 @@ u<!DOCTYPE html>
             </div>
             <div class="form-group">
                 <label for="combinedNames">Gabungan Nama (pisah dengan +) / Combined Names (separate with +):</label>
-                <textarea id="combinedNames" rows="4" placeholder="Contoh: Nama bapak + Nama ibu + nama anak pertama + nama anak kedua + seterus nya / Example: Ahmad Tayor + mishelle + Bianka Prissa Senja + callista cecillia senja"></textarea>
+                <textarea id="combinedNames" rows="4" placeholder="Contoh: Nama bapak + Nama ibu + nama anak pertama + nama anak kedua + seterusnya"></textarea>
             </div>
             <button type="button" onclick="calculate()">Hitung Numerologi / Calculate Numerology</button>
         </form>
-        <div id="result" class="result" style="display: none;"></div>
+
+        <div id="result" class="result"></div>
 
         <div class="zodiac-section">
-            <h2>Horoskop Zodiac Hari Ini</h2>
-            <div class="form-group">
-                <label for="modelSelect">Pilih Model AI / Select AI Model:</label>
-                <select id="modelSelect" onchange="toggleApiKeyFields()">
-                    <option value="openai-gpt4mini">OpenAI GPT-4 Mini</option>
-                </select>
+            <div class="section-heading">
+                <h2>Horoskop Zodiac Harian</h2>
+                <p class="section-note">Pilih tanggal, lalu sistem akan menghasilkan prediksi untuk semua zodiac pada tanggal itu. Jadi kalau kamu pilih <strong>1 Mei 2026</strong>, seluruh hasil otomatis menyesuaikan ke tanggal tersebut.</p>
             </div>
-            <div class="form-group" id="openaiKeyGroup">
-                <label for="openaiApiKey">Masukkan API Key OpenAI / Enter OpenAI API Key:</label>
-                <input type="password" id="openaiApiKey" placeholder="Masukkan API key kamu / Enter your API key">
-                <button type="button" onclick="saveApiKey('openai')" style="margin-top: 5px; width: auto; padding: 8px 12px;">Simpan API Key / Save API Key</button>
+            <div class="date-row">
+                <div class="form-group">
+                    <label for="horoscopeDate">Tanggal horoskop:</label>
+                    <input type="date" id="horoscopeDate" onchange="generateHoroscope()">
+                </div>
             </div>
+            <div id="horoscopeResult" class="sparkle"></div>
+        </div>
 
-            <label for="zodiacSelect">Pilih Zodiac / Select Zodiac:</label>
-            <select id="zodiacSelect">
-                <option value="">Pilih zodiac...</option>
-                <option value="Aries">Aries (21 Maret - 19 April)</option>
-                <option value="Taurus">Taurus (20 April - 20 Mei)</option>
-                <option value="Gemini">Gemini (21 Mei - 20 Juni)</option>
-                <option value="Cancer">Cancer (21 Juni - 22 Juli)</option>
-                <option value="Leo">Leo (23 Juli - 22 Agustus)</option>
-                <option value="Virgo">Virgo (23 Agustus - 22 September)</option>
-                <option value="Libra">Libra (23 September - 22 Oktober)</option>
-                <option value="Scorpio">Scorpio (23 Oktober - 21 November)</option>
-                <option value="Sagittarius">Sagittarius (22 November - 21 Desember)</option>
-                <option value="Capricorn">Capricorn (22 Desember - 19 Januari)</option>
-                <option value="Aquarius">Aquarius (20 Januari - 18 Februari)</option>
-                <option value="Pisces">Pisces (19 Februari - 20 Maret)</option>
-            </select>
-            <button id="generateHoroscope" onclick="generateHoroscope()">Generate Horoskop Hari Ini</button>
-            <div id="horoscopeResult" class="sparkle" style="display: none;"></div>
+        <div class="zodiac-section">
+            <div class="section-heading">
+                <h2>Makna Sri, Lungguh, Pati, Dunia</h2>
+            </div>
+            <div id="termDescriptions" class="term-grid"></div>
         </div>
     </div>
 
     <script>
-        // Load API keys from localStorage on page load
-        window.onload = function() {
-            const savedOpenaiKey = localStorage.getItem('openaiApiKey');
-            if (savedOpenaiKey) {
-                document.getElementById('openaiApiKey').value = savedOpenaiKey;
+        const zodiacProfiles = [
+            { name: "Aries", range: "21 Maret - 19 April", trait: "berani", element: "Api" },
+            { name: "Taurus", range: "20 April - 20 Mei", trait: "stabil", element: "Tanah" },
+            { name: "Gemini", range: "21 Mei - 20 Juni", trait: "adaptif", element: "Udara" },
+            { name: "Cancer", range: "21 Juni - 22 Juli", trait: "peka", element: "Air" },
+            { name: "Leo", range: "23 Juli - 22 Agustus", trait: "percaya diri", element: "Api" },
+            { name: "Virgo", range: "23 Agustus - 22 September", trait: "teliti", element: "Tanah" },
+            { name: "Libra", range: "23 September - 22 Oktober", trait: "harmonis", element: "Udara" },
+            { name: "Scorpio", range: "23 Oktober - 21 November", trait: "intens", element: "Air" },
+            { name: "Sagittarius", range: "22 November - 21 Desember", trait: "optimistis", element: "Api" },
+            { name: "Capricorn", range: "22 Desember - 19 Januari", trait: "disiplin", element: "Tanah" },
+            { name: "Aquarius", range: "20 Januari - 18 Februari", trait: "visioner", element: "Udara" },
+            { name: "Pisces", range: "19 Februari - 20 Maret", trait: "imajinatif", element: "Air" }
+        ];
+
+        const horoscopeSegments = {
+            love: [
+                "komunikasi jujur lebih penting daripada gestur besar",
+                "energi romantis menguat saat kamu berhenti menebak-nebak",
+                "hubungan terasa lebih ringan jika kamu memberi ruang dan kejelasan",
+                "rasa penasaran dari seseorang bisa berubah jadi pendekatan yang serius",
+                "pasangan butuh validasi sederhana, bukan drama berkepanjangan",
+                "daya tarikmu muncul saat kamu tampil apa adanya"
+            ],
+            finance: [
+                "waktu yang baik untuk merapikan pengeluaran kecil yang selama ini bocor",
+                "peluang finansial datang dari langkah praktis, bukan spekulasi cepat",
+                "anggaran akan lebih sehat kalau kamu menunda pembelian impulsif",
+                "fokus pada pemasukan yang konsisten akan memberi hasil lebih nyata",
+                "ada sinyal baik untuk negosiasi, revisi harga, atau menagih pembayaran",
+                "prioritas hari ini adalah menjaga arus kas tetap aman"
+            ],
+            energy: [
+                "tenaga naik stabil sejak siang dan cocok dipakai menyelesaikan urusan tertunda",
+                "emosi cenderung sensitif, jadi atur ritme agar tidak cepat lelah",
+                "daya fokus tinggi jika kamu bekerja dengan target yang jelas",
+                "intuisimu tajam, tetapi tetap perlu diseimbangkan dengan data",
+                "energi sosial cukup kuat untuk bertemu orang baru atau presentasi",
+                "tubuh memberi sinyal untuk memperlambat tempo dan tidur lebih teratur"
+            ],
+            tips: [
+                "selesaikan satu hal terpenting sebelum membuka terlalu banyak percakapan",
+                "hindari janji yang belum kamu ukur kapasitas waktunya",
+                "catat ide yang muncul mendadak karena salah satunya layak ditindaklanjuti",
+                "jaga nada bicara tetap tenang ketika membahas hal sensitif",
+                "rapikan meja, file, atau dompet karena keteraturan membuka fokus baru",
+                "beri jeda singkat sebelum merespons agar keputusanmu lebih matang"
+            ],
+            focus: [
+                "hubungan pribadi",
+                "stabilitas kerja",
+                "pemulihan energi",
+                "keberanian mengambil keputusan",
+                "disiplin terhadap target",
+                "menata prioritas"
+            ]
+        };
+
+        const termExplanations = {
+            Sri: {
+                id: "Sri melambangkan berkah, kesuburan, kehalusan batin, dan daya tumbuh. Dalam pembacaan numerologi, Sri sering dibaca sebagai tanda bahwa sebuah nama membawa energi yang meneduhkan, memelihara relasi, dan menarik keberuntungan lewat sikap yang sabar serta selaras. Orang dengan hasil Sri cenderung kuat di area perawatan, diplomasi, keindahan, dan kemampuan mengundang rasa percaya.",
+                en: "Sri symbolizes blessing, fertility, inner grace, and the power to nurture growth. In numerology, it often marks a name that carries calming energy, supports relationships, and attracts fortune through patience and harmony."
+            },
+            Lungguh: {
+                id: "Lungguh berarti duduk, menetap, atau menempati posisi. Dalam numerologi Jawa, Lungguh menunjukkan fondasi yang mapan, kecenderungan hidup yang lebih terstruktur, dan potensi untuk memperoleh kedudukan atau tanggung jawab yang stabil. Energinya bukan tentang gerak cepat, melainkan ketahanan, wibawa, dan kemampuan menjaga sesuatu tetap berdiri lama.",
+                en: "Lungguh means sitting, settling, or holding a position. In Javanese numerology, it points to stability, structure, endurance, and the capacity to carry lasting responsibility."
+            },
+            Pati: {
+                id: "Pati tidak selalu harus dibaca sebagai kematian harfiah, tetapi sebagai simbol akhir dari satu fase dan ujian yang menuntut pelepasan. Dalam numerologi Jawa, Pati menandai energi perubahan besar, benturan ego, atau proses hidup yang memaksa seseorang menutup pola lama sebelum masuk ke tahap berikutnya. Hasil ini sering mengingatkan bahwa kekuatan muncul saat berani memangkas hal yang tidak lagi sehat.",
+                en: "Pati should not always be read as literal death, but as the end of a phase and a test of release. It marks major transformation, friction, and the need to let go before moving forward."
+            },
+            Dunia: {
+                id: "Dunia melambangkan keluasan pengalaman, jaringan, peluang material, dan keterlibatan kuat dengan urusan nyata kehidupan. Dalam numerologi Jawa, Dunia sering dihubungkan dengan rezeki, akses, pengaruh sosial, dan kemampuan membaca keadaan secara praktis. Energi ini bagus untuk pertumbuhan usaha dan pencapaian duniawi, tetapi tetap perlu dijaga agar tidak berubah menjadi terlalu materialistis atau tercerai dari keseimbangan batin.",
+                en: "Dunia symbolizes worldly reach, material opportunities, social influence, and practical intelligence. It supports business growth and visible achievement, while reminding the person not to lose inner balance."
             }
         };
 
-        function toggleApiKeyFields() {
-            const model = document.getElementById('modelSelect').value;
-            const openaiGroup = document.getElementById('openaiKeyGroup');
-            if (model.startsWith('openai-')) {
-                openaiGroup.style.display = 'block';
-            }
-        }
+        window.onload = function () {
+            document.getElementById("horoscopeDate").value = getTodayLocalDate();
+            renderTermDescriptions();
+            generateHoroscope();
+        };
 
-        function saveApiKey(model) {
-            let apiKey;
-            if (model === 'openai') {
-                apiKey = document.getElementById('openaiApiKey').value.trim();
-            } else if (model === 'gemini') {
-                apiKey = document.getElementById('geminiApiKey').value.trim();
-            }
-            if (apiKey) {
-                localStorage.setItem(`${model}ApiKey`, apiKey);
-                alert('API key berhasil disimpan! / API key saved successfully!');
-            } else {
-                alert('Masukkan API key terlebih dahulu! / Please enter an API key first!');
-            }
-        }
-
-        async function generateHoroscope() {
-            const zodiac = document.getElementById('zodiacSelect').value;
-            const model = document.getElementById('modelSelect').value;
-            let apiKey;
-            let modelName;
-            if (model.startsWith('openai-')) {
-                apiKey = document.getElementById('openaiApiKey').value.trim();
-                if (model === 'openai-gpt3.5') {
-                    modelName = 'gpt-3.5-turbo';
-                } else if (model === 'openai-gpt4mini') {
-                    modelName = 'gpt-4o-mini';
-                }
-            } else if (model === 'gemini') {
-                apiKey = document.getElementById('geminiApiKey').value.trim();
-            }
-            if (!zodiac) {
-                alert('Pilih zodiac terlebih dahulu!');
-                return;
-            }
-            if (!apiKey) {
-                alert(`Masukkan API key ${model.startsWith('openai-') ? 'OpenAI' : 'Gemini'} terlebih dahulu!`);
+        function generateHoroscope() {
+            const rawDate = document.getElementById("horoscopeDate").value;
+            if (!rawDate) {
+                alert("Pilih tanggal horoskop terlebih dahulu!");
                 return;
             }
 
-            const prompt = `Buat horoskop harian untuk zodiac ${zodiac} hari ini. Sertakan bagian: Percintaan (single atau married), Keuangan/Ekonomi, Energi Hari Ini, dan Tips untuk hari ini. Buat dalam bahasa Indonesia, singkat dan akurat.`;
+            const selectedDate = parseLocalDate(rawDate);
+            const formattedDate = formatDateIndo(selectedDate);
+            const cards = zodiacProfiles.map((profile) => buildHoroscopeCard(profile, selectedDate)).join("");
 
-            try {
-                let response;
-                if (model.startsWith('openai-')) {
-                    response = await fetch('https://api.openai.com/v1/chat/completions', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'Authorization': `Bearer ${apiKey}`
-                        },
-                        body: JSON.stringify({
-                            model: modelName,
-                            messages: [{ role: 'user', content: prompt }],
-                            max_tokens: 300
-                        })
-                    });
-                } else if (model === 'gemini') {
-                    response = await fetch(`https://generativelanguage.googleapis.com/v1/models/gemini-1.5-pro:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            contents: [{
-                                parts: [{ text: prompt }]
-                            }]
-                        })
-                    });
-                }
-
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('API Error:', errorData);
-                    let errorMessage = 'Unknown error';
-                    if (model.startsWith('openai-')) {
-                        errorMessage = errorData.error?.message || errorMessage;
-                    } else if (model === 'gemini') {
-                        errorMessage = errorData.error?.message || errorMessage;
-                    }
-                    document.getElementById('horoscopeResult').innerHTML = `<p>Gagal generate horoskop: ${errorMessage}. Periksa API key.</p>`;
-                    document.getElementById('horoscopeResult').style.display = 'block';
-                    return;
-                }
-
-                const data = await response.json();
-                let horoscopeText = '';
-                if (model.startsWith('openai-') && data.choices && data.choices[0]) {
-                    horoscopeText = data.choices[0].message.content;
-                } else if (model === 'gemini' && data.candidates && data.candidates[0]) {
-                    horoscopeText = data.candidates[0].content.parts[0].text;
-                } else {
-                    document.getElementById('horoscopeResult').innerHTML = '<p>Gagal generate horoskop. Coba lagi.</p>';
-                    document.getElementById('horoscopeResult').style.display = 'block';
-                    return;
-                }
-
-                document.getElementById('horoscopeResult').innerHTML = `<h3>Horoskop ${zodiac} Hari Ini</h3><p>${horoscopeText.replace(/\n/g, '<br>')}</p>`;
-                document.getElementById('horoscopeResult').style.display = 'block';
-            } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('horoscopeResult').innerHTML = '<p>Terjadi kesalahan. Periksa API key dan koneksi internet.</p>';
-                document.getElementById('horoscopeResult').style.display = 'block';
-            }
+            document.getElementById("horoscopeResult").innerHTML = `
+                <h3>Horoskop Semua Zodiac - ${formattedDate}</h3>
+                <p class="section-note">Prediksi disusun dari kombinasi hari, bulan, tahun, dan karakter dasar tiap zodiac. Jadi hasilnya akan ikut berubah secara konsisten saat tanggal diganti.</p>
+                <div class="horoscope-grid">${cards}</div>
+            `;
+            document.getElementById("horoscopeResult").style.display = "block";
         }
 
         function calculateUniqueLetters(name) {
             if (!name) return 0;
-            const letters = new Set(name.toLowerCase().replace(/\s/g, '').split(''));
+
+            const normalized = name
+                .toLowerCase()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "")
+                .replace(/[^a-z]/g, "");
+
+            const letters = new Set(normalized.split("").filter(Boolean));
             return letters.size;
         }
 
         function mapToJavaneseTerm(count) {
-            const terms = ['Sri', 'Lungguh', 'Pati', 'Dunia'];
-            const index = (count - 9) % 4;
-            return terms[index] || 'Tidak diketahui';
+            const terms = ["Sri", "Lungguh", "Pati", "Dunia"];
+            if (count <= 0) return "Tidak diketahui";
+            const index = ((count - 9) % 4 + 4) % 4;
+            return terms[index] || "Tidak diketahui";
         }
 
         function getExplanation(term) {
-            const explanations = {
-                'Sri': {
-                    id: 'Sri dalam Aksara Kepercayaan Jawa melambangkan kemakmuran, kecantikan, dan keberuntungan. Ia sering dikaitkan dengan Dewi Sri, dewi padi dan kekayaan, yang membawa kelimpahan dan kesuburan.',
-                    en: 'Sri in Javanese Kepercayaan script symbolizes prosperity, beauty, and good fortune. It is often associated with Dewi Sri, the goddess of rice and wealth, bringing abundance and fertility.'
-                },
-                'Lungguh': {
-                    id: 'Lungguh berarti duduk atau menetap. Dalam konteks numerologi Jawa, ia menunjukkan stabilitas, fondasi yang kuat, dan kemampuan untuk bertahan dalam situasi apa pun.',
-                    en: 'Lungguh means sitting or settling. In the context of Javanese numerology, it indicates stability, a strong foundation, and the ability to endure in any situation.'
-                },
-                'Pati': {
-                    id: 'Pati dalam Aksara Kepercayaan Jawa adalah mati yang menandakan kesusahan, melambangkan tantangan, transisi besar, atau kesulitan dalam kehidupan.',
-                    en: 'Pati in Javanese Kepercayaan script is death that signifies hardship, symbolizing challenges, major transitions, or difficulties in life.'
-                },
-                'Dunia': {
-                    id: 'Dunia dalam Aksara Kepercayaan Jawa berarti kekayaan yang sangat melimpah, melambangkan kelimpahan materi, kesuksesan duniawi, dan kemakmuran.',
-                    en: 'Dunia in Javanese Kepercayaan script means immense wealth, symbolizing material abundance, worldly success, and prosperity.'
-                }
-            };
-            const exp = explanations[term];
-            if (exp) {
-                return `${exp.id}<br><em>${exp.en}</em>`;
+            const explanation = termExplanations[term];
+            if (!explanation) {
+                return "Penjelasan tidak tersedia. / Explanation not available.";
             }
-            return 'Penjelasan tidak tersedia. / Explanation not available.';
+            return `${explanation.id}<br><em>${explanation.en}</em>`;
         }
 
         function calculate() {
-            const firstName = document.getElementById('firstName').value.trim();
-            const middleName = document.getElementById('middleName').value.trim();
-            const lastName = document.getElementById('lastName').value.trim();
-            const combinedNames = document.getElementById('combinedNames').value.trim();
+            const firstName = document.getElementById("firstName").value.trim();
+            const middleName = document.getElementById("middleName").value.trim();
+            const lastName = document.getElementById("lastName").value.trim();
+            const combinedNames = document.getElementById("combinedNames").value.trim();
 
-            let resultText = '';
+            let resultText = "";
 
-            // Calculate individual name
-            const fullName = [firstName, middleName, lastName].filter(n => n).join(' ');
+            const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
             if (fullName) {
                 const count = calculateUniqueLetters(fullName);
                 const term = mapToJavaneseTerm(count);
-                const explanation = getExplanation(term);
                 resultText += `<h3>Nama Lengkap: ${fullName}</h3>`;
                 resultText += `<p>Jumlah huruf unik: ${count}</p>`;
                 resultText += `<p>Jatuh di: ${term}</p>`;
-                resultText += `<p><em>Penjelasan: ${explanation}</em></p>`;
+                resultText += `<p><em>Penjelasan: ${getExplanation(term)}</em></p>`;
             }
 
-            // Calculate combined names
             if (combinedNames) {
-                const names = combinedNames.split('+').map(n => n.trim()).filter(n => n);
+                const names = combinedNames.split("+").map((name) => name.trim()).filter(Boolean);
                 let totalCount = 0;
-                resultText += '<h3>Gabungan Nama:</h3>';
-                names.forEach(name => {
+                resultText += "<h3>Gabungan Nama:</h3>";
+
+                names.forEach((name) => {
                     const count = calculateUniqueLetters(name);
                     const term = mapToJavaneseTerm(count);
-                    const explanation = getExplanation(term);
                     totalCount += count;
-                    resultText += `<p>${name}: ${count} huruf unik → ${term}</p>`;
-                    resultText += `<p><em>Penjelasan: ${explanation}</em></p>`;
+                    resultText += `<p>${name}: ${count} huruf unik -> ${term}</p>`;
+                    resultText += `<p><em>Penjelasan: ${getExplanation(term)}</em></p>`;
                 });
+
                 const totalTerm = mapToJavaneseTerm(totalCount);
-                const totalExplanation = getExplanation(totalTerm);
-                resultText += `<p><strong>Total: ${totalCount} → ${totalTerm}</strong></p>`;
-                resultText += `<p><em>Penjelasan Total: ${totalExplanation}</em></p>`;
+                resultText += `<p><strong>Total: ${totalCount} -> ${totalTerm}</strong></p>`;
+                resultText += `<p><em>Penjelasan Total: ${getExplanation(totalTerm)}</em></p>`;
             }
 
-            document.getElementById('result').innerHTML = resultText;
-            document.getElementById('result').style.display = 'block';
+            if (!resultText) {
+                resultText = "<p>Masukkan minimal satu nama untuk dihitung.</p>";
+            }
+
+            document.getElementById("result").innerHTML = resultText;
+            document.getElementById("result").style.display = "block";
+        }
+
+        function renderTermDescriptions() {
+            const terms = ["Sri", "Lungguh", "Pati", "Dunia"];
+            document.getElementById("termDescriptions").innerHTML = terms.map((term) => `
+                <div class="term-card">
+                    <span class="pill">${term}</span>
+                    <h3>${term}</h3>
+                    <p>${getExplanation(term)}</p>
+                </div>
+            `).join("");
+        }
+
+        function getTodayLocalDate() {
+            const now = new Date();
+            const offset = now.getTimezoneOffset();
+            const local = new Date(now.getTime() - (offset * 60000));
+            return local.toISOString().split("T")[0];
+        }
+
+        function parseLocalDate(dateString) {
+            const [year, month, day] = dateString.split("-").map(Number);
+            return new Date(year, month - 1, day);
+        }
+
+        function formatDateIndo(date) {
+            return date.toLocaleDateString("id-ID", {
+                day: "numeric",
+                month: "long",
+                year: "numeric"
+            });
+        }
+
+        function getDayOfYear(date) {
+            const start = new Date(date.getFullYear(), 0, 0);
+            const diff = date - start;
+            return Math.floor(diff / 86400000);
+        }
+
+        function hashString(value) {
+            let hash = 0;
+            for (let i = 0; i < value.length; i += 1) {
+                hash = ((hash << 5) - hash + value.charCodeAt(i)) | 0;
+            }
+            return Math.abs(hash);
+        }
+
+        function pickSegment(list, seed, shift) {
+            return list[(seed + shift) % list.length];
+        }
+
+        function buildHoroscopeCard(profile, date) {
+            const dateKey = `${profile.name}-${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+            const seed = hashString(dateKey);
+            const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
+            const monthName = date.toLocaleDateString("id-ID", { month: "long" });
+            const seasonalFocus = horoscopeSegments.focus[(getDayOfYear(date) + profile.name.length) % horoscopeSegments.focus.length];
+
+            const love = `Percintaan: Untuk ${profile.name} yang dikenal ${profile.trait}, ${pickSegment(horoscopeSegments.love, seed, 1)}.`;
+            const finance = `Keuangan: ${pickSegment(horoscopeSegments.finance, seed, 2)}.`;
+            const energy = `Energi hari ini: Pada ${weekday} di bulan ${monthName}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickSegment(horoscopeSegments.energy, seed, 3)}.`;
+            const tip = `Tips: Fokus utama ${profile.name.toLowerCase()} hari ini ada pada ${seasonalFocus}; ${pickSegment(horoscopeSegments.tips, seed, 4)}.`;
+
+            return `
+                <article class="horoscope-card">
+                    <span class="pill">${profile.name} · ${profile.range}</span>
+                    <h3>${profile.name}</h3>
+                    <p>${love}</p>
+                    <p>${finance}</p>
+                    <p>${energy}</p>
+                    <p>${tip}</p>
+                </article>
+            `;
         }
     </script>
 </body>
