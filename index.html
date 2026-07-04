@@ -3,22 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalkulator Numerologi Nama Jawa</title>
+    <title>Petuang Kejawen</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Marcellus+SC&family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9C%A8%3C/text%3E%3C/svg%3E">
     <style>
         :root {
-            --bg-deep: #0f1b2d;
-            --panel: rgba(10, 23, 39, 0.82);
-            --panel-soft: rgba(255, 248, 231, 0.08);
-            --line: rgba(255, 233, 187, 0.22);
-            --text: #f8f1df;
-            --muted: #d7c8a4;
-            --accent: #d9a441;
-            --accent-strong: #f0bf62;
-            --shadow: rgba(3, 10, 18, 0.45);
+            --bg-deep: #070505;
+            --panel: rgba(13, 10, 8, 0.8);
+            --panel-soft: rgba(199, 154, 88, 0.08);
+            --line: rgba(183, 142, 80, 0.28);
+            --text: #f1e1be;
+            --muted: #cfb78c;
+            --accent: #9c6730;
+            --accent-strong: #e0bb75;
+            --shadow: rgba(0, 0, 0, 0.55);
+            --blood: #9a2d20;
         }
 
         * {
@@ -33,21 +34,36 @@
             color: var(--text);
             background-color: var(--bg-deep);
             background-image:
-                linear-gradient(rgba(7, 16, 28, 0.45), rgba(7, 16, 28, 0.82)),
-                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1' y1='0' y2='1'%3E%3Cstop stop-color='%2312223a'/%3E%3Cstop offset='1' stop-color='%2317424d'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23g)'/%3E%3Ccircle cx='210' cy='160' r='120' fill='%23f3d08c' fill-opacity='.15'/%3E%3Ccircle cx='1220' cy='120' r='90' fill='%23f3d08c' fill-opacity='.13'/%3E%3Ccircle cx='1420' cy='700' r='160' fill='%23c18a2f' fill-opacity='.12'/%3E%3Cg stroke='%23f2d496' stroke-opacity='.14' fill='none'%3E%3Cpath d='M120 760C350 610 600 610 820 760'/%3E%3Cpath d='M280 710C520 540 880 540 1140 710'/%3E%3Cpath d='M540 790C790 630 1080 630 1340 790'/%3E%3C/g%3E%3Cg fill='%23fff7e4' fill-opacity='.55'%3E%3Ccircle cx='140' cy='120' r='2'/%3E%3Ccircle cx='300' cy='220' r='2'/%3E%3Ccircle cx='510' cy='120' r='1.8'/%3E%3Ccircle cx='660' cy='210' r='1.6'/%3E%3Ccircle cx='910' cy='180' r='2.2'/%3E%3Ccircle cx='1090' cy='250' r='1.8'/%3E%3Ccircle cx='1280' cy='180' r='2'/%3E%3Ccircle cx='1490' cy='240' r='1.5'/%3E%3Ccircle cx='1360' cy='100' r='1.7'/%3E%3C/g%3E%3C/svg%3E");
+                linear-gradient(rgba(4, 3, 2, 0.62), rgba(4, 3, 2, 0.86)),
+                radial-gradient(circle at top, rgba(196, 153, 86, 0.12), transparent 34%),
+                url("assets/kejawen-background.png");
             background-size: cover;
             background-position: center;
+            background-attachment: fixed;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background:
+                linear-gradient(90deg, rgba(5, 3, 2, 0.7) 0%, rgba(5, 3, 2, 0.2) 40%, rgba(5, 3, 2, 0.58) 100%),
+                radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.48) 100%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .container {
             max-width: 980px;
             margin: 0 auto;
+            position: relative;
+            z-index: 1;
             padding: 28px;
             background: var(--panel);
             border: 1px solid var(--line);
             border-radius: 28px;
             box-shadow: 0 20px 60px var(--shadow);
-            backdrop-filter: blur(14px);
+            backdrop-filter: blur(10px);
         }
 
         .hero {
@@ -58,29 +74,31 @@
         h1 {
             margin: 0;
             color: var(--accent-strong);
-            font-family: "Cinzel", Georgia, serif;
+            font-family: "Marcellus SC", Georgia, serif;
             font-size: clamp(2.3rem, 5.4vw, 4rem);
-            font-weight: 700;
+            font-weight: 400;
             line-height: 1.08;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.16em;
             text-transform: uppercase;
             text-wrap: balance;
-            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+            text-shadow: 0 8px 24px rgba(0, 0, 0, 0.38);
         }
 
         h2 {
             margin: 0 0 10px;
             color: var(--accent-strong);
+            font-family: "Cormorant Garamond", Georgia, serif;
             font-size: clamp(1.35rem, 3vw, 2rem);
-            font-weight: 800;
+            font-weight: 600;
             line-height: 1.2;
-            letter-spacing: 0.02em;
+            letter-spacing: 0.05em;
             text-wrap: balance;
         }
 
         h3 {
+            font-family: "Cormorant Garamond", Georgia, serif;
             line-height: 1.3;
-            letter-spacing: 0.01em;
+            letter-spacing: 0.03em;
         }
 
         .intro,
@@ -92,6 +110,26 @@
             font-size: 1rem;
             line-height: 1.8;
             text-wrap: pretty;
+        }
+
+        .hero-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+            color: var(--muted);
+            font-family: "Cormorant Garamond", Georgia, serif;
+            font-size: 1rem;
+            letter-spacing: 0.24em;
+            text-transform: uppercase;
+        }
+
+        .hero-mark::before,
+        .hero-mark::after {
+            content: "";
+            width: 46px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(224, 187, 117, 0.7), transparent);
         }
 
         .section-heading {
@@ -114,9 +152,9 @@
         textarea {
             width: 100%;
             padding: 12px 14px;
-            border: 1px solid rgba(255, 233, 187, 0.2);
+            border: 1px solid rgba(183, 142, 80, 0.34);
             border-radius: 14px;
-            background: rgba(255, 248, 231, 0.08);
+            background: rgba(33, 22, 16, 0.76);
             color: var(--text);
             font-size: 16px;
         }
@@ -138,18 +176,18 @@
             padding: 14px 16px;
             border: none;
             border-radius: 14px;
-            background: linear-gradient(135deg, var(--accent) 0%, #8d5a14 100%);
-            color: #16100a;
+            background: linear-gradient(135deg, var(--accent-strong) 0%, var(--accent) 55%, #4c2214 100%);
+            color: #140d08;
             font-size: 16px;
             font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 12px 24px rgba(141, 90, 20, 0.28);
+            box-shadow: 0 12px 24px rgba(76, 34, 20, 0.36);
             transition: transform 0.3s ease, background 0.3s ease;
         }
 
         button:hover {
             transform: translateY(-2px);
-            background: linear-gradient(135deg, #efbd60 0%, #a4681e 100%);
+            background: linear-gradient(135deg, #efcb8d 0%, #b97f39 55%, #6f2a1d 100%);
         }
 
         .result,
@@ -157,7 +195,7 @@
             margin-top: 24px;
             padding: 22px;
             background: var(--panel-soft);
-            border: 1px solid rgba(255, 233, 187, 0.18);
+            border: 1px solid rgba(183, 142, 80, 0.2);
             border-radius: 22px;
         }
 
@@ -179,8 +217,8 @@
             display: none;
             margin-top: 20px;
             padding: 20px;
-            background: rgba(255, 248, 231, 0.05);
-            border: 1px solid rgba(255, 233, 187, 0.18);
+            background: rgba(18, 11, 8, 0.68);
+            border: 1px solid rgba(183, 142, 80, 0.18);
             border-radius: 18px;
             opacity: 0;
             animation: fadeIn 0.9s ease-in-out forwards;
@@ -198,10 +236,19 @@
             position: relative;
             overflow: hidden;
             padding: 16px;
-            background: rgba(6, 15, 26, 0.58);
-            border: 1px solid rgba(255, 233, 187, 0.14);
+            background: linear-gradient(180deg, rgba(28, 18, 13, 0.84), rgba(13, 9, 7, 0.88));
+            border: 1px solid rgba(183, 142, 80, 0.16);
             border-radius: 18px;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+        }
+
+        .horoscope-card::after,
+        .term-card::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(224, 187, 117, 0.05), transparent 45%, rgba(154, 45, 32, 0.06));
+            pointer-events: none;
         }
 
         .horoscope-card h3,
@@ -222,7 +269,7 @@
             display: inline-block;
             padding: 4px 10px;
             border-radius: 999px;
-            background: rgba(240, 191, 98, 0.13);
+            background: rgba(224, 187, 117, 0.12);
             color: var(--accent-strong);
             font-size: 13px;
         }
@@ -277,8 +324,9 @@
 <body>
     <div class="container">
         <div class="hero">
-            <h1>Numerologi Nama</h1>
-            <p class="intro">Kalkulator ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
+            <div class="hero-mark">Petungan</div>
+            <h1>Petuang Kejawen</h1>
+            <p class="intro">Petungan ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
         </div>
 
         <form id="nameForm">
@@ -319,7 +367,7 @@
 
         <div class="zodiac-section">
             <div class="section-heading">
-                <h2>Makna Sri, Lungguh, Pati, Dunia</h2>
+                <h2>Makna Sri, Lungguh, Pati, Dunya</h2>
             </div>
             <div id="termDescriptions" class="term-grid"></div>
         </div>
@@ -348,7 +396,11 @@
                 "hubungan terasa lebih ringan jika kamu memberi ruang dan kejelasan",
                 "rasa penasaran dari seseorang bisa berubah jadi pendekatan yang serius",
                 "pasangan butuh validasi sederhana, bukan drama berkepanjangan",
-                "daya tarikmu muncul saat kamu tampil apa adanya"
+                "daya tarikmu muncul saat kamu tampil apa adanya",
+                "pertemuan singkat bisa membuka percakapan yang selama ini tertunda",
+                "rasa ragu akan mencair saat kamu berani menyebutkan keinginanmu dengan jelas",
+                "hubungan lama terasa hangat lagi ketika kamu berhenti mengungkit hal kecil",
+                "isyarat halus dari seseorang layak dibaca lebih serius hari ini"
             ],
             finance: [
                 "waktu yang baik untuk merapikan pengeluaran kecil yang selama ini bocor",
@@ -356,7 +408,11 @@
                 "anggaran akan lebih sehat kalau kamu menunda pembelian impulsif",
                 "fokus pada pemasukan yang konsisten akan memberi hasil lebih nyata",
                 "ada sinyal baik untuk negosiasi, revisi harga, atau menagih pembayaran",
-                "prioritas hari ini adalah menjaga arus kas tetap aman"
+                "prioritas hari ini adalah menjaga arus kas tetap aman",
+                "uang yang tertahan berpotensi bergerak jika kamu proaktif menghubungi pihak terkait",
+                "keputusan belanja terbaik datang setelah kamu membandingkan dua opsi dengan sabar",
+                "ide sampingan yang sederhana justru lebih menjanjikan daripada rencana besar",
+                "hari ini cocok untuk menutup celah kecil yang diam-diam melelahkan dompet"
             ],
             energy: [
                 "tenaga naik stabil sejak siang dan cocok dipakai menyelesaikan urusan tertunda",
@@ -364,7 +420,11 @@
                 "daya fokus tinggi jika kamu bekerja dengan target yang jelas",
                 "intuisimu tajam, tetapi tetap perlu diseimbangkan dengan data",
                 "energi sosial cukup kuat untuk bertemu orang baru atau presentasi",
-                "tubuh memberi sinyal untuk memperlambat tempo dan tidur lebih teratur"
+                "tubuh memberi sinyal untuk memperlambat tempo dan tidur lebih teratur",
+                "semangat datang bergelombang, jadi hasil terbaik muncul saat kamu bekerja per sesi pendek",
+                "ketegangan kecil di pagi hari akan reda kalau kamu tidak memaksa semua selesai sekaligus",
+                "instingmu cepat menangkap perubahan suasana, manfaatkan itu untuk memilih waktu yang tepat",
+                "energi batin lebih kuat daripada tenaga fisik, jadi jangan abaikan firasat"
             ],
             tips: [
                 "selesaikan satu hal terpenting sebelum membuka terlalu banyak percakapan",
@@ -372,7 +432,11 @@
                 "catat ide yang muncul mendadak karena salah satunya layak ditindaklanjuti",
                 "jaga nada bicara tetap tenang ketika membahas hal sensitif",
                 "rapikan meja, file, atau dompet karena keteraturan membuka fokus baru",
-                "beri jeda singkat sebelum merespons agar keputusanmu lebih matang"
+                "beri jeda singkat sebelum merespons agar keputusanmu lebih matang",
+                "jangan buru-buru menjawab semua pesan; pilih yang benar-benar perlu lebih dulu",
+                "tetapkan batas kecil agar energimu tidak habis untuk urusan orang lain",
+                "ulang kembali niat awalmu sebelum mengambil keputusan yang terasa mendesak",
+                "pakai malam hari untuk evaluasi singkat, bukan menyalahkan diri"
             ],
             focus: [
                 "hubungan pribadi",
@@ -380,26 +444,40 @@
                 "pemulihan energi",
                 "keberanian mengambil keputusan",
                 "disiplin terhadap target",
-                "menata prioritas"
+                "menata prioritas",
+                "menguatkan batas diri",
+                "membaca tanda dan timing"
+            ],
+            atmosphere: [
+                "suasana batin terasa tenang tetapi penuh isyarat",
+                "angin hari ini membawa energi perubahan yang halus",
+                "ritme semesta cenderung lambat dan meminta ketelitian",
+                "getaran hari ini lebih cocok untuk langkah yang sadar daripada tergesa",
+                "situasi sekitar terasa padat, tetapi masih memberi celah untuk bergerak cermat",
+                "hari ini memunculkan tanda kecil yang hanya terbaca kalau kamu mau hening sejenak"
+            ],
+            warnings: [
+                "jangan memaksakan jawaban dari orang yang belum siap bicara",
+                "hindari keputusan karena gengsi atau dorongan sesaat",
+                "waspadai kebiasaan menunda hal kecil yang sebenarnya bisa selesai cepat",
+                "jangan terlalu percaya pada kesan pertama sebelum memeriksa ulang fakta",
+                "kurangi debat yang tidak membawa hasil nyata",
+                "jaga pengeluaran emosional yang muncul saat suasana hati naik turun"
             ]
         };
 
         const termExplanations = {
             Sri: {
-                id: "Sri melambangkan berkah, kesuburan, kehalusan batin, dan daya tumbuh. Dalam pembacaan numerologi, Sri sering dibaca sebagai tanda bahwa sebuah nama membawa energi yang meneduhkan, memelihara relasi, dan menarik keberuntungan lewat sikap yang sabar serta selaras. Hidupnya cenderung rukun, tenang, dan tenteram, tetapi secara ekonomi sering terasa pas-pasan sehingga perlu pandai menjaga keseimbangan antara rasa syukur dan ikhtiar. Orang dengan hasil Sri biasanya kuat di area perawatan, diplomasi, keindahan, dan kemampuan mengundang rasa percaya.",
-                en: "Sri symbolizes blessing, fertility, inner grace, and the power to nurture growth. In numerology, it often marks a name that carries calming energy, supports relationships, and attracts fortune through patience and harmony."
+                id: "<strong>Makna utama:</strong> Kecukupan dan ketenangan.<br><br>Orang yang berada di posisi Sri biasanya tidak hidup berlebihan, tetapi kebutuhannya selalu tercukupi. Rezekinya datang sesuai kebutuhan, sehingga jarang mengalami kekurangan yang berat.<br><br><strong>Ciri-ciri:</strong><br>Keuangan cukup dan stabil.<br>Jika ada kebutuhan baru, biasanya harus mengurangi atau menunda kebutuhan lain.<br>Tidak mudah kaya mendadak, tetapi juga tidak mudah jatuh miskin.<br>Hidup cenderung tenang, damai, dan sederhana.<br><br><strong>Inti Sri:</strong><br>\"Tidak berlimpah, tetapi selalu cukup.\""
             },
             Lungguh: {
-                id: "Lungguh berarti duduk, menetap, atau menempati posisi. Dalam numerologi Jawa, Lungguh menunjukkan fondasi yang mapan, kecenderungan hidup yang lebih terstruktur, dan potensi untuk memperoleh kedudukan atau tanggung jawab yang stabil. Energinya bukan tentang gerak cepat, melainkan ketahanan, wibawa, dan kemampuan menjaga sesuatu tetap berdiri lama. Hasil ini juga kuat pada sisi kepemimpinan: ia cenderung mendominasi saat mengambil keputusan, dan suara atau penilaiannya lebih sering didengar orang lain.",
-                en: "Lungguh means sitting, settling, or holding a position. In Javanese numerology, it points to stability, structure, endurance, and the capacity to carry lasting responsibility."
+                id: "<strong>Makna utama:</strong> Kepemimpinan dan kewibawaan.<br><br>Lungguh melambangkan kedudukan, pengaruh, dan kemampuan mengarahkan orang lain. Tidak harus menjadi bos atau pejabat, tetapi pendapatnya sering didengar dan dijadikan pertimbangan.<br><br><strong>Ciri-ciri:</strong><br>Memiliki jiwa pemimpin.<br>Pendapatnya sering dianggap penting.<br>Mudah mendapatkan kepercayaan orang lain.<br>Cocok menjadi pengambil keputusan.<br><br><strong>Inti Lungguh:</strong><br>\"Suaranya didengar, keputusannya dipertimbangkan.\""
             },
             Pati: {
-                id: "Pati tidak selalu harus dibaca sebagai kematian harfiah, tetapi sebagai simbol akhir dari satu fase dan ujian yang menuntut pelepasan. Dalam numerologi Jawa, Pati menandai hidup yang cenderung sulit, penuh ujian pahit, dan banyak cobaan. Namun justru dari tempaan itu lahir mental baja: sejak kecil diasah keras, lalu ketika dewasa menjadi lebih tajam. Pola pikirnya sering logis, manusiawi, bijak, dan sabar karena ia belajar dari luka, kehilangan, dan proses yang panjang.",
-                en: "Pati should not always be read as literal death, but as the end of a phase and a test of release. It marks major transformation, friction, and the need to let go before moving forward."
+                id: "<strong>Makna utama:</strong> Ujian hidup dan ketangguhan.<br><br>Pati sering dianggap sebagai posisi yang berat karena perjalanan hidupnya cenderung lebih terjal dibanding yang lain. Rezeki, karier, dan hubungan sering melalui proses yang tidak mudah.<br><br><strong>Ciri-ciri:</strong><br>Hidup penuh tantangan.<br>Ekonomi sering naik turun atau harus diperjuangkan keras.<br>Banyak mengalami kegagalan sebelum berhasil.<br>Mental sangat kuat karena terbiasa menghadapi kesulitan.<br><br><strong>Sisi positif terbesar:</strong><br>Karena sering ditempa masalah, orang Pati biasanya memiliki mental baja dan daya tahan luar biasa.<br><br><strong>Inti Pati:</strong><br>\"Hidupnya keras, tetapi jiwanya paling kuat.\""
             },
-            Dunia: {
-                id: "Dunia melambangkan keluasan pengalaman, jaringan, peluang material, dan keterlibatan kuat dengan urusan nyata kehidupan. Dalam numerologi Jawa, Dunia sering dihubungkan dengan rezeki, akses, pengaruh sosial, dan kemampuan membaca keadaan secara praktis. Dalam hidupnya, secara ekonomi apa yang ia inginkan sering hampir seluruhnya tercapai, cita-cita banyak yang tergapai, dan hidupnya tampak senang. Namun sisi lemahnya ada pada mental yang kadang ciut saat tekanan datang, dan ia bisa tumbang ketika terlalu takabur atau merasa semua akan selalu mudah.",
-                en: "Dunia symbolizes worldly reach, material opportunities, social influence, and practical intelligence. It supports business growth and visible achievement, while reminding the person not to lose inner balance."
+            Dunya: {
+                id: "<strong>Makna utama:</strong> Kemakmuran dan pencapaian.<br><br>Dunya melambangkan kelancaran rezeki, kemudahan mencapai cita-cita, dan peluang yang terbuka luas. Apa yang diusahakan sering menemukan jalannya.<br><br><strong>Ciri-ciri:</strong><br>Rezeki cenderung lancar.<br>Keinginan dan cita-cita lebih mudah tercapai.<br>Peluang hidup banyak terbuka.<br>Mudah mendapatkan keberhasilan dibanding rata-rata orang.<br><br><strong>Pantangan alami:</strong><br>Takabur, sombong, merasa paling hebat, atau lupa diri.<br><br>Dalam kepercayaan petungan Jawa, ketika sifat takabur muncul, keberuntungan Dunya dipercaya dapat berbalik menjadi kesulitan.<br><br><strong>Inti Dunya:</strong><br>\"Mudah mencapai tujuan, selama tidak dikuasai kesombongan.\""
             }
         };
 
@@ -442,7 +520,7 @@
         }
 
         function mapToJavaneseTerm(count) {
-            const terms = ["Sri", "Lungguh", "Pati", "Dunia"];
+            const terms = ["Sri", "Lungguh", "Pati", "Dunya"];
             if (count <= 0) return "Tidak diketahui";
             const index = ((count - 9) % 4 + 4) % 4;
             return terms[index] || "Tidak diketahui";
@@ -453,7 +531,7 @@
             if (!explanation) {
                 return "Penjelasan tidak tersedia. / Explanation not available.";
             }
-            return `${explanation.id}<br><em>${explanation.en}</em>`;
+            return explanation.id;
         }
 
         function calculate() {
@@ -501,7 +579,7 @@
         }
 
         function renderTermDescriptions() {
-            const terms = ["Sri", "Lungguh", "Pati", "Dunia"];
+            const terms = ["Sri", "Lungguh", "Pati", "Dunya"];
             document.getElementById("termDescriptions").innerHTML = terms.map((term) => `
                 <div class="term-card">
                     <span class="pill">${term}</span>
@@ -541,13 +619,38 @@
             return text.split("").reduce((total, char) => total + char.charCodeAt(0), 0);
         }
 
-        function pickByDate(list, profile, date, salt) {
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
+        function hashString(text) {
+            let hash = 2166136261;
+            for (let index = 0; index < text.length; index += 1) {
+                hash ^= text.charCodeAt(index);
+                hash = Math.imul(hash, 16777619);
+            }
+            return hash >>> 0;
+        }
+
+        function createSeed(profile, date, salt) {
             const year = date.getFullYear();
-            const zodiacValue = nameValue(profile.name);
-            const seed = (day * 17) + (month * 31) + (year * 13) + zodiacValue + (salt * 19);
-            return list[Math.abs(seed) % list.length];
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayOfYear = getDayOfYear(date);
+            const key = [
+                profile.name,
+                profile.element,
+                profile.range,
+                salt,
+                year,
+                month,
+                day,
+                dayOfYear,
+                year * month * day
+            ].join("|");
+            return hashString(key);
+        }
+
+        function pickByDate(list, profile, date, salt) {
+            const seed = createSeed(profile, date, salt);
+            const mix = (seed ^ Math.imul(nameValue(profile.name) + salt, 2654435761)) >>> 0;
+            return list[mix % list.length];
         }
 
         function buildHoroscopeCard(profile, date) {
@@ -556,12 +659,16 @@
             const year = date.getFullYear();
             const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
             const monthName = date.toLocaleDateString("id-ID", { month: "long" });
-            const seasonalFocus = horoscopeSegments.focus[(getDayOfYear(date) + profile.name.length + month + day) % horoscopeSegments.focus.length];
+            const daySeed = createSeed(profile, date, 99);
+            const seasonalFocus = horoscopeSegments.focus[daySeed % horoscopeSegments.focus.length];
+            const atmosphere = horoscopeSegments.atmosphere[(daySeed >>> 3) % horoscopeSegments.atmosphere.length];
+            const warning = horoscopeSegments.warnings[(daySeed >>> 5) % horoscopeSegments.warnings.length];
 
             const love = `Percintaan: Untuk ${profile.name} yang dikenal ${profile.trait}, ${pickByDate(horoscopeSegments.love, profile, date, 1)}.`;
             const finance = `Keuangan: ${pickByDate(horoscopeSegments.finance, profile, date, 2)}.`;
-            const energy = `Energi hari ini: Pada ${weekday}, ${day} ${monthName} ${year}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickByDate(horoscopeSegments.energy, profile, date, 3)}.`;
+            const energy = `Energi hari ini: Pada ${weekday}, ${day} ${monthName} ${year}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickByDate(horoscopeSegments.energy, profile, date, 3)}. ${atmosphere.charAt(0).toUpperCase() + atmosphere.slice(1)}.`;
             const tip = `Tips: Fokus utama ${profile.name.toLowerCase()} hari ini ada pada ${seasonalFocus}; ${pickByDate(horoscopeSegments.tips, profile, date, 4)}.`;
+            const caution = `Catatan: ${warning}.`;
 
             return `
                 <article class="horoscope-card">
@@ -571,6 +678,7 @@
                     <p>${finance}</p>
                     <p>${energy}</p>
                     <p>${tip}</p>
+                    <p>${caution}</p>
                 </article>
             `;
         }
