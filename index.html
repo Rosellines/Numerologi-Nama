@@ -11,8 +11,8 @@
     <style>
         :root {
             --bg-deep: #070505;
-            --panel: rgba(13, 10, 8, 0.62);
-            --panel-soft: rgba(199, 154, 88, 0.05);
+            --panel: rgba(13, 10, 8, 0.5);
+            --panel-soft: rgba(199, 154, 88, 0.035);
             --line: rgba(183, 142, 80, 0.28);
             --text: #f1e1be;
             --muted: #cfb78c;
@@ -63,7 +63,7 @@
             border: 1px solid var(--line);
             border-radius: 28px;
             box-shadow: 0 20px 60px var(--shadow);
-            backdrop-filter: blur(7px);
+            backdrop-filter: blur(10px);
         }
 
         .hero {
@@ -194,9 +194,28 @@
         .zodiac-section {
             margin-top: 24px;
             padding: 22px;
-            background: var(--panel-soft);
+            background: rgba(199, 154, 88, 0.028);
             border: 1px solid rgba(183, 142, 80, 0.16);
             border-radius: 22px;
+        }
+
+        .sound-panel {
+            margin-top: 22px;
+            padding: 16px 18px;
+            background: rgba(17, 11, 8, 0.34);
+            border: 1px solid rgba(183, 142, 80, 0.18);
+            border-radius: 18px;
+            text-align: center;
+        }
+
+        .sound-panel button {
+            margin-top: 12px;
+        }
+
+        .sound-note {
+            margin: 0;
+            color: var(--muted);
+            line-height: 1.7;
         }
 
         .result {
@@ -217,7 +236,7 @@
             display: none;
             margin-top: 20px;
             padding: 20px;
-            background: rgba(18, 11, 8, 0.48);
+            background: rgba(18, 11, 8, 0.4);
             border: 1px solid rgba(183, 142, 80, 0.18);
             border-radius: 18px;
             opacity: 0;
@@ -263,6 +282,27 @@
             margin: 0 0 0.8em;
             line-height: 1.65;
             text-wrap: pretty;
+        }
+
+        .metric-row {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 10px;
+            margin: 14px 0;
+        }
+
+        .metric-box {
+            padding: 10px 12px;
+            background: rgba(255, 248, 230, 0.04);
+            border: 1px solid rgba(183, 142, 80, 0.12);
+            border-radius: 14px;
+        }
+
+        .metric-box strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--accent-strong);
+            font-size: 0.9rem;
         }
 
         .pill {
@@ -326,7 +366,11 @@
         <div class="hero">
             <div class="hero-mark">Petuang</div>
             <h1>Petuang Kejawen</h1>
-            <p class="intro">Petuang ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
+            <p class="intro">Petuang ini ngitung jumlah huruf unik dari nama, nyocokin ke istilah Jawa, lalu nampilin horoskop harian buat semua zodiak berdasarkan tanggal yang elu pilih. Vibenya santai, tapi hitungannya tetap rapi, jadi bukan ramalan copy-paste yang auranya kayak forward-an grup.</p>
+            <div class="sound-panel">
+                <p id="soundNote" class="sound-note">Suara yang dicoba nyala itu nuansanya gamelan Jawa kuno, horor, mistis, dan agak mencekam. Kalau browser elu sok jago dan ngeblokir autoplay, tinggal pencet tombol ini sekali biar ritualnya lanjut.</p>
+                <button id="soundToggle" type="button" onclick="toggleAmbientSound()">Nyalakan Suara Ritual</button>
+            </div>
         </div>
 
         <form id="nameForm">
@@ -354,7 +398,7 @@
         <div class="zodiac-section">
             <div class="section-heading">
                 <h2>Horoskop Zodiac Harian</h2>
-                <p class="section-note">Pilih tanggal, lalu sistem akan menghasilkan prediksi untuk semua zodiac pada tanggal itu. Jadi kalau kamu pilih <strong>1 Mei 2026</strong>, seluruh hasil otomatis menyesuaikan ke tanggal tersebut.</p>
+                <p class="section-note">Pilih tanggal, lalu sistem bakal ngeracik prediksi harian buat semua zodiak. Isinya dibikin beda per zodiak dan per tanggal, jadi kalau elu ganti hari, hasilnya ikut geser juga. Bukan model "Aries sama Virgo beda tipis kayak font bold doang".</p>
             </div>
             <div class="date-row">
                 <div class="form-group">
@@ -389,81 +433,150 @@
             { name: "Pisces", range: "19 Februari - 20 Maret", trait: "imajinatif", element: "Air" }
         ];
 
-        const horoscopeSegments = {
-            love: [
-                "komunikasi jujur lebih penting daripada gestur besar",
-                "energi romantis menguat saat kamu berhenti menebak-nebak",
-                "hubungan terasa lebih ringan jika kamu memberi ruang dan kejelasan",
-                "rasa penasaran dari seseorang bisa berubah jadi pendekatan yang serius",
-                "pasangan butuh validasi sederhana, bukan drama berkepanjangan",
-                "daya tarikmu muncul saat kamu tampil apa adanya",
-                "pertemuan singkat bisa membuka percakapan yang selama ini tertunda",
-                "rasa ragu akan mencair saat kamu berani menyebutkan keinginanmu dengan jelas",
-                "hubungan lama terasa hangat lagi ketika kamu berhenti mengungkit hal kecil",
-                "isyarat halus dari seseorang layak dibaca lebih serius hari ini"
+        const horoscopeSignals = {
+            cosmicWeather: [
+                "channel semesta lagi rame, jadi sinyal kecil gampang kebaca kalau elu gak sibuk overthinking",
+                "vibe hari ini agak random, tapi justru dari kekacauan mini itu ada clue yang berguna",
+                "ritme harinya pelan, kayak semesta bilang 'santai dulu bro, jangan sprint dari menit pertama'",
+                "udara batin lumayan padat, jadi keputusan bagus datang kalau elu stop sok tau 5 menit",
+                "hari ini cocok buat gerak cerdas, bukan gerak banyak yang ujung-ujungnya capek sendiri",
+                "auranya lumayan nyetrum, tapi masih aman kalau elu gak nyalain drama bonus"
             ],
-            finance: [
-                "waktu yang baik untuk merapikan pengeluaran kecil yang selama ini bocor",
-                "peluang finansial datang dari langkah praktis, bukan spekulasi cepat",
-                "anggaran akan lebih sehat kalau kamu menunda pembelian impulsif",
-                "fokus pada pemasukan yang konsisten akan memberi hasil lebih nyata",
-                "ada sinyal baik untuk negosiasi, revisi harga, atau menagih pembayaran",
-                "prioritas hari ini adalah menjaga arus kas tetap aman",
-                "uang yang tertahan berpotensi bergerak jika kamu proaktif menghubungi pihak terkait",
-                "keputusan belanja terbaik datang setelah kamu membandingkan dua opsi dengan sabar",
-                "ide sampingan yang sederhana justru lebih menjanjikan daripada rencana besar",
-                "hari ini cocok untuk menutup celah kecil yang diam-diam melelahkan dompet"
+            socialModes: [
+                "mending jawab yang penting dulu, gak semua chat wajib dibales secepat admin promo pinjol",
+                "kalau ada orang aneh, anggap aja NPC yang lagi bug",
+                "circle kecil justru lebih waras daripada kebanyakan orang yang ngomongnya kayak podcast 4x speed",
+                "obrolan receh bisa berubah jadi insight lumayan, jadi jangan langsung skip",
+                "lebih aman jujur dikit daripada sok santai tapi pasif-agresif",
+                "hari ini cocok buat setting boundary tanpa harus jadi villain"
             ],
-            energy: [
-                "tenaga naik stabil sejak siang dan cocok dipakai menyelesaikan urusan tertunda",
-                "emosi cenderung sensitif, jadi atur ritme agar tidak cepat lelah",
-                "daya fokus tinggi jika kamu bekerja dengan target yang jelas",
-                "intuisimu tajam, tetapi tetap perlu diseimbangkan dengan data",
-                "energi sosial cukup kuat untuk bertemu orang baru atau presentasi",
-                "tubuh memberi sinyal untuk memperlambat tempo dan tidur lebih teratur",
-                "semangat datang bergelombang, jadi hasil terbaik muncul saat kamu bekerja per sesi pendek",
-                "ketegangan kecil di pagi hari akan reda kalau kamu tidak memaksa semua selesai sekaligus",
-                "instingmu cepat menangkap perubahan suasana, manfaatkan itu untuk memilih waktu yang tepat",
-                "energi batin lebih kuat daripada tenaga fisik, jadi jangan abaikan firasat"
+            timing: [
+                "jam rame elu ada di siang menjelang sore",
+                "momen paling enak buat mutusin sesuatu ada di pagi setelah kepala gak kusut",
+                "malam justru lebih cocok buat evaluasi daripada perang argumentasi",
+                "awal hari agak ngeselin, tapi habis itu grafiknya naik pelan-pelan",
+                "habis makan siang otak elu lebih sinkron daripada sebelum kopi kedua",
+                "sore jadi waktu paling mantep buat closing urusan kecil yang ngendon"
             ],
-            tips: [
-                "selesaikan satu hal terpenting sebelum membuka terlalu banyak percakapan",
-                "hindari janji yang belum kamu ukur kapasitas waktunya",
-                "catat ide yang muncul mendadak karena salah satunya layak ditindaklanjuti",
-                "jaga nada bicara tetap tenang ketika membahas hal sensitif",
-                "rapikan meja, file, atau dompet karena keteraturan membuka fokus baru",
-                "beri jeda singkat sebelum merespons agar keputusanmu lebih matang",
-                "jangan buru-buru menjawab semua pesan; pilih yang benar-benar perlu lebih dulu",
-                "tetapkan batas kecil agar energimu tidak habis untuk urusan orang lain",
-                "ulang kembali niat awalmu sebelum mengambil keputusan yang terasa mendesak",
-                "pakai malam hari untuk evaluasi singkat, bukan menyalahkan diri"
-            ],
-            focus: [
-                "hubungan pribadi",
-                "stabilitas kerja",
-                "pemulihan energi",
-                "keberanian mengambil keputusan",
-                "disiplin terhadap target",
-                "menata prioritas",
-                "menguatkan batas diri",
-                "membaca tanda dan timing"
-            ],
-            atmosphere: [
-                "suasana batin terasa tenang tetapi penuh isyarat",
-                "angin hari ini membawa energi perubahan yang halus",
-                "ritme semesta cenderung lambat dan meminta ketelitian",
-                "getaran hari ini lebih cocok untuk langkah yang sadar daripada tergesa",
-                "situasi sekitar terasa padat, tetapi masih memberi celah untuk bergerak cermat",
-                "hari ini memunculkan tanda kecil yang hanya terbaca kalau kamu mau hening sejenak"
-            ],
-            warnings: [
-                "jangan memaksakan jawaban dari orang yang belum siap bicara",
-                "hindari keputusan karena gengsi atau dorongan sesaat",
-                "waspadai kebiasaan menunda hal kecil yang sebenarnya bisa selesai cepat",
-                "jangan terlalu percaya pada kesan pertama sebelum memeriksa ulang fakta",
-                "kurangi debat yang tidak membawa hasil nyata",
-                "jaga pengeluaran emosional yang muncul saat suasana hati naik turun"
+            humorWarnings: [
+                "jangan sotoy dulu, semesta gak suka orang yang pede sebelum baca konteks",
+                "kalau mau ngegas, cek bensin emosinya dulu. Jangan modal alis naik doang",
+                "dompet elu butuh perlindungan lebih dari diskon palsu yang keliatan 'murah banget cuy'",
+                "hindari debat yang hadiahnya cuma capek dan haus",
+                "jangan stalking kesimpulan terlalu cepat. Fakta kadang telat login",
+                "kalau suasana mulai absurd, tarik napas. Gak semua hal harus elu menangkan"
             ]
+        };
+
+        const zodiacVoices = {
+            Aries: {
+                archetype: "si gaspol yang kalau udah yakin susah direm",
+                moodMap: ["berani buka jalan", "kepancing balapan ego", "pede tapi butuh rem kecil", "lagi semangat ngajak orang gerak"],
+                love: ["elu keliatan lebih menarik pas ngomong to the point, bukan pas sok misterius", "orang yang elu taksir lebih peka ke aksi kecil daripada gaya hero dadakan", "kalau ada tensi dikit di hubungan, selesain dengan jujur, bukan dengan mode debat ranked"],
+                finance: ["duit masuk bisa kepake bagus kalau elu gak impulsif beli barang yang vibes-nya 'penting gak penting'", "peluang cuan datang dari keputusan cepat yang tetap pake otak, bukan cuma pake adrenalin", "ada momen bagus buat ngejar pembayaran atau nawar deal yang kemarin kepending"],
+                energy: ["tenaga elu kenceng, tapi kalau semua dilibas sekaligus ujungnya tepar kayak baterai 1 persen", "ambisi naik tinggi dan bagus buat mulai sesuatu yang keburu lama diem", "kepala elu panas dikit, jadi kasih jeda sebelum bales hal yang bikin kesel"],
+                focus: ["eksekusi ide", "beresin konflik kecil", "ambil posisi duluan", "ngatur tempo biar gak boros tenaga"],
+                chaos: ["musuh alami hari ini: keputusan spontan yang lahir cuma karena pengen cepet menang", "kalau ada yang lemot, jangan langsung elu anggap pengkhianatan terhadap timeline umat manusia", "jangan jadi pemadam kebakaran yang malah bawa bensin"]
+            },
+            Taurus: {
+                archetype: "si kalem yang keliatannya santai, padahal radar nyamannya detail banget",
+                moodMap: ["lagi pengen serba stabil", "lebih sensitif soal rasa aman", "mood bagus kalau lingkungan rapi", "diam-diam lagi nyusun langkah matang"],
+                love: ["afeksi kecil lebih ngena buat elu hari ini dibanding kata-kata megah ala caption galau", "kalau ada orang yang konsisten hadir, itu lebih layak diperhatiin daripada yang cuma rame pas senggang", "hubungan jadi adem kalau elu ngomong kebutuhan elu tanpa nunggu orang nebak"],
+                finance: ["hari ini cocok buat ngerapiin pengeluaran bocor yang selama ini nyamar jadi 'ah receh doang'", "pilihan keuangan paling waras datang dari sabar bandingin opsi, bukan buru-buru checkout", "cuan pelan tapi pasti lebih ramah buat elu daripada skema yang terlalu heboh"],
+                energy: ["ritme stabil jadi senjata utama elu hari ini", "badan minta jeda yang proper, bukan healing palsu sambil doomscrolling", "fokus bagus muncul waktu elu kerja di tempat yang minim gangguan"],
+                focus: ["stabilitas dompet", "kenyamanan relasi", "beresin hal teknis", "ngebangun fondasi yang gak gampang goyah"],
+                chaos: ["jangan keras kepala cuma karena gengsi. Batu juga kalah kalau ketemu waktu", "kalau mood turun, jangan lampiasin ke dompet", "ngotot boleh, asal jangan sampe jadi wallpaper masalah"]
+            },
+            Gemini: {
+                archetype: "si lincah yang otaknya kebuka tab banyak banget",
+                moodMap: ["lagi pengen ngobrol sama semua orang", "cepet nangkep info tapi rawan buyar", "humornya on point", "mood naik kalau ada hal baru"],
+                love: ["chemistry tumbuh dari obrolan yang nyambung, bukan cuma saling liat story terus hilang", "orang tertarik sama cara elu mikir, jadi jangan takut nunjukin sisi cerdas elu", "kalau relasi terasa ganjel, obrolan ringan justru bisa jadi pintu masuk buat jujur"],
+                finance: ["ide sampingan yang keliatannya receh malah punya potensi cuan lumayan", "hari ini jangan langsung percaya promo yang terlalu manis, takutnya jebakan betmen digital", "keputusan duit paling aman datang setelah elu crosscheck dua kali"],
+                energy: ["otak ngebut, jadi tubuh jangan ditinggal kayak side character", "bagus buat brainstorming, kurang bagus buat multitasking kebablasan", "kalau pikiran mulai loncat-loncat, tulis poin pentingnya biar gak kabur"],
+                focus: ["komunikasi", "nyaring informasi", "kenalan baru", "ngebedain sinyal sama noise"],
+                chaos: ["jangan semua hal dijadiin topik sekaligus, nanti chat elu kayak forum kebakaran", "kalau kepo, pastiin gak nyemplung ke asumsi liar", "ngaret dikit gapapa, asal jangan niat elu yang ngilang"]
+            },
+            Cancer: {
+                archetype: "si perasa yang memorinya tajam dan hatinya gampang nangkep aura",
+                moodMap: ["lagi peka banget", "butuh rasa aman emosional", "mood bisa berubah gara-gara detail kecil", "instingnya kuat"],
+                love: ["hati elu lebih tenang kalau lawan bicara nunjukin konsistensi, bukan cuma manis pas sempat", "hari ini enaknya ngomong apa yang elu rasain sebelum numpuk jadi drama internal", "kedekatan tumbuh pas elu berani bilang 'sebenernya gw kepikiran ini'"],
+                finance: ["duit lebih aman kalau elu gak belanja buat ngademin hati sesaat", "ada peluang ngerapiin kebutuhan rumah, keluarga, atau hal yang bikin hidup lebih nyaman", "jangan pinjemin tenaga dan uang sekaligus kalau intuisi elu udah kasih lampu kuning"],
+                energy: ["emosi jadi kompas, tapi jangan biarin dia nyetir sendirian", "hari ini cocok buat kerja dari ritme yang pelan tapi niat", "kalau suasana rame banget, elu bakal lebih waras setelah ambil jeda bentar"],
+                focus: ["keseimbangan batin", "urusan rumah atau keluarga", "ngebatesin energi", "nyembuhin ganjelan lama"],
+                chaos: ["jangan diem-diem ngambek terus berharap orang lain punya subtitle", "kalau capek, izin mundur bentar itu bukan kalah", "jangan pungut semua masalah orang, elu bukan karung serbaguna"]
+            },
+            Leo: {
+                archetype: "si bersinar yang kalau masuk room auranya ikut nyala",
+                moodMap: ["lagi pede", "butuh diapresiasi", "semangat tampil", "siap jadi motor suasana"],
+                love: ["pesona elu naik pas elu hangat, bukan pas terlalu pengen menang sorotan", "ada yang ngeliatin elu lebih serius dari yang elu kira, bukan cuma numpang liat lalu lewat", "relasi makin enak kalau elu kasih ruang orang lain buat ikut bersinar juga"],
+                finance: ["hari ini bagus buat nunjukin value elu dan minta bayaran yang sepadan", "jangan belanja cuma demi gengsi visual. Dompet juga punya perasaan, bro", "peluang cuan muncul waktu elu percaya diri tapi tetap realistis"],
+                energy: ["energi sosial kuat dan bikin elu gampang nyetir suasana", "bagus buat presentasi, pitching, atau ngasih warna ke tim", "kalau ego kepancing, tarik napas dulu sebelum mode raja tanpa briefing aktif"],
+                focus: ["percaya diri yang sehat", "showcase karya", "romansa hangat", "ngerawat citra tanpa pencitraan berlebihan"],
+                chaos: ["jangan semua spotlight elu embat. Matahari aja bagi cahaya", "kalau dikritik dikit, gak usah langsung ngira dunia iri", "hindari drama yang staging-nya lebih mewah daripada hasilnya"]
+            },
+            Virgo: {
+                archetype: "si perfeksionis waras yang bisa nemu typo di semesta",
+                moodMap: ["lagi pengen semuanya jelas", "fokus tinggi", "rada cerewet ke detail", "mood bagus kalau progres keliatan"],
+                love: ["rasa sayang elu kebaca dari perhatian kecil yang rapi, dan itu justru jadi poin manis", "jangan terlalu sibuk bedah sinyal sampai lupa nikmatin interaksinya", "orang yang serius bakal nyaman sama cara elu nunjukin perhatian yang konsisten"],
+                finance: ["hari ini paling cuan kalau elu rapihin angka, list, dan prioritas", "pemborosan bisa dicegah cuma dengan satu langkah kecil: cek ulang sebelum bayar", "ada hasil bagus dari kerja detail yang orang lain males kerjain"],
+                energy: ["fokus elu lagi tajam banget, cocok buat nutup pekerjaan yang sempat gantung", "jangan paksa diri jadi mesin. Bahkan spreadsheet pun bisa hang", "kepuasan datang dari progres konkret, bukan pujian random"],
+                focus: ["rapihin sistem", "efisiensi kerja", "ngebenerin error kecil", "jaga badan dari kelelahan diam-diam"],
+                chaos: ["jangan kritik semua hal cuma karena bisa", "kalau ada yang berantakan, benerin seperlunya dulu, gak harus langsung operasi total", "hindari mikir berulang sampe masalahnya malah punya franchise"]
+            },
+            Libra: {
+                archetype: "si diplomat manis yang pengen semuanya balance tapi suka bingung milih",
+                moodMap: ["lagi pengen adem", "sensitif sama vibe orang", "mood naik kalau suasana harmonis", "otaknya sibuk nimbang opsi"],
+                love: ["romansa buat elu jalan bagus kalau komunikasi dua arah dijaga, bukan cuma saling kode", "orang yang menghargai effort kecil elu layak naik level di radar", "hari ini elu gampang bikin suasana manis asal gak kebanyakan nahan omongan penting"],
+                finance: ["keputusan duit paling oke datang setelah elu timbang fungsi dan gengsi", "bisa ada pengeluaran buat penampilan atau kenyamanan, tapi jangan sampe jadi plot twist tagihan", "negosiasi atau kerja bareng punya hasil manis kalau aturannya jelas"],
+                energy: ["vibe sosial lagi kuat, cocok buat ngobrol, kolab, atau damaiin situasi", "jangan terlalu lama mikir demi semua orang sampai elu sendiri kehabisan tenaga", "kepala lebih enteng kalau meja, chat, atau agenda gak berantakan"],
+                focus: ["hubungan timbal balik", "kerja sama", "pilihan yang adil", "ngebenerin dinamika sosial"],
+                chaos: ["jangan kebanyakan mikir sampe pilihan gampang jadi sidang pleno", "damai itu bagus, tapi people pleasing kelewatan bikin elu yang remuk", "hindari bilang 'terserah' kalau sebenernya elu punya maunya"]
+            },
+            Scorpio: {
+                archetype: "si intens yang diem-diem baca situasi lebih tajam dari CCTV 4K",
+                moodMap: ["lagi tajam", "emosinya dalam", "rada susah percaya", "power batinnya naik"],
+                love: ["kedekatan terasa lebih real kalau elu buka kartu seperlunya, gak semuanya disimpen di dungeon", "orang yang niat bakal keliatan dari konsistensi, bukan dari kata-kata tinggi", "chemistry kuat, tapi cemburu receh jangan dipelihara kayak tanaman hias"],
+                finance: ["bagus buat baca celah, riset, atau nyusun strategi duit jangka menengah", "jangan asal percaya omongan manis soal cuan kilat", "ada peluang beresin sesuatu yang sempat ngendap dan bikin waswas"],
+                energy: ["insting lagi liar tapi berguna, asal tetep dicek logikanya", "tenaga lebih kuat buat kerja fokus daripada basa-basi panjang", "hari ini cocok buat nutup siklus lama dan beresin yang gantung"],
+                focus: ["strategi", "privasi yang sehat", "healing luka ego", "bongkar akar masalah"],
+                chaos: ["jangan nyimpen curiga tanpa bukti, nanti otak elu bikin fanfic sendiri", "kalau kesel, jangan lempar silent treatment level boss", "rahasia boleh, tapi jangan sampe komunikasi jadi escape room"]
+            },
+            Sagittarius: {
+                archetype: "si petualang receh yang suka kebebasan dan opini blak-blakan",
+                moodMap: ["lagi pengen gerak", "butuh ruang", "optimis", "humornya liar"],
+                love: ["daya tarik elu naik pas elu jujur dan gak kebanyakan manuver", "relasi terasa seru kalau ada ruang buat tumbuh, bukan diiket pake drama", "candaan elu bisa jadi pemecah es, asal timing-nya gak barbar"],
+                finance: ["peluang duit datang dari jaringan, ide baru, atau langkah yang agak berani tapi masih masuk akal", "jangan kalap checkout demi self reward padahal baru self lewat", "hari ini bagus buat mikirin target yang lebih luas tanpa ngelupain detail kecil"],
+                energy: ["semangat tinggi, cocok buat eksplor, belajar, atau ngedorong rencana yang mandek", "kalau terlalu bebas, fokus bisa kabur naik angin", "badan minta gerak, jadi jangan diem kelamaan sambil bilang 'nanti aja'"],
+                focus: ["ekspansi", "belajar hal baru", "networking", "ngerapihin tujuan besar"],
+                chaos: ["jangan ngomong terlalu jujur sampe terdengar kayak roasting sponsor", "kebebasan itu enak, tapi deadline masih makhluk nyata", "hindari janji spontan yang lahir cuma karena suasana lagi seru"]
+            },
+            Capricorn: {
+                archetype: "si pendaki bukit target yang keliatannya dingin tapi niatnya tebel",
+                moodMap: ["lagi serius", "fokus ke hasil", "rada kaku", "staminanya tahan lama"],
+                love: ["perasaan elu paling kebaca dari aksi nyata, dan itu justru bikin orang merasa aman", "hari ini cocok buat nunjukin niat lewat konsistensi kecil", "kalau ada jarak, mungkin yang dibutuhin bukan drama tapi kejelasan agenda hati"],
+                finance: ["bagus buat nyusun strategi, nabung, atau beresin hal administratif yang malesin tapi penting", "cuan datang dari disiplin, bukan dari FOMO finansial", "hari ini ada progres kalau elu sabar ngerjain langkah yang keliatannya kecil"],
+                energy: ["stamina kerja kuat, tapi jangan lupa elu juga makhluk hidup bukan printer kantor", "kepala dingin bantu elu ambil keputusan yang tahan lama", "hasil terbaik muncul saat elu fokus ke satu prioritas dulu"],
+                focus: ["target jangka panjang", "struktur kerja", "reputasi", "disiplin sehat"],
+                chaos: ["jangan terlalu keras sama diri sendiri sampe tiap istirahat berasa dosa", "kalau orang lain lebih lambat, bukan berarti elu harus bawa semuanya sendiri", "hindari mode robot serius yang bikin semua obrolan kayak rapat audit"]
+            },
+            Aquarius: {
+                archetype: "si out of the box yang idenya kadang datang sebelum orang lain sempat loading",
+                moodMap: ["lagi visioner", "butuh ruang mikir", "rada detached", "kepalanya muter cepat"],
+                love: ["orang tertarik sama keunikan elu, jadi jangan disamarkan demi keliatan aman", "hubungan terasa lebih seru kalau obrolannya punya isi, bukan formalitas doang", "kalau hati lagi bingung, coba jujur tanpa bikin semuanya terdengar kayak presentasi riset"],
+                finance: ["ide baru, proyek digital, atau cara kerja beda bisa bawa hasil menarik", "jangan sok anti aturan sampai lupa cek detail teknis yang penting", "hari ini cocok buat nyari efisiensi yang gak kepikiran orang lain"],
+                energy: ["otak elu nyala dan cocok buat mikir strategi atau eksperimen", "emosi mungkin terasa jauh, tapi tubuh tetap perlu diurus", "bagus buat ngebuka pola baru asal gak semuanya dirombak sekaligus"],
+                focus: ["inovasi", "komunitas", "cara kerja baru", "ngebikin sistem lebih cerdas"],
+                chaos: ["jangan terlalu sibuk jadi beda sampai lupa jadi jelas", "kalau ngomong, bantu orang lain ngikutin jalurnya. Gak semua orang hidup di server yang sama", "hindari cuek performatif yang sebenernya cuma capek"]
+            },
+            Pisces: {
+                archetype: "si intuitif yang hidupnya sering ditemenin radar rasa dan imajinasi",
+                moodMap: ["lagi dreamy", "intuisi kenceng", "mudah kebawa suasana", "lembut tapi dalam"],
+                love: ["romansa buat elu hidup dari kehangatan kecil dan rasa dipahami", "hari ini hati elu lebih gampang kebuka ke orang yang bikin tenang, bukan yang bikin bingung", "kalau ada rasa ganjel, bilang baik-baik sebelum berubah jadi film internal 12 episode"],
+                finance: ["jangan belanja demi kabur dari mood, dompet bukan therapist", "peluang duit muncul dari kreativitas, empati, atau kerja yang butuh sentuhan personal", "lebih aman pegang plan sederhana daripada ngandelin feeling doang"],
+                energy: ["intuisi elu tajam, tapi butuh anchor biar gak hanyut", "hari ini cocok buat kerja kreatif, refleksi, atau ngobrol yang tulus", "kalau suasana terlalu berat, musik atau jeda singkat bisa bantu reset"],
+                focus: ["healing", "kreativitas", "ngebaca arah batin", "milih mana yang layak diserap"],
+                chaos: ["jangan nyerap semua emosi ruangan sampai lupa mana punyamu", "kalau bingung, jangan langsung ilang mode ghost laut selatan", "hindari janji samar yang bikin dua pihak sama-sama nebak"]
+            }
         };
 
         const termExplanations = {
@@ -511,7 +624,7 @@
 
             document.getElementById("horoscopeResult").innerHTML = `
                 <h3>Horoskop Semua Zodiac - ${formattedDate}</h3>
-                <p class="section-note">Prediksi disusun dari kombinasi tanggal yang dipilih dan karakter dasar tiap zodiac, jadi saat tanggal berubah isi hasilnya ikut berubah.</p>
+                <p class="section-note">Prediksi ini diracik dari karakter unik tiap zodiak + seed tanggal yang elu pilih, jadi hasilnya beda per zodiak dan ikut berubah tiap hari. Anggap aja ini engine ramalan bergaya AI versi front-end, bukan template males yang tinggal ganti judul doang.</p>
                 <div class="horoscope-grid">${cards}</div>
             `;
             document.getElementById("horoscopeResult").style.display = "block";
@@ -664,32 +777,56 @@
             return list[mix % list.length];
         }
 
-        function buildHoroscopeCard(profile, date) {
-            const day = date.getDate();
-            const month = date.getMonth() + 1;
-            const year = date.getFullYear();
-            const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
-            const monthName = date.toLocaleDateString("id-ID", { month: "long" });
-            const daySeed = createSeed(profile, date, 99);
-            const seasonalFocus = horoscopeSegments.focus[daySeed % horoscopeSegments.focus.length];
-            const atmosphere = horoscopeSegments.atmosphere[(daySeed >>> 3) % horoscopeSegments.atmosphere.length];
-            const warning = horoscopeSegments.warnings[(daySeed >>> 5) % horoscopeSegments.warnings.length];
+        function scoreFromSeed(profile, date, salt, min, max) {
+            const seed = createSeed(profile, date, salt);
+            return min + (seed % (max - min + 1));
+        }
 
-            const love = `Percintaan: Untuk ${profile.name} yang dikenal ${profile.trait}, ${pickByDate(horoscopeSegments.love, profile, date, 1)}.`;
-            const finance = `Keuangan: ${pickByDate(horoscopeSegments.finance, profile, date, 2)}.`;
-            const energy = `Energi hari ini: Pada ${weekday}, ${day} ${monthName} ${year}, elemen ${profile.element.toLowerCase()} mendorongmu agar ${pickByDate(horoscopeSegments.energy, profile, date, 3)}. ${atmosphere.charAt(0).toUpperCase() + atmosphere.slice(1)}.`;
-            const tip = `Tips: Fokus utama ${profile.name.toLowerCase()} hari ini ada pada ${seasonalFocus}; ${pickByDate(horoscopeSegments.tips, profile, date, 4)}.`;
-            const caution = `Catatan: ${warning}.`;
+        function pickVoiceLine(profile, date, key, salt) {
+            return pickByDate(zodiacVoices[profile.name][key], profile, date, salt);
+        }
+
+        function buildHoroscopeCard(profile, date) {
+            const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
+            const persona = zodiacVoices[profile.name];
+            const mood = pickVoiceLine(profile, date, "moodMap", 11);
+            const loveScore = scoreFromSeed(profile, date, 21, 63, 96);
+            const moneyScore = scoreFromSeed(profile, date, 22, 58, 92);
+            const energyScore = scoreFromSeed(profile, date, 23, 55, 95);
+            const focus = pickVoiceLine(profile, date, "focus", 24);
+            const loveLine = pickVoiceLine(profile, date, "love", 25);
+            const financeLine = pickVoiceLine(profile, date, "finance", 26);
+            const energyLine = pickVoiceLine(profile, date, "energy", 27);
+            const chaosLine = pickVoiceLine(profile, date, "chaos", 28);
+            const cosmicWeather = pickByDate(horoscopeSignals.cosmicWeather, profile, date, 29);
+            const socialMode = pickByDate(horoscopeSignals.socialModes, profile, date, 30);
+            const timing = pickByDate(horoscopeSignals.timing, profile, date, 31);
+            const warning = pickByDate(horoscopeSignals.humorWarnings, profile, date, 32);
 
             return `
                 <article class="horoscope-card">
                     <span class="pill">${profile.name} - ${profile.range}</span>
                     <h3>${profile.name}</h3>
-                    <p>${love}</p>
-                    <p>${finance}</p>
-                    <p>${energy}</p>
-                    <p>${tip}</p>
-                    <p>${caution}</p>
+                    <p><strong>Vibe ${weekday}:</strong> ${profile.name} lagi masuk mode ${mood}. Karakter dasarnya ${persona.archetype}, jadi fokus harinya condong ke ${focus}. ${cosmicWeather}.</p>
+                    <div class="metric-row">
+                        <div class="metric-box">
+                            <strong>Love Meter</strong>
+                            <span>${loveScore}/100</span>
+                        </div>
+                        <div class="metric-box">
+                            <strong>Cuan Meter</strong>
+                            <span>${moneyScore}/100</span>
+                        </div>
+                        <div class="metric-box">
+                            <strong>Tenaga</strong>
+                            <span>${energyScore}/100</span>
+                        </div>
+                    </div>
+                    <p><strong>Percintaan:</strong> ${loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.</p>
+                    <p><strong>Keuangan:</strong> ${financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.</p>
+                    <p><strong>Energi:</strong> ${energyLine}. ${timing}.</p>
+                    <p><strong>Sosial dan tips:</strong> ${socialMode}. Power move buat elu hari ini: fokus ke ${focus} dan jangan kebanyakan buka front yang gak perlu.</p>
+                    <p><strong>Catatan receh semesta:</strong> ${chaosLine}. Bonus warning: ${warning}.</p>
                 </article>
             `;
         }
@@ -703,6 +840,12 @@
                     window.addEventListener(eventName, unlockAmbientSound, { passive: true });
                 });
             }
+
+            document.addEventListener("visibilitychange", () => {
+                if (!document.hidden && ambientAudioContext && ambientAudioContext.state !== "running") {
+                    startAmbientSound();
+                }
+            });
         }
 
         function unlockAmbientSound() {
@@ -725,7 +868,7 @@
             if (!ambientAudioContext) {
                 ambientAudioContext = new AudioContextClass();
                 ambientMasterGain = ambientAudioContext.createGain();
-                ambientMasterGain.gain.value = 0.08;
+                ambientMasterGain.gain.value = 0.1;
                 ambientMasterGain.connect(ambientAudioContext.destination);
                 ambientNoiseBuffer = createNoiseBuffer(ambientAudioContext);
             }
@@ -736,7 +879,9 @@
                         beginAmbientComposition();
                     }
                     updateSoundUI();
-                }).catch(() => {});
+                }).catch(() => {
+                    showSoundFallback("Autoplay-nya ketahan browser. Sekali klik tombol suara atau tap halaman, abis itu ambience bakal jalan.");
+                });
                 return;
             }
 
@@ -751,8 +896,9 @@
             ambientStarted = true;
             startDroneLayer();
             startWindLayer();
+            startRumbleLayer();
             scheduleAmbientPhrase();
-            ambientSchedulerId = window.setInterval(scheduleAmbientPhrase, 4800);
+            ambientSchedulerId = window.setInterval(scheduleAmbientPhrase, 6200);
             updateSoundUI();
         }
 
@@ -769,22 +915,31 @@
 
         function startDroneLayer() {
             const now = ambientAudioContext.currentTime;
-            [73.42, 110.0].forEach((frequency, index) => {
+            [55.0, 73.42, 110.0].forEach((frequency, index) => {
                 const oscillator = ambientAudioContext.createOscillator();
                 const gain = ambientAudioContext.createGain();
                 const filter = ambientAudioContext.createBiquadFilter();
+                const lfo = ambientAudioContext.createOscillator();
+                const lfoGain = ambientAudioContext.createGain();
 
-                oscillator.type = index === 0 ? "triangle" : "sine";
+                oscillator.type = index === 0 ? "sawtooth" : index === 1 ? "triangle" : "sine";
                 oscillator.frequency.value = frequency;
                 filter.type = "lowpass";
-                filter.frequency.value = index === 0 ? 260 : 180;
-                gain.gain.value = index === 0 ? 0.015 : 0.01;
+                filter.frequency.value = index === 0 ? 150 : index === 1 ? 220 : 170;
+                gain.gain.value = index === 0 ? 0.012 : index === 1 ? 0.016 : 0.01;
+
+                lfo.type = "sine";
+                lfo.frequency.value = 0.07 + (index * 0.03);
+                lfoGain.gain.value = index === 0 ? 5 : 3;
 
                 oscillator.connect(filter);
                 filter.connect(gain);
                 gain.connect(ambientMasterGain);
+                lfo.connect(lfoGain);
+                lfoGain.connect(oscillator.detune);
 
                 oscillator.start(now);
+                lfo.start(now);
             });
         }
 
@@ -796,9 +951,9 @@
             source.buffer = ambientNoiseBuffer;
             source.loop = true;
             filter.type = "bandpass";
-            filter.frequency.value = 420;
-            filter.Q.value = 0.8;
-            gain.gain.value = 0.008;
+            filter.frequency.value = 310;
+            filter.Q.value = 1.3;
+            gain.gain.value = 0.01;
 
             source.connect(filter);
             filter.connect(gain);
@@ -812,20 +967,37 @@
                 }
 
                 const now = ambientAudioContext.currentTime;
-                const targetFrequency = 260 + Math.random() * 420;
-                const targetGain = 0.004 + Math.random() * 0.008;
+                const targetFrequency = 180 + Math.random() * 260;
+                const targetGain = 0.005 + Math.random() * 0.009;
 
                 filter.frequency.cancelScheduledValues(now);
                 filter.frequency.setValueAtTime(filter.frequency.value, now);
-                filter.frequency.linearRampToValueAtTime(targetFrequency, now + 3.5);
+                filter.frequency.linearRampToValueAtTime(targetFrequency, now + 4.2);
 
                 gain.gain.cancelScheduledValues(now);
                 gain.gain.setValueAtTime(gain.gain.value, now);
-                gain.gain.linearRampToValueAtTime(targetGain, now + 2.4);
+                gain.gain.linearRampToValueAtTime(targetGain, now + 3.4);
             };
 
             sweepWind();
-            ambientWindIntervalId = window.setInterval(sweepWind, 2600);
+            ambientWindIntervalId = window.setInterval(sweepWind, 3200);
+        }
+
+        function startRumbleLayer() {
+            const source = ambientAudioContext.createBufferSource();
+            const lowpass = ambientAudioContext.createBiquadFilter();
+            const gain = ambientAudioContext.createGain();
+
+            source.buffer = ambientNoiseBuffer;
+            source.loop = true;
+            lowpass.type = "lowpass";
+            lowpass.frequency.value = 95;
+            gain.gain.value = 0.005;
+
+            source.connect(lowpass);
+            lowpass.connect(gain);
+            gain.connect(ambientMasterGain);
+            source.start();
         }
 
         function scheduleAmbientPhrase() {
@@ -834,46 +1006,102 @@
             }
 
             const now = ambientAudioContext.currentTime;
-            const slendroLike = [220.0, 246.94, 293.66, 329.63, 392.0];
+            const slendroLike = [110.0, 123.47, 146.83, 164.81, 196.0, 220.0];
+            const gongBase = [55.0, 61.74, 73.42];
 
-            for (let step = 0; step < 5; step += 1) {
-                const when = now + (step * 0.88) + Math.random() * 0.08;
+            playAncientGong(
+                gongBase[Math.floor(Math.random() * gongBase.length)],
+                now + 0.08,
+                6.8 + Math.random() * 1.4,
+                -0.08 + Math.random() * 0.16
+            );
+
+            for (let step = 0; step < 4; step += 1) {
+                const when = now + 0.7 + (step * 1.25) + Math.random() * 0.11;
                 const frequency = slendroLike[Math.floor(Math.random() * slendroLike.length)] * (Math.random() > 0.72 ? 0.5 : 1);
-                playHauntedBell(frequency, when, 1.7 + Math.random() * 0.8, step % 2 === 0 ? -0.18 : 0.18);
+                playHauntedBell(frequency, when, 2.2 + Math.random() * 1.2, step % 2 === 0 ? -0.22 : 0.22);
 
-                if (Math.random() > 0.55) {
-                    playWoodClack(when + 0.18 + Math.random() * 0.12);
+                if (Math.random() > 0.4) {
+                    playWoodClack(when + 0.2 + Math.random() * 0.18);
+                }
+
+                if (Math.random() > 0.62) {
+                    playMetalTick(frequency * 1.5, when + 0.36 + Math.random() * 0.14, step % 2 === 0 ? 0.15 : -0.15);
                 }
             }
         }
 
+        function playAncientGong(frequency, when, duration, pan) {
+            const partials = [1, 1.48, 1.97, 2.61];
+            const master = ambientAudioContext.createGain();
+            const hasStereoPanner = typeof ambientAudioContext.createStereoPanner === "function";
+            const outputNode = hasStereoPanner ? ambientAudioContext.createStereoPanner() : ambientAudioContext.createGain();
+            const lowpass = ambientAudioContext.createBiquadFilter();
+
+            if (hasStereoPanner) {
+                outputNode.pan.value = pan;
+            }
+
+            lowpass.type = "lowpass";
+            lowpass.frequency.value = 540;
+            master.gain.setValueAtTime(0.0001, when);
+            master.gain.exponentialRampToValueAtTime(0.055, when + 0.03);
+            master.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+
+            master.connect(lowpass);
+            lowpass.connect(outputNode);
+            outputNode.connect(ambientMasterGain);
+
+            partials.forEach((partial, index) => {
+                const oscillator = ambientAudioContext.createOscillator();
+                const bandpass = ambientAudioContext.createBiquadFilter();
+
+                oscillator.type = index === 0 ? "sine" : "triangle";
+                oscillator.frequency.setValueAtTime(frequency * partial, when);
+                oscillator.detune.setValueAtTime((Math.random() - 0.5) * (12 + index * 9), when);
+
+                bandpass.type = "bandpass";
+                bandpass.frequency.value = Math.min(900, (frequency * partial) + 80);
+                bandpass.Q.value = 2.4 - (index * 0.3);
+
+                oscillator.connect(bandpass);
+                bandpass.connect(master);
+                oscillator.start(when);
+                oscillator.stop(when + duration + 0.2);
+            });
+        }
+
         function playHauntedBell(frequency, when, duration, pan) {
-            const partials = [1, 2.01, 3.97];
+            const partials = [1, 1.52, 2.27, 3.93];
             const gain = ambientAudioContext.createGain();
             const hasStereoPanner = typeof ambientAudioContext.createStereoPanner === "function";
             const outputNode = hasStereoPanner ? ambientAudioContext.createStereoPanner() : ambientAudioContext.createGain();
+            const lowpass = ambientAudioContext.createBiquadFilter();
 
             if (hasStereoPanner) {
                 outputNode.pan.value = pan;
             }
 
             gain.gain.setValueAtTime(0.0001, when);
-            gain.gain.exponentialRampToValueAtTime(0.034, when + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.028, when + 0.025);
             gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
-            gain.connect(outputNode);
+            lowpass.type = "lowpass";
+            lowpass.frequency.value = 1750;
+            gain.connect(lowpass);
+            lowpass.connect(outputNode);
             outputNode.connect(ambientMasterGain);
 
             partials.forEach((partial, index) => {
                 const oscillator = ambientAudioContext.createOscillator();
                 const bandpass = ambientAudioContext.createBiquadFilter();
-                const detune = (Math.random() - 0.5) * (index === 0 ? 8 : 18);
+                const detune = (Math.random() - 0.5) * (index === 0 ? 10 : 28);
 
-                oscillator.type = index === 0 ? "triangle" : "sine";
+                oscillator.type = index === 0 ? "triangle" : index === 1 ? "sine" : "square";
                 oscillator.frequency.setValueAtTime(frequency * partial, when);
                 oscillator.detune.setValueAtTime(detune, when);
                 bandpass.type = "bandpass";
-                bandpass.frequency.value = Math.min(2400, frequency * (partial + 0.35));
-                bandpass.Q.value = 3.2 - (index * 0.5);
+                bandpass.frequency.value = Math.min(2200, frequency * (partial + 0.42));
+                bandpass.Q.value = 3.8 - (index * 0.55);
 
                 oscillator.connect(bandpass);
                 bandpass.connect(gain);
@@ -888,16 +1116,16 @@
             const gain = ambientAudioContext.createGain();
 
             oscillator.type = "square";
-            oscillator.frequency.setValueAtTime(180, when);
-            oscillator.frequency.exponentialRampToValueAtTime(80, when + 0.08);
+            oscillator.frequency.setValueAtTime(150, when);
+            oscillator.frequency.exponentialRampToValueAtTime(70, when + 0.1);
 
             filter.type = "bandpass";
-            filter.frequency.value = 720;
-            filter.Q.value = 1.8;
+            filter.frequency.value = 560;
+            filter.Q.value = 2.2;
 
             gain.gain.setValueAtTime(0.0001, when);
-            gain.gain.exponentialRampToValueAtTime(0.014, when + 0.01);
-            gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.12);
+            gain.gain.exponentialRampToValueAtTime(0.011, when + 0.008);
+            gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.15);
 
             oscillator.connect(filter);
             filter.connect(gain);
@@ -905,6 +1133,38 @@
 
             oscillator.start(when);
             oscillator.stop(when + 0.13);
+        }
+
+        function playMetalTick(frequency, when, pan) {
+            const oscillator = ambientAudioContext.createOscillator();
+            const filter = ambientAudioContext.createBiquadFilter();
+            const gain = ambientAudioContext.createGain();
+            const hasStereoPanner = typeof ambientAudioContext.createStereoPanner === "function";
+            const outputNode = hasStereoPanner ? ambientAudioContext.createStereoPanner() : ambientAudioContext.createGain();
+
+            if (hasStereoPanner) {
+                outputNode.pan.value = pan;
+            }
+
+            oscillator.type = "triangle";
+            oscillator.frequency.setValueAtTime(frequency, when);
+            oscillator.frequency.exponentialRampToValueAtTime(frequency * 0.76, when + 0.22);
+
+            filter.type = "bandpass";
+            filter.frequency.value = Math.min(2400, frequency * 1.7);
+            filter.Q.value = 4.2;
+
+            gain.gain.setValueAtTime(0.0001, when);
+            gain.gain.exponentialRampToValueAtTime(0.012, when + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.42);
+
+            oscillator.connect(filter);
+            filter.connect(gain);
+            gain.connect(outputNode);
+            outputNode.connect(ambientMasterGain);
+
+            oscillator.start(when);
+            oscillator.stop(when + 0.45);
         }
 
         function toggleAmbientSound() {
@@ -933,14 +1193,14 @@
 
             if (ambientAudioContext && ambientAudioContext.state === "running") {
                 soundToggle.textContent = "Matikan Suara Ritual";
-                soundNote.textContent = "Ambience sedang aktif. Kalau ingin hening, tekan tombol ini.";
+                soundNote.textContent = "Ambience gamelan mistisnya lagi jalan. Kalau elu pengen mode hening biar bisa merenung sambil pura-pura gak merinding, tinggal matiin aja.";
                 return;
             }
 
             soundToggle.textContent = "Nyalakan Suara Ritual";
 
             if (!ambientFallbackNoticeShown) {
-                soundNote.textContent = "Browser kadang memblokir autoplay. Kalau belum terdengar, tekan tombol ini sekali untuk memulai ambience.";
+                soundNote.textContent = "Sistem udah nyoba autoplay gamelan horornya pas halaman kebuka. Kalau belum bunyi, browser elu lagi jaim. Klik sekali buat unlock suaranya.";
             }
         }
 
