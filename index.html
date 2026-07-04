@@ -199,25 +199,6 @@
             border-radius: 22px;
         }
 
-        .sound-panel {
-            margin-top: 22px;
-            padding: 16px 18px;
-            background: rgba(17, 11, 8, 0.34);
-            border: 1px solid rgba(183, 142, 80, 0.18);
-            border-radius: 18px;
-            text-align: center;
-        }
-
-        .sound-panel button {
-            margin-top: 12px;
-        }
-
-        .sound-note {
-            margin: 0;
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
         .floating-sound {
             position: fixed;
             right: 20px;
@@ -427,10 +408,6 @@
             <div class="hero-mark">Petuang</div>
             <h1>Petuang Kejawen</h1>
             <p class="intro">Petuang ini ngitung jumlah huruf unik dari nama, nyocokin ke istilah Jawa, lalu nampilin horoskop harian buat semua zodiak berdasarkan tanggal yang elu pilih. Vibenya santai, tapi hitungannya tetap rapi, jadi bukan ramalan copy-paste yang auranya kayak forward-an grup.</p>
-            <div class="sound-panel">
-                <p id="soundNote" class="sound-note">Suara yang dicoba nyala itu nuansanya gamelan Jawa kuno, horor, mistis, dan agak mencekam. Kalau browser elu sok jago dan ngeblokir autoplay, tinggal pencet tombol ini sekali biar ritualnya lanjut.</p>
-                <button id="soundToggle" type="button" onclick="toggleAmbientSound()">Nyalakan Suara Ritual</button>
-            </div>
         </div>
 
         <form id="nameForm">
@@ -1252,32 +1229,23 @@
         }
 
         function updateSoundUI() {
-            const soundToggle = document.getElementById("soundToggle");
-            const soundNote = document.getElementById("soundNote");
             const floatingSound = document.getElementById("floatingSound");
             const floatingSoundToggle = document.getElementById("floatingSoundToggle");
             const floatingSoundStatus = document.getElementById("floatingSoundStatus");
 
-            if (!soundToggle || !soundNote || !floatingSound || !floatingSoundToggle || !floatingSoundStatus) {
+            if (!floatingSound || !floatingSoundToggle || !floatingSoundStatus) {
                 return;
             }
 
             if (ambientAudioContext && ambientAudioContext.state === "running") {
-                soundToggle.textContent = "Matikan Suara Ritual";
-                soundNote.textContent = "Ambience gamelan mistisnya lagi jalan. Kalau elu pengen mode hening biar bisa merenung sambil pura-pura gak merinding, tinggal matiin aja.";
                 floatingSoundToggle.textContent = "Mute";
                 floatingSoundStatus.textContent = "Musik ritual lagi nyala. Tekan kalau elu mau mendadak jadi berani.";
                 floatingSound.classList.add("active");
                 return;
             }
 
-            soundToggle.textContent = "Nyalakan Suara Ritual";
             floatingSoundToggle.textContent = "Musik";
             floatingSound.classList.remove("active");
-
-            if (!ambientFallbackNoticeShown) {
-                soundNote.textContent = "Sistem udah nyoba autoplay gamelan horornya pas halaman kebuka. Kalau belum bunyi, browser elu lagi jaim. Klik sekali buat unlock suaranya.";
-            }
 
             floatingSoundStatus.textContent = ambientFallbackNoticeShown
                 ? "Browser nge-rem autoplay. Tap sini buat manggil gamelannya manual."
@@ -1286,13 +1254,9 @@
 
         function showSoundFallback(message) {
             ambientFallbackNoticeShown = true;
-            const soundNote = document.getElementById("soundNote");
             const floatingSoundStatus = document.getElementById("floatingSoundStatus");
-            if (soundNote) {
-                soundNote.textContent = message;
-            }
             if (floatingSoundStatus) {
-                floatingSoundStatus.textContent = "Autoplay ketahan. Pencet bubble ini sekali, abis itu musik bakal jalan.";
+                floatingSoundStatus.textContent = message || "Autoplay ketahan. Pencet bubble ini sekali, abis itu musik bakal jalan.";
             }
         }
     </script>
