@@ -190,6 +190,27 @@
             background: linear-gradient(135deg, #efcb8d 0%, #b97f39 55%, #6f2a1d 100%);
         }
 
+        .sound-toggle {
+            width: auto;
+            min-width: 220px;
+            margin-top: 18px;
+            background: linear-gradient(135deg, rgba(224, 187, 117, 0.92) 0%, rgba(111, 42, 29, 0.92) 100%);
+            color: #f8ecd6;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.28);
+        }
+
+        .sound-toggle:hover {
+            background: linear-gradient(135deg, rgba(239, 203, 141, 0.96) 0%, rgba(143, 49, 33, 0.96) 100%);
+        }
+
+        .sound-note {
+            margin: 10px auto 0;
+            max-width: 520px;
+            color: rgba(241, 225, 190, 0.78);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
         .result,
         .zodiac-section {
             margin-top: 24px;
@@ -327,6 +348,8 @@
             <div class="hero-mark">Petuang</div>
             <h1>Petuang Kejawen</h1>
             <p class="intro">Petuang ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
+            <button type="button" id="soundToggle" class="sound-toggle" onclick="toggleAmbientSound()">Nyalakan Suara Ritual</button>
+            <p id="soundNote" class="sound-note">Browser kadang memblokir autoplay. Kalau belum terdengar, tekan tombol ini sekali untuk memulai ambience.</p>
         </div>
 
         <form id="nameForm">
@@ -487,11 +510,14 @@
         let ambientSchedulerId;
         let ambientNoiseBuffer;
         let ambientUnlockBound = false;
+        let ambientWindIntervalId;
+        let ambientFallbackNoticeShown = false;
 
         window.onload = function () {
             document.getElementById("horoscopeDate").value = getTodayLocalDate();
             renderTermDescriptions();
             generateHoroscope();
+            updateSoundUI();
             setupAmbientAutoplay();
         };
 
@@ -715,13 +741,14 @@
         function startAmbientSound() {
             const AudioContextClass = window.AudioContext || window.webkitAudioContext;
             if (!AudioContextClass) {
+                showSoundFallback("Browser ini tidak mendukung audio ambience otomatis.");
                 return;
             }
 
             if (!ambientAudioContext) {
                 ambientAudioContext = new AudioContextClass();
                 ambientMasterGain = ambientAudioContext.createGain();
-                ambientMasterGain.gain.value = 0.045;
+                ambientMasterGain.gain.value = 0.08;
                 ambientMasterGain.connect(ambientAudioContext.destination);
                 ambientNoiseBuffer = createNoiseBuffer(ambientAudioContext);
             }
@@ -731,6 +758,7 @@
                     if (!ambientStarted) {
                         beginAmbientComposition();
                     }
+                    updateSoundUI();
                 }).catch(() => {});
                 return;
             }
@@ -738,6 +766,8 @@
             if (!ambientStarted && ambientAudioContext.state === "running") {
                 beginAmbientComposition();
             }
+
+            updateSoundUI();
         }
 
         function beginAmbientComposition() {
@@ -746,6 +776,7 @@
             startWindLayer();
             scheduleAmbientPhrase();
             ambientSchedulerId = window.setInterval(scheduleAmbientPhrase, 4800);
+            updateSoundUI();
         }
 
         function createNoiseBuffer(audioContext) {
@@ -817,7 +848,7 @@
             };
 
             sweepWind();
-            window.setInterval(sweepWind, 2600);
+            ambientWindIntervalId = window.setInterval(sweepWind, 2600);
         }
 
         function scheduleAmbientPhrase() {
@@ -841,15 +872,19 @@
 
         function playHauntedBell(frequency, when, duration, pan) {
             const partials = [1, 2.01, 3.97];
-            const panner = ambientAudioContext.createStereoPanner();
             const gain = ambientAudioContext.createGain();
+            const hasStereoPanner = typeof ambientAudioContext.createStereoPanner === "function";
+            const outputNode = hasStereoPanner ? ambientAudioContext.createStereoPanner() : ambientAudioContext.createGain();
 
-            panner.pan.value = pan;
+            if (hasStereoPanner) {
+                outputNode.pan.value = pan;
+            }
+
             gain.gain.setValueAtTime(0.0001, when);
-            gain.gain.exponentialRampToValueAtTime(0.023, when + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.034, when + 0.03);
             gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
-            gain.connect(panner);
-            panner.connect(ambientMasterGain);
+            gain.connect(outputNode);
+            outputNode.connect(ambientMasterGain);
 
             partials.forEach((partial, index) => {
                 const oscillator = ambientAudioContext.createOscillator();
@@ -893,6 +928,51 @@
 
             oscillator.start(when);
             oscillator.stop(when + 0.13);
+        }
+
+        function toggleAmbientSound() {
+            if (!ambientAudioContext) {
+                startAmbientSound();
+                return;
+            }
+
+            if (ambientAudioContext.state === "running") {
+                ambientAudioContext.suspend().then(() => {
+                    updateSoundUI();
+                }).catch(() => {});
+                return;
+            }
+
+            startAmbientSound();
+        }
+
+        function updateSoundUI() {
+            const soundToggle = document.getElementById("soundToggle");
+            const soundNote = document.getElementById("soundNote");
+
+            if (!soundToggle || !soundNote) {
+                return;
+            }
+
+            if (ambientAudioContext && ambientAudioContext.state === "running") {
+                soundToggle.textContent = "Matikan Suara Ritual";
+                soundNote.textContent = "Ambience sedang aktif. Kalau ingin hening, tekan tombol ini.";
+                return;
+            }
+
+            soundToggle.textContent = "Nyalakan Suara Ritual";
+
+            if (!ambientFallbackNoticeShown) {
+                soundNote.textContent = "Browser kadang memblokir autoplay. Kalau belum terdengar, tekan tombol ini sekali untuk memulai ambience.";
+            }
+        }
+
+        function showSoundFallback(message) {
+            ambientFallbackNoticeShown = true;
+            const soundNote = document.getElementById("soundNote");
+            if (soundNote) {
+                soundNote.textContent = message;
+            }
         }
     </script>
 </body>
