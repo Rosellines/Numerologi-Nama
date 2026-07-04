@@ -218,6 +218,55 @@
             line-height: 1.7;
         }
 
+        .floating-sound {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: min(360px, calc(100vw - 32px));
+            padding: 12px 14px;
+            background: rgba(15, 10, 8, 0.82);
+            border: 1px solid rgba(183, 142, 80, 0.26);
+            border-radius: 20px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.34);
+            backdrop-filter: blur(10px);
+        }
+
+        .floating-sound button {
+            width: auto;
+            min-width: 58px;
+            padding: 12px 14px;
+            border-radius: 999px;
+            flex-shrink: 0;
+        }
+
+        .floating-sound.active {
+            border-color: rgba(224, 187, 117, 0.46);
+            box-shadow: 0 20px 46px rgba(94, 47, 22, 0.42);
+        }
+
+        .floating-sound-text {
+            min-width: 0;
+        }
+
+        .floating-sound-label {
+            display: block;
+            margin-bottom: 3px;
+            color: var(--accent-strong);
+            font-size: 0.86rem;
+            font-weight: 700;
+        }
+
+        .floating-sound-status {
+            margin: 0;
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
         .result {
             display: none;
         }
@@ -358,6 +407,17 @@
                 padding: 20px;
                 border-radius: 22px;
             }
+
+            .floating-sound {
+                right: 16px;
+                bottom: 16px;
+                gap: 10px;
+                padding: 11px 12px;
+            }
+
+            .floating-sound-status {
+                font-size: 0.84rem;
+            }
         }
     </style>
 </head>
@@ -414,6 +474,14 @@
                 <h2>Makna Sri, Lungguh, Pati, Dunya</h2>
             </div>
             <div id="termDescriptions" class="term-grid"></div>
+        </div>
+    </div>
+
+    <div id="floatingSound" class="floating-sound" aria-live="polite">
+        <button id="floatingSoundToggle" type="button" onclick="toggleAmbientSound()">Musik</button>
+        <div class="floating-sound-text">
+            <span class="floating-sound-label">Popup Musik Ritual</span>
+            <p id="floatingSoundStatus" class="floating-sound-status">Siap dipencet kalau browser elu belum mau bunyi.</p>
         </div>
     </div>
 
@@ -1186,29 +1254,45 @@
         function updateSoundUI() {
             const soundToggle = document.getElementById("soundToggle");
             const soundNote = document.getElementById("soundNote");
+            const floatingSound = document.getElementById("floatingSound");
+            const floatingSoundToggle = document.getElementById("floatingSoundToggle");
+            const floatingSoundStatus = document.getElementById("floatingSoundStatus");
 
-            if (!soundToggle || !soundNote) {
+            if (!soundToggle || !soundNote || !floatingSound || !floatingSoundToggle || !floatingSoundStatus) {
                 return;
             }
 
             if (ambientAudioContext && ambientAudioContext.state === "running") {
                 soundToggle.textContent = "Matikan Suara Ritual";
                 soundNote.textContent = "Ambience gamelan mistisnya lagi jalan. Kalau elu pengen mode hening biar bisa merenung sambil pura-pura gak merinding, tinggal matiin aja.";
+                floatingSoundToggle.textContent = "Mute";
+                floatingSoundStatus.textContent = "Musik ritual lagi nyala. Tekan kalau elu mau mendadak jadi berani.";
+                floatingSound.classList.add("active");
                 return;
             }
 
             soundToggle.textContent = "Nyalakan Suara Ritual";
+            floatingSoundToggle.textContent = "Musik";
+            floatingSound.classList.remove("active");
 
             if (!ambientFallbackNoticeShown) {
                 soundNote.textContent = "Sistem udah nyoba autoplay gamelan horornya pas halaman kebuka. Kalau belum bunyi, browser elu lagi jaim. Klik sekali buat unlock suaranya.";
             }
+
+            floatingSoundStatus.textContent = ambientFallbackNoticeShown
+                ? "Browser nge-rem autoplay. Tap sini buat manggil gamelannya manual."
+                : "Popup musik siap dipencet kalau elu mau nyalain ambience manual.";
         }
 
         function showSoundFallback(message) {
             ambientFallbackNoticeShown = true;
             const soundNote = document.getElementById("soundNote");
+            const floatingSoundStatus = document.getElementById("floatingSoundStatus");
             if (soundNote) {
                 soundNote.textContent = message;
+            }
+            if (floatingSoundStatus) {
+                floatingSoundStatus.textContent = "Autoplay ketahan. Pencet bubble ini sekali, abis itu musik bakal jalan.";
             }
         }
     </script>
