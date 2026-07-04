@@ -11,8 +11,8 @@
     <style>
         :root {
             --bg-deep: #070505;
-            --panel: rgba(13, 10, 8, 0.8);
-            --panel-soft: rgba(199, 154, 88, 0.08);
+            --panel: rgba(13, 10, 8, 0.62);
+            --panel-soft: rgba(199, 154, 88, 0.05);
             --line: rgba(183, 142, 80, 0.28);
             --text: #f1e1be;
             --muted: #cfb78c;
@@ -34,8 +34,8 @@
             color: var(--text);
             background-color: var(--bg-deep);
             background-image:
-                linear-gradient(rgba(4, 3, 2, 0.62), rgba(4, 3, 2, 0.86)),
-                radial-gradient(circle at top, rgba(196, 153, 86, 0.12), transparent 34%),
+                linear-gradient(rgba(4, 3, 2, 0.36), rgba(4, 3, 2, 0.62)),
+                radial-gradient(circle at top, rgba(196, 153, 86, 0.18), transparent 38%),
                 url("assets/kejawen-background.png");
             background-size: cover;
             background-position: center;
@@ -47,8 +47,8 @@
             position: fixed;
             inset: 0;
             background:
-                linear-gradient(90deg, rgba(5, 3, 2, 0.7) 0%, rgba(5, 3, 2, 0.2) 40%, rgba(5, 3, 2, 0.58) 100%),
-                radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.48) 100%);
+                linear-gradient(90deg, rgba(5, 3, 2, 0.42) 0%, rgba(5, 3, 2, 0.08) 40%, rgba(5, 3, 2, 0.34) 100%),
+                radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.28) 100%);
             pointer-events: none;
             z-index: 0;
         }
@@ -63,7 +63,7 @@
             border: 1px solid var(--line);
             border-radius: 28px;
             box-shadow: 0 20px 60px var(--shadow);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(7px);
         }
 
         .hero {
@@ -195,7 +195,7 @@
             margin-top: 24px;
             padding: 22px;
             background: var(--panel-soft);
-            border: 1px solid rgba(183, 142, 80, 0.2);
+            border: 1px solid rgba(183, 142, 80, 0.16);
             border-radius: 22px;
         }
 
@@ -217,7 +217,7 @@
             display: none;
             margin-top: 20px;
             padding: 20px;
-            background: rgba(18, 11, 8, 0.68);
+            background: rgba(18, 11, 8, 0.48);
             border: 1px solid rgba(183, 142, 80, 0.18);
             border-radius: 18px;
             opacity: 0;
@@ -236,8 +236,8 @@
             position: relative;
             overflow: hidden;
             padding: 16px;
-            background: linear-gradient(180deg, rgba(28, 18, 13, 0.84), rgba(13, 9, 7, 0.88));
-            border: 1px solid rgba(183, 142, 80, 0.16);
+            background: linear-gradient(180deg, rgba(28, 18, 13, 0.66), rgba(13, 9, 7, 0.72));
+            border: 1px solid rgba(183, 142, 80, 0.14);
             border-radius: 18px;
             box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
         }
@@ -324,9 +324,9 @@
 <body>
     <div class="container">
         <div class="hero">
-            <div class="hero-mark">Petungan</div>
+            <div class="hero-mark">Petuang</div>
             <h1>Petuang Kejawen</h1>
-            <p class="intro">Petungan ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
+            <p class="intro">Petuang ini menghitung jumlah huruf unik nama, memetakan hasilnya ke istilah Jawa, lalu menampilkan horoskop harian untuk semua zodiac berdasarkan tanggal yang kamu pilih.</p>
         </div>
 
         <form id="nameForm">
@@ -477,14 +477,22 @@
                 id: "<strong>Makna utama:</strong> Ujian hidup dan ketangguhan.<br><br>Pati sering dianggap sebagai posisi yang berat karena perjalanan hidupnya cenderung lebih terjal dibanding yang lain. Rezeki, karier, dan hubungan sering melalui proses yang tidak mudah.<br><br><strong>Ciri-ciri:</strong><br>Hidup penuh tantangan.<br>Ekonomi sering naik turun atau harus diperjuangkan keras.<br>Banyak mengalami kegagalan sebelum berhasil.<br>Mental sangat kuat karena terbiasa menghadapi kesulitan.<br><br><strong>Sisi positif terbesar:</strong><br>Karena sering ditempa masalah, orang Pati biasanya memiliki mental baja dan daya tahan luar biasa.<br><br><strong>Inti Pati:</strong><br>\"Hidupnya keras, tetapi jiwanya paling kuat.\""
             },
             Dunya: {
-                id: "<strong>Makna utama:</strong> Kemakmuran dan pencapaian.<br><br>Dunya melambangkan kelancaran rezeki, kemudahan mencapai cita-cita, dan peluang yang terbuka luas. Apa yang diusahakan sering menemukan jalannya.<br><br><strong>Ciri-ciri:</strong><br>Rezeki cenderung lancar.<br>Keinginan dan cita-cita lebih mudah tercapai.<br>Peluang hidup banyak terbuka.<br>Mudah mendapatkan keberhasilan dibanding rata-rata orang.<br><br><strong>Pantangan alami:</strong><br>Takabur, sombong, merasa paling hebat, atau lupa diri.<br><br>Dalam kepercayaan petungan Jawa, ketika sifat takabur muncul, keberuntungan Dunya dipercaya dapat berbalik menjadi kesulitan.<br><br><strong>Inti Dunya:</strong><br>\"Mudah mencapai tujuan, selama tidak dikuasai kesombongan.\""
+                id: "<strong>Makna utama:</strong> Kemakmuran dan pencapaian.<br><br>Dunya melambangkan kelancaran rezeki, kemudahan mencapai cita-cita, dan peluang yang terbuka luas. Apa yang diusahakan sering menemukan jalannya.<br><br><strong>Ciri-ciri:</strong><br>Rezeki cenderung lancar.<br>Keinginan dan cita-cita lebih mudah tercapai.<br>Peluang hidup banyak terbuka.<br>Mudah mendapatkan keberhasilan dibanding rata-rata orang.<br><br><strong>Pantangan alami:</strong><br>Takabur, sombong, merasa paling hebat, atau lupa diri.<br><br>Dalam kepercayaan petuang Jawa, ketika sifat takabur muncul, keberuntungan Dunya dipercaya dapat berbalik menjadi kesulitan.<br><br><strong>Inti Dunya:</strong><br>\"Mudah mencapai tujuan, selama tidak dikuasai kesombongan.\""
             }
         };
+
+        let ambientAudioContext;
+        let ambientMasterGain;
+        let ambientStarted = false;
+        let ambientSchedulerId;
+        let ambientNoiseBuffer;
+        let ambientUnlockBound = false;
 
         window.onload = function () {
             document.getElementById("horoscopeDate").value = getTodayLocalDate();
             renderTermDescriptions();
             generateHoroscope();
+            setupAmbientAutoplay();
         };
 
         function generateHoroscope() {
@@ -681,6 +689,210 @@
                     <p>${caution}</p>
                 </article>
             `;
+        }
+
+        function setupAmbientAutoplay() {
+            startAmbientSound();
+
+            if (!ambientUnlockBound) {
+                ambientUnlockBound = true;
+                ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+                    window.addEventListener(eventName, unlockAmbientSound, { passive: true });
+                });
+            }
+        }
+
+        function unlockAmbientSound() {
+            startAmbientSound();
+
+            if (ambientAudioContext && ambientAudioContext.state === "running") {
+                ["pointerdown", "keydown", "touchstart"].forEach((eventName) => {
+                    window.removeEventListener(eventName, unlockAmbientSound);
+                });
+            }
+        }
+
+        function startAmbientSound() {
+            const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+            if (!AudioContextClass) {
+                return;
+            }
+
+            if (!ambientAudioContext) {
+                ambientAudioContext = new AudioContextClass();
+                ambientMasterGain = ambientAudioContext.createGain();
+                ambientMasterGain.gain.value = 0.045;
+                ambientMasterGain.connect(ambientAudioContext.destination);
+                ambientNoiseBuffer = createNoiseBuffer(ambientAudioContext);
+            }
+
+            if (ambientAudioContext.state === "suspended") {
+                ambientAudioContext.resume().then(() => {
+                    if (!ambientStarted) {
+                        beginAmbientComposition();
+                    }
+                }).catch(() => {});
+                return;
+            }
+
+            if (!ambientStarted && ambientAudioContext.state === "running") {
+                beginAmbientComposition();
+            }
+        }
+
+        function beginAmbientComposition() {
+            ambientStarted = true;
+            startDroneLayer();
+            startWindLayer();
+            scheduleAmbientPhrase();
+            ambientSchedulerId = window.setInterval(scheduleAmbientPhrase, 4800);
+        }
+
+        function createNoiseBuffer(audioContext) {
+            const buffer = audioContext.createBuffer(1, audioContext.sampleRate * 2, audioContext.sampleRate);
+            const channel = buffer.getChannelData(0);
+
+            for (let index = 0; index < channel.length; index += 1) {
+                channel[index] = (Math.random() * 2 - 1) * (1 - (index / channel.length) * 0.35);
+            }
+
+            return buffer;
+        }
+
+        function startDroneLayer() {
+            const now = ambientAudioContext.currentTime;
+            [73.42, 110.0].forEach((frequency, index) => {
+                const oscillator = ambientAudioContext.createOscillator();
+                const gain = ambientAudioContext.createGain();
+                const filter = ambientAudioContext.createBiquadFilter();
+
+                oscillator.type = index === 0 ? "triangle" : "sine";
+                oscillator.frequency.value = frequency;
+                filter.type = "lowpass";
+                filter.frequency.value = index === 0 ? 260 : 180;
+                gain.gain.value = index === 0 ? 0.015 : 0.01;
+
+                oscillator.connect(filter);
+                filter.connect(gain);
+                gain.connect(ambientMasterGain);
+
+                oscillator.start(now);
+            });
+        }
+
+        function startWindLayer() {
+            const source = ambientAudioContext.createBufferSource();
+            const filter = ambientAudioContext.createBiquadFilter();
+            const gain = ambientAudioContext.createGain();
+
+            source.buffer = ambientNoiseBuffer;
+            source.loop = true;
+            filter.type = "bandpass";
+            filter.frequency.value = 420;
+            filter.Q.value = 0.8;
+            gain.gain.value = 0.008;
+
+            source.connect(filter);
+            filter.connect(gain);
+            gain.connect(ambientMasterGain);
+
+            source.start();
+
+            const sweepWind = () => {
+                if (!ambientAudioContext || ambientAudioContext.state !== "running") {
+                    return;
+                }
+
+                const now = ambientAudioContext.currentTime;
+                const targetFrequency = 260 + Math.random() * 420;
+                const targetGain = 0.004 + Math.random() * 0.008;
+
+                filter.frequency.cancelScheduledValues(now);
+                filter.frequency.setValueAtTime(filter.frequency.value, now);
+                filter.frequency.linearRampToValueAtTime(targetFrequency, now + 3.5);
+
+                gain.gain.cancelScheduledValues(now);
+                gain.gain.setValueAtTime(gain.gain.value, now);
+                gain.gain.linearRampToValueAtTime(targetGain, now + 2.4);
+            };
+
+            sweepWind();
+            window.setInterval(sweepWind, 2600);
+        }
+
+        function scheduleAmbientPhrase() {
+            if (!ambientAudioContext || ambientAudioContext.state !== "running") {
+                return;
+            }
+
+            const now = ambientAudioContext.currentTime;
+            const slendroLike = [220.0, 246.94, 293.66, 329.63, 392.0];
+
+            for (let step = 0; step < 5; step += 1) {
+                const when = now + (step * 0.88) + Math.random() * 0.08;
+                const frequency = slendroLike[Math.floor(Math.random() * slendroLike.length)] * (Math.random() > 0.72 ? 0.5 : 1);
+                playHauntedBell(frequency, when, 1.7 + Math.random() * 0.8, step % 2 === 0 ? -0.18 : 0.18);
+
+                if (Math.random() > 0.55) {
+                    playWoodClack(when + 0.18 + Math.random() * 0.12);
+                }
+            }
+        }
+
+        function playHauntedBell(frequency, when, duration, pan) {
+            const partials = [1, 2.01, 3.97];
+            const panner = ambientAudioContext.createStereoPanner();
+            const gain = ambientAudioContext.createGain();
+
+            panner.pan.value = pan;
+            gain.gain.setValueAtTime(0.0001, when);
+            gain.gain.exponentialRampToValueAtTime(0.023, when + 0.03);
+            gain.gain.exponentialRampToValueAtTime(0.0001, when + duration);
+            gain.connect(panner);
+            panner.connect(ambientMasterGain);
+
+            partials.forEach((partial, index) => {
+                const oscillator = ambientAudioContext.createOscillator();
+                const bandpass = ambientAudioContext.createBiquadFilter();
+                const detune = (Math.random() - 0.5) * (index === 0 ? 8 : 18);
+
+                oscillator.type = index === 0 ? "triangle" : "sine";
+                oscillator.frequency.setValueAtTime(frequency * partial, when);
+                oscillator.detune.setValueAtTime(detune, when);
+                bandpass.type = "bandpass";
+                bandpass.frequency.value = Math.min(2400, frequency * (partial + 0.35));
+                bandpass.Q.value = 3.2 - (index * 0.5);
+
+                oscillator.connect(bandpass);
+                bandpass.connect(gain);
+                oscillator.start(when);
+                oscillator.stop(when + duration + 0.1);
+            });
+        }
+
+        function playWoodClack(when) {
+            const oscillator = ambientAudioContext.createOscillator();
+            const filter = ambientAudioContext.createBiquadFilter();
+            const gain = ambientAudioContext.createGain();
+
+            oscillator.type = "square";
+            oscillator.frequency.setValueAtTime(180, when);
+            oscillator.frequency.exponentialRampToValueAtTime(80, when + 0.08);
+
+            filter.type = "bandpass";
+            filter.frequency.value = 720;
+            filter.Q.value = 1.8;
+
+            gain.gain.setValueAtTime(0.0001, when);
+            gain.gain.exponentialRampToValueAtTime(0.014, when + 0.01);
+            gain.gain.exponentialRampToValueAtTime(0.0001, when + 0.12);
+
+            oscillator.connect(filter);
+            filter.connect(gain);
+            gain.connect(ambientMasterGain);
+
+            oscillator.start(when);
+            oscillator.stop(when + 0.13);
         }
     </script>
 </body>
