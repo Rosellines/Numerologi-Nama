@@ -149,6 +149,7 @@
         }
 
         input,
+        select,
         textarea {
             width: 100%;
             padding: 12px 14px;
@@ -165,6 +166,7 @@
         }
 
         input:focus,
+        select:focus,
         textarea:focus {
             outline: none;
             border-color: rgba(240, 191, 98, 0.72);
@@ -197,6 +199,112 @@
             background: rgba(199, 154, 88, 0.028);
             border: 1px solid rgba(183, 142, 80, 0.16);
             border-radius: 22px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+        }
+
+        .name-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            align-items: start;
+        }
+
+        .name-group label {
+            margin-bottom: 8px;
+            font-size: 0.92rem;
+            letter-spacing: 0.02em;
+        }
+
+        .name-group input {
+            min-height: 50px;
+        }
+
+        .birth-note,
+        .action-status {
+            margin: 8px 0 0;
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.6;
+        }
+
+        .result {
+            display: none;
+        }
+
+        .result-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 18px;
+        }
+
+        .result-header h3,
+        .result-summary h3 {
+            margin: 0 0 8px;
+            color: var(--accent-strong);
+        }
+
+        .result-header p,
+        .result-summary p {
+            margin: 0;
+        }
+
+        .result-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            border: 1px solid rgba(224, 187, 117, 0.2);
+            border-radius: 999px;
+            background: rgba(224, 187, 117, 0.08);
+            color: var(--accent-strong);
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .result-summary {
+            margin-bottom: 18px;
+            padding: 16px;
+            border: 1px solid rgba(183, 142, 80, 0.12);
+            border-radius: 18px;
+            background: rgba(12, 8, 6, 0.45);
+        }
+
+        .result-list {
+            display: grid;
+            gap: 14px;
+        }
+
+        .result-item {
+            padding: 16px;
+            border: 1px solid rgba(183, 142, 80, 0.12);
+            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(28, 18, 13, 0.62), rgba(13, 9, 7, 0.7));
+        }
+
+        .result-item strong {
+            color: var(--accent-strong);
+        }
+
+        .action-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .action-row[hidden] {
+            display: none;
+        }
+
+        .action-row button {
+            width: auto;
+            flex: 1 1 180px;
+            min-width: 0;
         }
 
         .floating-sound {
@@ -248,10 +356,6 @@
             line-height: 1.5;
         }
 
-        .result {
-            display: none;
-        }
-
         .date-row {
             display: flex;
             justify-content: center;
@@ -260,6 +364,10 @@
         .date-row .form-group {
             width: min(100%, 320px);
             margin-bottom: 0;
+        }
+
+        .date-row .form-grid {
+            width: min(100%, 680px);
         }
 
         #horoscopeResult {
@@ -319,6 +427,18 @@
             grid-template-columns: repeat(3, minmax(0, 1fr));
             gap: 10px;
             margin: 14px 0;
+        }
+
+        .power-move {
+            margin: 0 0 14px;
+            padding: 14px 16px;
+            border-radius: 16px;
+            background: rgba(224, 187, 117, 0.08);
+            border: 1px solid rgba(224, 187, 117, 0.16);
+        }
+
+        .power-move strong {
+            color: var(--accent-strong);
         }
 
         .metric-box {
@@ -399,6 +519,14 @@
             .floating-sound-status {
                 font-size: 0.84rem;
             }
+
+            .result-header {
+                flex-direction: column;
+            }
+
+            .name-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -412,17 +540,24 @@
         </div>
 
         <form id="nameForm">
-            <div class="form-group">
-                <label for="firstName">Nama Depan / First Name:</label>
-                <input type="text" id="firstName" placeholder="Masukkan nama depan / Enter first name">
-            </div>
-            <div class="form-group">
-                <label for="middleName">Nama Tengah / Middle Name:</label>
-                <input type="text" id="middleName" placeholder="Masukkan nama tengah (opsional) / Enter middle name (optional)">
-            </div>
-            <div class="form-group">
-                <label for="lastName">Nama Belakang / Last Name:</label>
-                <input type="text" id="lastName" placeholder="Masukkan nama belakang / Enter last name">
+            <div class="form-grid name-grid">
+                <div class="form-group name-group">
+                    <label for="firstName">Nama Depan</label>
+                    <input type="text" id="firstName" placeholder="Contoh: Joko">
+                </div>
+                <div class="form-group name-group">
+                    <label for="middleName">Nama Tengah</label>
+                    <input type="text" id="middleName" placeholder="Opsional">
+                </div>
+                <div class="form-group name-group">
+                    <label for="lastName">Nama Belakang</label>
+                    <input type="text" id="lastName" placeholder="Contoh: Santoso">
+                </div>
+                <div class="form-group">
+                    <label for="birthDate">Tanggal lahir / Birth date:</label>
+                    <input type="date" id="birthDate">
+                    <p class="birth-note">Opsional. Kalau diisi, hasil akan menampilkan weton, neptu, dan sentuhan tafsir Jawa.</p>
+                </div>
             </div>
             <div class="form-group">
                 <label for="combinedNames">Gabungan Nama (pisah dengan +) / Combined Names (separate with +):</label>
@@ -432,28 +567,38 @@
         </form>
 
         <div id="result" class="result"></div>
+        <div id="resultActions" class="action-row" hidden>
+            <button type="button" onclick="copyPetuangResult()">Salin Hasil</button>
+            <button type="button" onclick="sharePetuangResult()">Bagikan Hasil</button>
+            <button type="button" onclick="downloadPetuangCard()">Unduh Kartu</button>
+        </div>
+        <p id="resultStatus" class="action-status" aria-live="polite"></p>
 
         <div class="zodiac-section">
             <div class="section-heading">
                 <h2>Horoskop Zodiac Harian</h2>
-                <p class="section-note"></p>
-                <div text-align="center"
-            </div>Pilih tanggal sing dikarepake, banjur sistem bakal ngracik ramalan kanggo saben zodiak.
+            </div>
             <div class="date-row">
-                <div class="form-group">
-                    <label for="horoscopeDate">Tanggal horoskop:</label>
-                    <input type="date" id="horoscopeDate" onchange="generateHoroscope()" oninput="generateHoroscope()">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="horoscopeDate">Tanggal horoskop:</label>
+                        <input type="date" id="horoscopeDate" onchange="generateHoroscope()" oninput="generateHoroscope()">
+                    </div>
+                    <div class="form-group">
+                        <label for="zodiacSelect">Pilih zodiak:</label>
+                        <select id="zodiacSelect" onchange="generateHoroscope()"></select>
+                    </div>
                 </div>
             </div>
             <div id="horoscopeResult" class="sparkle"></div>
+            <div id="horoscopeActions" class="action-row" hidden>
+                <button type="button" onclick="copyHoroscopeResult()">Salin Zodiac</button>
+                <button type="button" onclick="shareHoroscopeResult()">Bagikan Zodiac</button>
+                <button type="button" onclick="downloadHoroscopeCard()">Unduh Kartu</button>
+            </div>
+            <p id="horoscopeStatus" class="action-status" aria-live="polite"></p>
         </div>
 
-        <div class="zodiac-section">
-            <div class="section-heading">
-                <h2>Makna Sri, Lungguh, Pati, Dunya</h2>
-            </div>
-            <div id="termDescriptions" class="term-grid"></div>
-        </div>
     </div>
 
     <div id="floatingSound" class="floating-sound" aria-live="polite">
@@ -641,6 +786,31 @@
             }
         };
 
+        const wetonWeekdays = [
+            { name: "Minggu", neptu: 5 },
+            { name: "Senin", neptu: 4 },
+            { name: "Selasa", neptu: 3 },
+            { name: "Rabu", neptu: 7 },
+            { name: "Kamis", neptu: 8 },
+            { name: "Jumat", neptu: 6 },
+            { name: "Sabtu", neptu: 9 }
+        ];
+
+        const wetonPasaran = [
+            { name: "Legi", neptu: 5 },
+            { name: "Pahing", neptu: 9 },
+            { name: "Pon", neptu: 7 },
+            { name: "Wage", neptu: 4 },
+            { name: "Kliwon", neptu: 8 }
+        ];
+
+        const wetonCharacterMap = {
+            Sri: "Watake cenderung kalem, seneng kestabilan, lan rezekine apik nalika uripe ditata tanpa kesusu.",
+            Lungguh: "Aura kepemimpinane katon luwih gampang kebaca. Yen dijaga andhap asor, pengaruhe bisa dadi berkah.",
+            Pati: "Gabungan iki nggambarake jiwa sing kuat diuji. Jalane bisa luwih terjal, nanging daya tahane uga gedhe.",
+            Dunya: "Energi kelancaran lan pencapaian katon luwih dominan. Tantangane mung siji: ojo nganti keseret gengsi lan takabur."
+        };
+
         let ambientAudioContext;
         let ambientMasterGain;
         let ambientStarted = false;
@@ -649,17 +819,33 @@
         let ambientUnlockBound = false;
         let ambientWindIntervalId;
         let ambientFallbackNoticeShown = false;
+        let latestPetuangData = null;
+        let latestHoroscopeData = null;
 
         window.onload = function () {
             document.getElementById("horoscopeDate").value = getTodayLocalDate();
-            renderTermDescriptions();
+            renderZodiacOptions();
             generateHoroscope();
             updateSoundUI();
             setupAmbientAutoplay();
         };
 
+        function renderZodiacOptions() {
+            const zodiacSelect = document.getElementById("zodiacSelect");
+            if (!zodiacSelect) {
+                return;
+            }
+
+            zodiacSelect.innerHTML = [
+                '<option value="personal">Pilih otomatis / personal</option>',
+                ...zodiacProfiles.map((profile) => `<option value="${profile.name}">${profile.name}</option>`),
+                '<option value="all">Semua Zodiac</option>'
+            ].join("");
+        }
+
         function generateHoroscope() {
             const rawDate = document.getElementById("horoscopeDate").value;
+            const zodiacChoice = document.getElementById("zodiacSelect").value;
             if (!rawDate) {
                 alert("Pilih tanggal horoskop terlebih dahulu!");
                 return;
@@ -667,14 +853,37 @@
 
             const selectedDate = parseLocalDate(rawDate);
             const formattedDate = formatDateIndo(selectedDate);
-            const cards = zodiacProfiles.map((profile) => buildHoroscopeCard(profile, selectedDate)).join("");
+            const horoscopeEntries = zodiacProfiles.map((profile) => buildHoroscopeProfile(profile, selectedDate));
+            const leadEntry = getLeadHoroscopeEntry(horoscopeEntries);
+            const activeEntries = getActiveHoroscopeEntries(horoscopeEntries, zodiacChoice, leadEntry.profile.name);
+            const cards = activeEntries.map((entry) => buildHoroscopeCard(entry)).join("");
+            const primaryEntry = activeEntries[0];
+            const isAllMode = zodiacChoice === "all";
+            const heading = isAllMode
+                ? `Horoskop Semua Zodiac - ${formattedDate}`
+                : `Horoskop Personal - ${primaryEntry.profile.name} - ${formattedDate}`;
+            const intro = isAllMode
+                ? "Prediksi ini diracik dari karakter unik tiap zodiak + seed tanggal yang elu pilih, jadi hasilnya beda per zodiak dan ikut berubah tiap hari."
+                : "";
 
             document.getElementById("horoscopeResult").innerHTML = `
-                <h3>Horoskop Semua Zodiac - ${formattedDate}</h3>
-                <p class="section-note">Prediksi ini diracik dari karakter unik tiap zodiak + seed tanggal yang elu pilih, jadi hasilnya beda per zodiak dan ikut berubah tiap hari. Anggap aja ini engine ramalan bergaya AI versi front-end, bukan template males yang tinggal ganti judul doang.</p>
+                <h3>${heading}</h3>
+                ${intro ? `<p class="section-note">${intro}</p>` : ""}
                 <div class="horoscope-grid">${cards}</div>
             `;
             document.getElementById("horoscopeResult").style.display = "block";
+            document.getElementById("horoscopeActions").hidden = false;
+            setActionStatus("horoscopeStatus", `${isAllMode ? "Sorotan semua zodiak" : `Horoskop ${primaryEntry.profile.name}`} siap disalin, dibagikan, atau diunduh.`);
+
+            latestHoroscopeData = {
+                date: formattedDate,
+                title: isAllMode ? `${leadEntry.profile.name} lagi paling nyala buat tanggal ini` : `${primaryEntry.profile.name} - mode personal`,
+                summary: isAllMode ? `${leadEntry.profile.name} memimpin ritme hari dengan fokus ${leadEntry.focus}.` : buildPersonalHoroscopeSummary(primaryEntry),
+                boxes: isAllMode ? buildAllHoroscopeBoxes(horoscopeEntries, leadEntry) : buildPersonalHoroscopeBoxes(primaryEntry),
+                entries: activeEntries,
+                mode: isAllMode ? "all" : "personal",
+                shareText: buildHoroscopeShareText(activeEntries, formattedDate, isAllMode)
+            };
         }
 
         function calculateUniqueLetters(name) {
@@ -705,59 +914,191 @@
             return explanation.id;
         }
 
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, (char) => ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                "\"": "&quot;",
+                "'": "&#39;"
+            }[char]));
+        }
+
+        function stripHtml(html) {
+            return html.replace(/<br\s*\/?>/gi, "\n").replace(/<[^>]+>/g, "").replace(/\n{3,}/g, "\n\n").trim();
+        }
+
+        function calculateWeton(date) {
+            const safeDate = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 12);
+            const referenceDate = new Date(1945, 7, 17, 12);
+            const diffDays = Math.round((safeDate - referenceDate) / 86400000);
+            const weekday = wetonWeekdays[safeDate.getDay()];
+            const pasaran = wetonPasaran[((diffDays % 5) + 5) % 5];
+
+            return {
+                weekday: weekday.name,
+                weekdayNeptu: weekday.neptu,
+                pasaran: pasaran.name,
+                pasaranNeptu: pasaran.neptu,
+                totalNeptu: weekday.neptu + pasaran.neptu,
+                label: `${weekday.name} ${pasaran.name}`
+            };
+        }
+
+        function buildBirthInsight(birthDate, dominantTerm) {
+            if (!birthDate) {
+                return null;
+            }
+
+            const weton = calculateWeton(birthDate);
+            const birthLabel = formatDateIndo(birthDate);
+            const character = wetonCharacterMap[dominantTerm] || "Tanggal lahire nambah rasa pribadi sing luwih unik ing tafsir petuang iki.";
+
+            return {
+                birthLabel,
+                weton,
+                text: `${birthLabel} lahir dengan weton ${weton.label} dan total neptu ${weton.totalNeptu}. ${character}`
+            };
+        }
+
+        function getDominantPetuang(primaryTerm, combinedTerm) {
+            return primaryTerm || combinedTerm || "Sri";
+        }
+
         function calculate() {
             const firstName = document.getElementById("firstName").value.trim();
             const middleName = document.getElementById("middleName").value.trim();
             const lastName = document.getElementById("lastName").value.trim();
+            const birthDateRaw = document.getElementById("birthDate").value;
             const combinedNames = document.getElementById("combinedNames").value.trim();
-
-            let resultText = "";
+            const resultSections = [];
+            let primaryTerm = "";
+            let combinedTerm = "";
 
             const fullName = [firstName, middleName, lastName].filter(Boolean).join(" ");
             if (fullName) {
                 const count = calculateUniqueLetters(fullName);
                 const term = mapToJavaneseTerm(count);
-                resultText += `<h3>Nama Lengkap: ${fullName}</h3>`;
-                resultText += `<p>Jumlah huruf unik: ${count}</p>`;
-                resultText += `<p>Jatuh di: ${term}</p>`;
-                resultText += `<p><em>Penjelasan: ${getExplanation(term)}</em></p>`;
+                primaryTerm = term;
+                resultSections.push({
+                    title: `Nama Lengkap: ${fullName}`,
+                    count,
+                    term,
+                    explanationHtml: getExplanation(term)
+                });
             }
 
             if (combinedNames) {
                 const names = combinedNames.split("+").map((name) => name.trim()).filter(Boolean);
                 let totalCount = 0;
-                resultText += "<h3>Gabungan Nama:</h3>";
+                const items = [];
 
                 names.forEach((name) => {
                     const count = calculateUniqueLetters(name);
                     const term = mapToJavaneseTerm(count);
                     totalCount += count;
-                    resultText += `<p>${name}: ${count} huruf unik -> ${term}</p>`;
-                    resultText += `<p><em>Penjelasan: ${getExplanation(term)}</em></p>`;
+                    items.push({
+                        name,
+                        count,
+                        term,
+                        explanationHtml: getExplanation(term)
+                    });
                 });
 
-                const totalTerm = mapToJavaneseTerm(totalCount);
-                resultText += `<p><strong>Total: ${totalCount} -> ${totalTerm}</strong></p>`;
-                resultText += `<p><em>Penjelasan Total: ${getExplanation(totalTerm)}</em></p>`;
+                combinedTerm = mapToJavaneseTerm(totalCount);
+                resultSections.push({
+                    title: "Gabungan Nama",
+                    items,
+                    totalCount,
+                    term: combinedTerm,
+                    explanationHtml: getExplanation(combinedTerm)
+                });
             }
 
-            if (!resultText) {
-                resultText = "<p>Masukkan minimal satu nama untuk dihitung.</p>";
+            if (!resultSections.length) {
+                latestPetuangData = null;
+                document.getElementById("result").innerHTML = "<p>Masukkan minimal satu nama untuk dihitung.</p>";
+                document.getElementById("result").style.display = "block";
+                document.getElementById("resultActions").hidden = true;
+                setActionStatus("resultStatus", "Belum ada hasil yang bisa disalin atau diunduh.");
+                return;
             }
 
-            document.getElementById("result").innerHTML = resultText;
-            document.getElementById("result").style.display = "block";
-        }
-
-        function renderTermDescriptions() {
-            const terms = ["Sri", "Lungguh", "Pati", "Dunya"];
-            document.getElementById("termDescriptions").innerHTML = terms.map((term) => `
-                <div class="term-card">
-                    <span class="pill">${term}</span>
-                    <h3>${term}</h3>
-                    <p>${getExplanation(term)}</p>
+            const dominantTerm = getDominantPetuang(primaryTerm, combinedTerm);
+            const birthInsight = birthDateRaw ? buildBirthInsight(parseLocalDate(birthDateRaw), dominantTerm) : null;
+            const heroTitle = fullName || "Petungan Gabungan";
+            const introText = birthInsight
+                ? `Asma ini jatuh ke ${dominantTerm} dan dipadukan dengan weton ${birthInsight.weton.label}.`
+                : `Asma ini jatuh ke ${dominantTerm} berdasarkan hitungan huruf unik.`;
+            const resultHtml = `
+                <div class="result-header">
+                    <div>
+                        <h3>Ringkesan Petuang</h3>
+                        <p>${escapeHtml(introText)}</p>
+                    </div>
+                    <span class="result-badge">${dominantTerm}</span>
                 </div>
-            `).join("");
+                ${birthInsight ? `
+                    <div class="result-summary">
+                        <h3>Tanggal Lahir & Weton</h3>
+                        <p><strong>${birthInsight.birthLabel}</strong> - ${birthInsight.weton.label} (neptu ${birthInsight.weton.totalNeptu})</p>
+                        <p>${escapeHtml(wetonCharacterMap[dominantTerm] || birthInsight.text)}</p>
+                    </div>
+                ` : ""}
+                <div class="result-list">
+                    ${resultSections.map((section) => {
+                        if (section.items) {
+                            return `
+                                <div class="result-item">
+                                    <h3>${escapeHtml(section.title)}</h3>
+                                    ${section.items.map((item) => `
+                                        <p><strong>${escapeHtml(item.name)}</strong>: ${item.count} huruf unik -> ${item.term}</p>
+                                        <p><em>${getExplanation(item.term)}</em></p>
+                                    `).join("")}
+                                    <p><strong>Total gabungan:</strong> ${section.totalCount} -> ${section.term}</p>
+                                    <p><em>${section.explanationHtml}</em></p>
+                                </div>
+                            `;
+                        }
+
+                        return `
+                            <div class="result-item">
+                                <h3>${escapeHtml(section.title)}</h3>
+                                <p><strong>Jumlah huruf unik:</strong> ${section.count}</p>
+                                <p><strong>Jatuh di:</strong> ${section.term}</p>
+                                <p><em>${section.explanationHtml}</em></p>
+                            </div>
+                        `;
+                    }).join("")}
+                </div>
+            `;
+
+            const shareLines = [
+                `Petuang Kejawen - ${heroTitle}`,
+                `Dominan: ${dominantTerm}`,
+                ...resultSections.flatMap((section) => section.items
+                    ? [
+                        `${section.title}: total ${section.totalCount} -> ${section.term}`,
+                        ...section.items.map((item) => `- ${item.name}: ${item.count} huruf unik -> ${item.term}`)
+                    ]
+                    : [`${section.title}: ${section.count} huruf unik -> ${section.term}`]),
+                birthInsight ? `Weton: ${birthInsight.weton.label} (neptu ${birthInsight.weton.totalNeptu})` : "",
+                "Diracik dari Petuang Kejawen."
+            ].filter(Boolean);
+
+            latestPetuangData = {
+                title: heroTitle,
+                dominantTerm,
+                introText,
+                birthInsight,
+                sections: resultSections,
+                shareText: shareLines.join("\n")
+            };
+
+            document.getElementById("result").innerHTML = resultHtml;
+            document.getElementById("result").style.display = "block";
+            document.getElementById("resultActions").hidden = false;
+            setActionStatus("resultStatus", "Hasil petuang siap disalin, dibagikan, atau diunduh sebagai kartu.");
         }
 
         function getTodayLocalDate() {
@@ -833,49 +1174,379 @@
             return pickByDate(zodiacVoices[profile.name][key], profile, date, salt);
         }
 
-        function buildHoroscopeCard(profile, date) {
+        function buildHoroscopeProfile(profile, date) {
             const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
             const persona = zodiacVoices[profile.name];
-            const mood = pickVoiceLine(profile, date, "moodMap", 11);
-            const loveScore = scoreFromSeed(profile, date, 21, 63, 96);
-            const moneyScore = scoreFromSeed(profile, date, 22, 58, 92);
-            const energyScore = scoreFromSeed(profile, date, 23, 55, 95);
-            const focus = pickVoiceLine(profile, date, "focus", 24);
-            const loveLine = pickVoiceLine(profile, date, "love", 25);
-            const financeLine = pickVoiceLine(profile, date, "finance", 26);
-            const energyLine = pickVoiceLine(profile, date, "energy", 27);
-            const chaosLine = pickVoiceLine(profile, date, "chaos", 28);
-            const cosmicWeather = pickByDate(horoscopeSignals.cosmicWeather, profile, date, 29);
-            const socialMode = pickByDate(horoscopeSignals.socialModes, profile, date, 30);
-            const timing = pickByDate(horoscopeSignals.timing, profile, date, 31);
-            const warning = pickByDate(horoscopeSignals.humorWarnings, profile, date, 32);
 
+            return {
+                profile,
+                weekday,
+                persona,
+                mood: pickVoiceLine(profile, date, "moodMap", 11),
+                loveScore: scoreFromSeed(profile, date, 21, 63, 96),
+                moneyScore: scoreFromSeed(profile, date, 22, 58, 92),
+                energyScore: scoreFromSeed(profile, date, 23, 55, 95),
+                focus: pickVoiceLine(profile, date, "focus", 24),
+                loveLine: pickVoiceLine(profile, date, "love", 25),
+                financeLine: pickVoiceLine(profile, date, "finance", 26),
+                energyLine: pickVoiceLine(profile, date, "energy", 27),
+                chaosLine: pickVoiceLine(profile, date, "chaos", 28),
+                cosmicWeather: pickByDate(horoscopeSignals.cosmicWeather, profile, date, 29),
+                socialMode: pickByDate(horoscopeSignals.socialModes, profile, date, 30),
+                timing: pickByDate(horoscopeSignals.timing, profile, date, 31),
+                warning: pickByDate(horoscopeSignals.humorWarnings, profile, date, 32)
+            };
+        }
+
+        function getLeadHoroscopeEntry(entries) {
+            return [...entries].sort((a, b) => (b.loveScore + b.moneyScore + b.energyScore) - (a.loveScore + a.moneyScore + a.energyScore))[0];
+        }
+
+        function buildAllHoroscopeBoxes(entries, leadEntry) {
+            const topLove = [...entries].sort((a, b) => b.loveScore - a.loveScore)[0];
+            const topMoney = [...entries].sort((a, b) => b.moneyScore - a.moneyScore)[0];
+            const topEnergy = [...entries].sort((a, b) => b.energyScore - a.energyScore)[0];
+
+            return [
+                { label: "Love Tertinggi", value: `${topLove.profile.name} (${topLove.loveScore}/100)` },
+                { label: "Cuan Tertinggi", value: `${topMoney.profile.name} (${topMoney.moneyScore}/100)` },
+                { label: "Energi Tertinggi", value: `${topEnergy.profile.name} (${topEnergy.energyScore}/100)` },
+                { label: "Power Move", value: `${leadEntry.profile.name}: ${leadEntry.focus}` }
+            ];
+        }
+
+        function getActiveHoroscopeEntries(entries, zodiacChoice, fallbackName) {
+            if (zodiacChoice === "all") {
+                return entries;
+            }
+
+            if (zodiacChoice && zodiacChoice !== "personal") {
+                return entries.filter((entry) => entry.profile.name === zodiacChoice);
+            }
+
+            return entries.filter((entry) => entry.profile.name === fallbackName);
+        }
+
+        function buildPersonalHoroscopeSummary(entry) {
+            return `${entry.profile.name} lagi masuk mode ${entry.mood} dengan fokus utama ${entry.focus}. Energi sosialnya kebaca dari ${entry.socialMode}, sementara semestanya bilang ${entry.cosmicWeather}.`;
+        }
+
+        function buildPersonalHoroscopeBoxes(entry) {
+            return [
+                { label: "Love Meter", value: `${entry.loveScore}/100` },
+                { label: "Cuan Meter", value: `${entry.moneyScore}/100` },
+                { label: "Tenaga", value: `${entry.energyScore}/100` },
+                { label: "Power Move", value: entry.focus }
+            ];
+        }
+
+        function buildHoroscopeShareText(entries, formattedDate, isAllMode) {
+            return [
+                `${isAllMode ? "Horoskop Zodiac Harian" : `Horoskop ${entries[0].profile.name}`} - ${formattedDate}`,
+                ...entries.flatMap((entry) => [
+                    "",
+                    `${entry.profile.name} - ${entry.profile.range}`,
+                    `Vibe ${entry.weekday}: ${entry.profile.name} lagi masuk mode ${entry.mood}. Karakter dasarnya ${entry.persona.archetype}, jadi fokus harinya condong ke ${entry.focus}. ${entry.cosmicWeather}.`,
+                    `Power Move: ${entry.focus}. Ini langkah paling mantep buat ${entry.profile.name} di tanggal ini.`,
+                    `Love Meter: ${entry.loveScore}/100`,
+                    `Cuan Meter: ${entry.moneyScore}/100`,
+                    `Tenaga: ${entry.energyScore}/100`,
+                    `Percintaan: ${entry.loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.`,
+                    `Keuangan: ${entry.financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.`,
+                    `Energi: ${entry.energyLine}. ${entry.timing}.`,
+                    `Sosial dan tips: ${entry.socialMode}. Power move buat elu hari ini: fokus ke ${entry.focus} dan jangan kebanyakan buka front yang gak perlu.`,
+                    `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}.`
+                ]),
+                "",
+                "Sumber: https://numerologi-nama.pages.dev"
+            ].join("\n");
+        }
+
+        function buildHoroscopeCard(entry) {
             return `
                 <article class="horoscope-card">
-                    <span class="pill">${profile.name} - ${profile.range}</span>
-                    <h3>${profile.name}</h3>
-                    <p><strong>Vibe ${weekday}:</strong> ${profile.name} lagi masuk mode ${mood}. Karakter dasarnya ${persona.archetype}, jadi fokus harinya condong ke ${focus}. ${cosmicWeather}.</p>
+                    <span class="pill">${entry.profile.name} - ${entry.profile.range}</span>
+                    <h3>${entry.profile.name}</h3>
+                    <p><strong>Vibe ${entry.weekday}:</strong> ${entry.profile.name} lagi masuk mode ${entry.mood}. Karakter dasarnya ${entry.persona.archetype}, jadi fokus harinya condong ke ${entry.focus}. ${entry.cosmicWeather}.</p>
+                    <p class="power-move"><strong>Power Move:</strong> ${entry.focus}. Ini langkah paling mantep buat ${entry.profile.name} di tanggal ini.</p>
                     <div class="metric-row">
                         <div class="metric-box">
                             <strong>Love Meter</strong>
-                            <span>${loveScore}/100</span>
+                            <span>${entry.loveScore}/100</span>
                         </div>
                         <div class="metric-box">
                             <strong>Cuan Meter</strong>
-                            <span>${moneyScore}/100</span>
+                            <span>${entry.moneyScore}/100</span>
                         </div>
                         <div class="metric-box">
                             <strong>Tenaga</strong>
-                            <span>${energyScore}/100</span>
+                            <span>${entry.energyScore}/100</span>
                         </div>
                     </div>
-                    <p><strong>Percintaan:</strong> ${loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.</p>
-                    <p><strong>Keuangan:</strong> ${financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.</p>
-                    <p><strong>Energi:</strong> ${energyLine}. ${timing}.</p>
-                    <p><strong>Sosial dan tips:</strong> ${socialMode}. Power move buat elu hari ini: fokus ke ${focus} dan jangan kebanyakan buka front yang gak perlu.</p>
-                    <p><strong>Catatan receh semesta:</strong> ${chaosLine}. Bonus warning: ${warning}.</p>
+                    <p><strong>Percintaan:</strong> ${entry.loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.</p>
+                    <p><strong>Keuangan:</strong> ${entry.financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.</p>
+                    <p><strong>Energi:</strong> ${entry.energyLine}. ${entry.timing}.</p>
+                    <p><strong>Sosial dan tips:</strong> ${entry.socialMode}. Power move buat elu hari ini: fokus ke ${entry.focus} dan jangan kebanyakan buka front yang gak perlu.</p>
+                    <p><strong>Catatan receh semesta:</strong> ${entry.chaosLine}. Bonus warning: ${entry.warning}.</p>
                 </article>
             `;
+        }
+
+        function setActionStatus(elementId, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = message;
+            }
+        }
+
+        async function copyTextToClipboard(text, statusId, successMessage) {
+            try {
+                await navigator.clipboard.writeText(text);
+                setActionStatus(statusId, successMessage);
+            } catch (error) {
+                setActionStatus(statusId, "Clipboard ditolak browser. Coba pakai tombol bagikan atau izin clipboard dulu.");
+            }
+        }
+
+        async function shareTextPayload(text, statusId, title) {
+            if (navigator.share) {
+                try {
+                    await navigator.share({ title, text });
+                    setActionStatus(statusId, "Panel bagikan berhasil dibuka.");
+                    return;
+                } catch (error) {
+                    if (error && error.name === "AbortError") {
+                        setActionStatus(statusId, "Bagikan dibatalkan.");
+                        return;
+                    }
+                }
+            }
+
+            await copyTextToClipboard(text, statusId, "Fitur share browser tidak tersedia, jadi teksnya saya salin ke clipboard.");
+        }
+
+        function copyPetuangResult() {
+            if (!latestPetuangData) {
+                setActionStatus("resultStatus", "Belum ada hasil petuang untuk disalin.");
+                return;
+            }
+
+            copyTextToClipboard(latestPetuangData.shareText, "resultStatus", "Ringkasan petuang berhasil disalin.");
+        }
+
+        function sharePetuangResult() {
+            if (!latestPetuangData) {
+                setActionStatus("resultStatus", "Belum ada hasil petuang untuk dibagikan.");
+                return;
+            }
+
+            shareTextPayload(latestPetuangData.shareText, "resultStatus", "Petuang Kejawen");
+        }
+
+        function copyHoroscopeResult() {
+            if (!latestHoroscopeData) {
+                setActionStatus("horoscopeStatus", "Belum ada sorotan horoskop untuk disalin.");
+                return;
+            }
+
+            copyTextToClipboard(latestHoroscopeData.shareText, "horoscopeStatus", "Isi zodiac yang sedang tampil berhasil disalin.");
+        }
+
+        function shareHoroscopeResult() {
+            if (!latestHoroscopeData) {
+                setActionStatus("horoscopeStatus", "Belum ada sorotan horoskop untuk dibagikan.");
+                return;
+            }
+
+            shareTextPayload(latestHoroscopeData.shareText, "horoscopeStatus", "Horoskop Petuang Kejawen");
+        }
+
+        function wrapCanvasText(context, text, x, y, maxWidth, lineHeight, color) {
+            context.fillStyle = color;
+            const words = text.split(" ");
+            let line = "";
+            let currentY = y;
+
+            words.forEach((word) => {
+                const candidate = line ? `${line} ${word}` : word;
+                if (context.measureText(candidate).width > maxWidth && line) {
+                    context.fillText(line, x, currentY);
+                    line = word;
+                    currentY += lineHeight;
+                } else {
+                    line = candidate;
+                }
+            });
+
+            if (line) {
+                context.fillText(line, x, currentY);
+                currentY += lineHeight;
+            }
+
+            return currentY;
+        }
+
+        function renderVisualCard(options) {
+            const canvas = document.createElement("canvas");
+            canvas.width = 1080;
+            canvas.height = 1350;
+            const context = canvas.getContext("2d");
+            const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
+            gradient.addColorStop(0, "#100907");
+            gradient.addColorStop(0.55, "#2f190f");
+            gradient.addColorStop(1, "#090605");
+            context.fillStyle = gradient;
+            context.fillRect(0, 0, canvas.width, canvas.height);
+
+            context.fillStyle = "rgba(224, 187, 117, 0.08)";
+            context.beginPath();
+            context.arc(860, 220, 240, 0, Math.PI * 2);
+            context.fill();
+            context.beginPath();
+            context.arc(180, 1080, 210, 0, Math.PI * 2);
+            context.fill();
+
+            context.strokeStyle = "rgba(224, 187, 117, 0.28)";
+            context.lineWidth = 2;
+            context.strokeRect(48, 48, canvas.width - 96, canvas.height - 96);
+
+            let y = 110;
+            context.fillStyle = "#e0bb75";
+            context.font = "700 28px 'Plus Jakarta Sans', sans-serif";
+            context.fillText("PETUANG KEJAWEN", 88, y);
+
+            y += 62;
+            context.fillStyle = "#f7e8c8";
+            context.font = "700 58px 'Cormorant Garamond', serif";
+            y = wrapCanvasText(context, options.title, 88, y, 900, 66, "#f7e8c8");
+
+            if (options.badge) {
+                context.fillStyle = "rgba(224, 187, 117, 0.16)";
+                context.fillRect(88, y + 12, 260, 56);
+                context.strokeStyle = "rgba(224, 187, 117, 0.35)";
+                context.strokeRect(88, y + 12, 260, 56);
+                context.fillStyle = "#e0bb75";
+                context.font = "700 26px 'Plus Jakarta Sans', sans-serif";
+                context.fillText(options.badge, 108, y + 49);
+                y += 96;
+            }
+
+            context.font = "500 28px 'Plus Jakarta Sans', sans-serif";
+            y = wrapCanvasText(context, options.subtitle, 88, y, 900, 42, "#cfb78c");
+            y += 28;
+
+            options.sections.forEach((section) => {
+                context.fillStyle = "rgba(17, 11, 8, 0.88)";
+                context.fillRect(88, y, 904, section.lines.length * 38 + 88);
+                context.strokeStyle = "rgba(224, 187, 117, 0.16)";
+                context.strokeRect(88, y, 904, section.lines.length * 38 + 88);
+
+                context.fillStyle = "#e0bb75";
+                context.font = "700 30px 'Plus Jakarta Sans', sans-serif";
+                context.fillText(section.heading, 118, y + 44);
+                context.font = "500 24px 'Plus Jakarta Sans', sans-serif";
+
+                let sectionY = y + 88;
+                section.lines.forEach((line) => {
+                    sectionY = wrapCanvasText(context, line, 118, sectionY, 844, 34, "#f1e1be");
+                });
+                y += section.lines.length * 38 + 116;
+            });
+
+            context.font = "500 22px 'Plus Jakarta Sans', sans-serif";
+            context.fillStyle = "#cfb78c";
+            context.fillText("Diracik otomatis dari halaman Petuang Kejawen", 88, canvas.height - 92);
+            context.textAlign = "right";
+            context.fillText("https://numerologi-nama.pages.dev", canvas.width - 88, canvas.height - 92);
+            context.textAlign = "left";
+
+            return canvas;
+        }
+
+        function triggerCanvasDownload(canvas, fileName, statusId, successMessage) {
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/png");
+            link.download = fileName;
+            link.click();
+            setActionStatus(statusId, successMessage);
+        }
+
+        function downloadPetuangCard() {
+            if (!latestPetuangData) {
+                setActionStatus("resultStatus", "Belum ada hasil petuang untuk diunduh.");
+                return;
+            }
+
+            const sections = [];
+
+            if (latestPetuangData.birthInsight) {
+                sections.push({
+                    heading: "Tanggal Lahir",
+                    lines: [
+                        `${latestPetuangData.birthInsight.birthLabel}`,
+                        `${latestPetuangData.birthInsight.weton.label} - neptu ${latestPetuangData.birthInsight.weton.totalNeptu}`
+                    ]
+                });
+            }
+
+            latestPetuangData.sections.forEach((section) => {
+                if (section.items) {
+                    sections.push({
+                        heading: `${section.title} (${section.term})`,
+                        lines: [
+                            ...section.items.map((item) => `${item.name}: ${item.count} huruf unik -> ${item.term}`),
+                            `Total gabungan: ${section.totalCount} -> ${section.term}`
+                        ]
+                    });
+                } else {
+                    sections.push({
+                        heading: section.title,
+                        lines: [
+                            `Jumlah huruf unik: ${section.count}`,
+                            `Jatuh di: ${section.term}`,
+                            stripHtml(section.explanationHtml).split("\n")[0]
+                        ]
+                    });
+                }
+            });
+
+            const canvas = renderVisualCard({
+                title: latestPetuangData.title,
+                badge: latestPetuangData.dominantTerm,
+                subtitle: latestPetuangData.introText,
+                sections
+            });
+
+            triggerCanvasDownload(canvas, "petuang-kejawen-card.png", "resultStatus", "Kartu petuang berhasil diunduh.");
+        }
+
+        function downloadHoroscopeCard() {
+            if (!latestHoroscopeData) {
+                setActionStatus("horoscopeStatus", "Belum ada sorotan horoskop untuk diunduh.");
+                return;
+            }
+
+            const canvas = renderVisualCard({
+                title: `Horoskop ${latestHoroscopeData.date}`,
+                badge: "Sorotan Harian",
+                subtitle: latestHoroscopeData.summary,
+                sections: latestHoroscopeData.entries.map((entry) => ({
+                    heading: `${entry.profile.name} (${entry.profile.range})`,
+                    lines: [
+                        `Power Move: ${entry.focus}`,
+                        `Love Meter: ${entry.loveScore}/100`,
+                        `Cuan Meter: ${entry.moneyScore}/100`,
+                        `Tenaga: ${entry.energyScore}/100`,
+                        `Percintaan: ${entry.loveLine}`,
+                        `Keuangan: ${entry.financeLine}`,
+                        `Energi: ${entry.energyLine}. ${entry.timing}`,
+                        `Sosial dan tips: ${entry.socialMode}`,
+                        `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}`
+                    ]
+                }))
+            });
+
+            triggerCanvasDownload(canvas, "horoscope-kejawen-card.png", "horoscopeStatus", "Kartu horoskop berhasil diunduh.");
         }
 
         function setupAmbientAutoplay() {
