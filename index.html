@@ -660,6 +660,65 @@
             ]
         };
 
+        const horoscopeNarratives = {
+            openings: [
+                "Ada satu pola yang langsung kebaca dari ritme hari ini:",
+                "Kalau dibaca lebih dalam, inti harinya ngumpul di titik ini:",
+                "Bukan hari yang datar, karena ada sinyal khusus yang lagi nongol:",
+                "Kalau energi harinya diterjemahin jadi bahasa manusia, bunyinya kira-kira begini:",
+                "Yang bikin hari ini beda bukan dramanya, tapi arah bawah sadar yang lagi kebentuk:"
+            ],
+            pressurePoints: [
+                "bagian tersulitnya justru muncul waktu elu pengen semuanya cepat beres",
+                "titik rawannya ada di momen kecil yang kelihatannya receh tapi ngubah mood total",
+                "semesta ngetes cara elu baca situasi, bukan cuma cara elu bereaksi",
+                "hari ini gampang kebelok kalau elu terlalu sibuk nebak pikiran orang",
+                "yang paling menguras justru hal yang belum selesai dari kemarin"
+            ],
+            pivots: [
+                "Begitu elu sadar ini, arah harinya langsung lebih gampang dikendalikan.",
+                "Kalau bagian ini diberesin dulu, sisanya biasanya ikut melunak.",
+                "Di sinilah bedanya hari yang berantakan dan hari yang berhasil elu pegang.",
+                "Momentum bagusnya datang setelah elu berhenti maksa ritme yang salah.",
+                "Kuncinya bukan nambah tenaga, tapi geser cara mainnya sedikit."
+            ],
+            loveClosers: [
+                "Biar romantisnya kerasa, elu gak perlu sok puitis. Cukup hadir dengan niat yang kebaca.",
+                "Hubungan hari ini lebih nurut ke kejujuran kecil daripada gesture bombastis.",
+                "Kalau hati lagi sensitif, kualitas respon lebih penting daripada panjang chat.",
+                "Yang bikin chemistry hidup justru rasa aman, bukan trik buat terlihat misterius.",
+                "Jangan nunggu momen sempurna buat jujur, karena hangatnya justru datang dari spontan yang tulus."
+            ],
+            financeClosers: [
+                "Cuan hari ini lebih ramah sama orang yang tenang, bukan yang panik lihat peluang lewat.",
+                "Kalau dompet mau selamat, bedain mana kebutuhan beneran dan mana ego yang lagi lapar.",
+                "Gerak duitnya bagus waktu elu disiplin sama keputusan kecil.",
+                "Peluang ada, tapi hasilnya paling terasa kalau elu gak beli rasa puas instan.",
+                "Uang hari ini mending diperlakukan kayak strategi, bukan pelampiasan."
+            ],
+            energyClosers: [
+                "Badan elu butuh ritme yang sinkron sama kepala, bukan cuma dorongan sesaat.",
+                "Tenaga bakal lebih awet kalau elu kasih jeda sebelum semuanya terasa berat.",
+                "Produktif hari ini datang dari tempo yang pas, bukan dari mode kebut tanpa rem.",
+                "Energi elu naik waktu perhatianmu gak pecah ke banyak arah sekaligus.",
+                "Yang bikin kuat bukan semangat awalnya, tapi konsistensi kecil sepanjang hari."
+            ],
+            socialClosers: [
+                "Di ranah sosial, kualitas baca suasana jauh lebih penting daripada banyaknya omongan.",
+                "Kalau mau hari ini mulus, pilih respon yang presisi daripada reaksi yang keras.",
+                "Lingkungan hari ini bakal kebaca beda kalau elu gak buru-buru kasih label ke orang.",
+                "Interaksi kecil bisa jadi penentu, jadi jangan anggap semua hal cuma lalu lintas obrolan.",
+                "Aura sosialnya lebih aman kalau elu jaga batas tanpa kehilangan hangat."
+            ],
+            destinyHints: [
+                "Ada aroma perubahan kecil yang efeknya lebih panjang dari kelihatannya.",
+                "Sinyal bagusnya bukan datang dari kebisingan, tapi dari momen yang awalnya diremehkan.",
+                "Hari ini seperti minta satu keputusan yang bersih supaya jalur berikutnya kebuka.",
+                "Yang terasa lambat di awal justru bisa jadi bagian paling penting dari hasil akhirnya.",
+                "Semesta lagi nyodorin petunjuk, tapi bentuknya gak selalu nyaman."
+            ]
+        };
+
         const zodiacVoices = {
             Aries: {
                 archetype: "si gaspol yang kalau udah yakin susah direm",
@@ -821,6 +880,8 @@
         let ambientFallbackNoticeShown = false;
         let latestPetuangData = null;
         let latestHoroscopeData = null;
+        let cardBackgroundImagePromise = null;
+        let horoscopeAiEnabled = true;
 
         window.onload = function () {
             document.getElementById("horoscopeDate").value = getTodayLocalDate();
@@ -843,7 +904,7 @@
             ].join("");
         }
 
-        function generateHoroscope() {
+        async function generateHoroscope() {
             const rawDate = document.getElementById("horoscopeDate").value;
             const zodiacChoice = document.getElementById("zodiacSelect").value;
             if (!rawDate) {
@@ -855,10 +916,20 @@
             const formattedDate = formatDateIndo(selectedDate);
             const horoscopeEntries = zodiacProfiles.map((profile) => buildHoroscopeProfile(profile, selectedDate));
             const leadEntry = getLeadHoroscopeEntry(horoscopeEntries);
-            const activeEntries = getActiveHoroscopeEntries(horoscopeEntries, zodiacChoice, leadEntry.profile.name);
+            let activeEntries = getActiveHoroscopeEntries(horoscopeEntries, zodiacChoice, leadEntry.profile.name);
+            const isAllMode = zodiacChoice === "all";
+
+            if (horoscopeAiEnabled) {
+                setActionStatus("horoscopeStatus", "Sedang meracik horoscope via AI...");
+                try {
+                    activeEntries = await enhanceHoroscopeEntriesWithAI(activeEntries, formattedDate, isAllMode);
+                } catch (error) {
+                    setActionStatus("horoscopeStatus", "Groq tidak merespons, jadi sementara pakai generator lokal.");
+                }
+            }
+
             const cards = activeEntries.map((entry) => buildHoroscopeCard(entry)).join("");
             const primaryEntry = activeEntries[0];
-            const isAllMode = zodiacChoice === "all";
             const heading = isAllMode
                 ? `Horoskop Semua Zodiac - ${formattedDate}`
                 : `Horoskop Personal - ${primaryEntry.profile.name} - ${formattedDate}`;
@@ -884,6 +955,67 @@
                 mode: isAllMode ? "all" : "personal",
                 shareText: buildHoroscopeShareText(activeEntries, formattedDate, isAllMode)
             };
+        }
+
+        async function enhanceHoroscopeEntriesWithAI(entries, formattedDate, isAllMode) {
+            const response = await fetch("/api/horoscope", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    formattedDate,
+                    mode: isAllMode ? "all" : "personal",
+                    entries: entries.map((entry) => ({
+                        name: entry.profile.name,
+                        range: entry.profile.range,
+                        weekday: entry.weekday,
+                        archetype: entry.persona.archetype,
+                        mood: entry.mood,
+                        focus: entry.focus,
+                        loveScore: entry.loveScore,
+                        moneyScore: entry.moneyScore,
+                        energyScore: entry.energyScore,
+                        cosmicWeather: entry.cosmicWeather,
+                        socialMode: entry.socialMode,
+                        timing: entry.timing,
+                        warning: entry.warning,
+                        loveBase: entry.loveLine,
+                        financeBase: entry.financeLine,
+                        energyBase: entry.energyLine,
+                        chaosBase: entry.chaosLine
+                    }))
+                })
+            });
+
+            if (!response.ok) {
+                throw new Error("AI request failed.");
+            }
+
+            const payload = await response.json();
+            const aiEntries = Array.isArray(payload.entries) ? payload.entries : [];
+
+            if (!aiEntries.length) {
+                throw new Error("AI payload invalid.");
+            }
+
+            return entries.map((entry) => {
+                const aiEntry = aiEntries.find((item) => item.name === entry.profile.name);
+                if (!aiEntry) {
+                    return entry;
+                }
+
+                return {
+                    ...entry,
+                    aiVibe: aiEntry.vibe || "",
+                    aiPowerMove: aiEntry.powerMove || "",
+                    aiLove: aiEntry.love || "",
+                    aiFinance: aiEntry.finance || "",
+                    aiEnergy: aiEntry.energy || "",
+                    aiSocial: aiEntry.social || "",
+                    aiWarning: aiEntry.warning || ""
+                };
+            });
         }
 
         function calculateUniqueLetters(name) {
@@ -1177,24 +1309,45 @@
         function buildHoroscopeProfile(profile, date) {
             const weekday = date.toLocaleDateString("id-ID", { weekday: "long" });
             const persona = zodiacVoices[profile.name];
+            const mood = pickVoiceLine(profile, date, "moodMap", 11);
+            const loveScore = scoreFromSeed(profile, date, 21, 63, 96);
+            const moneyScore = scoreFromSeed(profile, date, 22, 58, 92);
+            const energyScore = scoreFromSeed(profile, date, 23, 55, 95);
+            const focus = pickVoiceLine(profile, date, "focus", 24);
+            const loveLine = pickVoiceLine(profile, date, "love", 25);
+            const financeLine = pickVoiceLine(profile, date, "finance", 26);
+            const energyLine = pickVoiceLine(profile, date, "energy", 27);
+            const chaosLine = pickVoiceLine(profile, date, "chaos", 28);
+            const cosmicWeather = pickByDate(horoscopeSignals.cosmicWeather, profile, date, 29);
+            const socialMode = pickByDate(horoscopeSignals.socialModes, profile, date, 30);
+            const timing = pickByDate(horoscopeSignals.timing, profile, date, 31);
+            const warning = pickByDate(horoscopeSignals.humorWarnings, profile, date, 32);
 
             return {
                 profile,
                 weekday,
                 persona,
-                mood: pickVoiceLine(profile, date, "moodMap", 11),
-                loveScore: scoreFromSeed(profile, date, 21, 63, 96),
-                moneyScore: scoreFromSeed(profile, date, 22, 58, 92),
-                energyScore: scoreFromSeed(profile, date, 23, 55, 95),
-                focus: pickVoiceLine(profile, date, "focus", 24),
-                loveLine: pickVoiceLine(profile, date, "love", 25),
-                financeLine: pickVoiceLine(profile, date, "finance", 26),
-                energyLine: pickVoiceLine(profile, date, "energy", 27),
-                chaosLine: pickVoiceLine(profile, date, "chaos", 28),
-                cosmicWeather: pickByDate(horoscopeSignals.cosmicWeather, profile, date, 29),
-                socialMode: pickByDate(horoscopeSignals.socialModes, profile, date, 30),
-                timing: pickByDate(horoscopeSignals.timing, profile, date, 31),
-                warning: pickByDate(horoscopeSignals.humorWarnings, profile, date, 32)
+                mood,
+                loveScore,
+                moneyScore,
+                energyScore,
+                focus,
+                loveLine,
+                financeLine,
+                energyLine,
+                chaosLine,
+                cosmicWeather,
+                socialMode,
+                timing,
+                warning,
+                openingLine: pickByDate(horoscopeNarratives.openings, profile, date, 33),
+                pressurePoint: pickByDate(horoscopeNarratives.pressurePoints, profile, date, 34),
+                pivotLine: pickByDate(horoscopeNarratives.pivots, profile, date, 35),
+                loveCloser: pickByDate(horoscopeNarratives.loveClosers, profile, date, 36),
+                financeCloser: pickByDate(horoscopeNarratives.financeClosers, profile, date, 37),
+                energyCloser: pickByDate(horoscopeNarratives.energyClosers, profile, date, 38),
+                socialCloser: pickByDate(horoscopeNarratives.socialClosers, profile, date, 39),
+                destinyHint: pickByDate(horoscopeNarratives.destinyHints, profile, date, 40)
             };
         }
 
@@ -1228,7 +1381,7 @@
         }
 
         function buildPersonalHoroscopeSummary(entry) {
-            return `${entry.profile.name} lagi masuk mode ${entry.mood} dengan fokus utama ${entry.focus}. Energi sosialnya kebaca dari ${entry.socialMode}, sementara semestanya bilang ${entry.cosmicWeather}.`;
+            return `${entry.openingLine} ${entry.profile.name} lagi masuk mode ${entry.mood}, dengan pusat gerak di ${entry.focus}. ${entry.pressurePoint}. ${entry.pivotLine}`;
         }
 
         function buildPersonalHoroscopeBoxes(entry) {
@@ -1246,20 +1399,48 @@
                 ...entries.flatMap((entry) => [
                     "",
                     `${entry.profile.name} - ${entry.profile.range}`,
-                    `Vibe ${entry.weekday}: ${entry.profile.name} lagi masuk mode ${entry.mood}. Karakter dasarnya ${entry.persona.archetype}, jadi fokus harinya condong ke ${entry.focus}. ${entry.cosmicWeather}.`,
-                    `Power Move: ${entry.focus}. Ini langkah paling mantep buat ${entry.profile.name} di tanggal ini.`,
+                    `Vibe ${entry.weekday}: ${getHoroscopeVibeText(entry)}`,
+                    `Power Move: ${getHoroscopePowerMoveText(entry)}`,
                     `Love Meter: ${entry.loveScore}/100`,
                     `Cuan Meter: ${entry.moneyScore}/100`,
                     `Tenaga: ${entry.energyScore}/100`,
-                    `Percintaan: ${entry.loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.`,
-                    `Keuangan: ${entry.financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.`,
-                    `Energi: ${entry.energyLine}. ${entry.timing}.`,
-                    `Sosial dan tips: ${entry.socialMode}. Power move buat elu hari ini: fokus ke ${entry.focus} dan jangan kebanyakan buka front yang gak perlu.`,
-                    `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}.`
+                    `Percintaan: ${getHoroscopeLoveText(entry)}`,
+                    `Keuangan: ${getHoroscopeFinanceText(entry)}`,
+                    `Energi: ${getHoroscopeEnergyText(entry)}`,
+                    `Sosial dan tips: ${getHoroscopeSocialText(entry)}`,
+                    `Catatan receh semesta: ${getHoroscopeWarningText(entry)}`
                 ]),
                 "",
                 "Sumber: https://numerologi-nama.pages.dev"
             ].join("\n");
+        }
+
+        function getHoroscopeVibeText(entry) {
+            return entry.aiVibe || `${entry.openingLine} ${entry.profile.name} lagi masuk mode ${entry.mood}. Karakter dasarnya ${entry.persona.archetype}, jadi fokus harinya condong ke ${entry.focus}. ${entry.cosmicWeather}. ${entry.pressurePoint}. ${entry.pivotLine}`;
+        }
+
+        function getHoroscopePowerMoveText(entry) {
+            return entry.aiPowerMove || `${entry.focus}. Ini langkah paling mantep buat ${entry.profile.name} di tanggal ini.`;
+        }
+
+        function getHoroscopeLoveText(entry) {
+            return entry.aiLove || `${entry.loveLine}. ${entry.loveCloser}`;
+        }
+
+        function getHoroscopeFinanceText(entry) {
+            return entry.aiFinance || `${entry.financeLine}. ${entry.financeCloser}`;
+        }
+
+        function getHoroscopeEnergyText(entry) {
+            return entry.aiEnergy || `${entry.energyLine}. ${entry.timing}. ${entry.energyCloser}`;
+        }
+
+        function getHoroscopeSocialText(entry) {
+            return entry.aiSocial || `${entry.socialMode}. ${entry.socialCloser} Power move buat elu hari ini: fokus ke ${entry.focus} dan jangan kebanyakan buka front yang gak perlu.`;
+        }
+
+        function getHoroscopeWarningText(entry) {
+            return entry.aiWarning || `${entry.chaosLine}. Bonus warning: ${entry.warning}. ${entry.destinyHint}`;
         }
 
         function buildHoroscopeCard(entry) {
@@ -1267,8 +1448,8 @@
                 <article class="horoscope-card">
                     <span class="pill">${entry.profile.name} - ${entry.profile.range}</span>
                     <h3>${entry.profile.name}</h3>
-                    <p><strong>Vibe ${entry.weekday}:</strong> ${entry.profile.name} lagi masuk mode ${entry.mood}. Karakter dasarnya ${entry.persona.archetype}, jadi fokus harinya condong ke ${entry.focus}. ${entry.cosmicWeather}.</p>
-                    <p class="power-move"><strong>Power Move:</strong> ${entry.focus}. Ini langkah paling mantep buat ${entry.profile.name} di tanggal ini.</p>
+                    <p><strong>Vibe ${entry.weekday}:</strong> ${getHoroscopeVibeText(entry)}</p>
+                    <p class="power-move"><strong>Power Move:</strong> ${getHoroscopePowerMoveText(entry)}</p>
                     <div class="metric-row">
                         <div class="metric-box">
                             <strong>Love Meter</strong>
@@ -1283,11 +1464,11 @@
                             <span>${entry.energyScore}/100</span>
                         </div>
                     </div>
-                    <p><strong>Percintaan:</strong> ${entry.loveLine}. Intinya, jangan bikin hati jadi escape room, cuy.</p>
-                    <p><strong>Keuangan:</strong> ${entry.financeLine}. Kalau ada godaan checkout random, coba tatap saldo dulu biar gak kaget sendiri.</p>
-                    <p><strong>Energi:</strong> ${entry.energyLine}. ${entry.timing}.</p>
-                    <p><strong>Sosial dan tips:</strong> ${entry.socialMode}. Power move buat elu hari ini: fokus ke ${entry.focus} dan jangan kebanyakan buka front yang gak perlu.</p>
-                    <p><strong>Catatan receh semesta:</strong> ${entry.chaosLine}. Bonus warning: ${entry.warning}.</p>
+                    <p><strong>Percintaan:</strong> ${getHoroscopeLoveText(entry)}</p>
+                    <p><strong>Keuangan:</strong> ${getHoroscopeFinanceText(entry)}</p>
+                    <p><strong>Energi:</strong> ${getHoroscopeEnergyText(entry)}</p>
+                    <p><strong>Sosial dan tips:</strong> ${getHoroscopeSocialText(entry)}</p>
+                    <p><strong>Catatan receh semesta:</strong> ${getHoroscopeWarningText(entry)}</p>
                 </article>
             `;
         }
@@ -1386,25 +1567,32 @@
             return currentY;
         }
 
-        function renderVisualCard(options) {
+        function loadCardBackgroundImage() {
+            if (!cardBackgroundImagePromise) {
+                cardBackgroundImagePromise = new Promise((resolve, reject) => {
+                    const image = new Image();
+                    image.onload = () => resolve(image);
+                    image.onerror = () => reject(new Error("Background image failed to load."));
+                    image.src = "assets/kejawen-background.png";
+                });
+            }
+
+            return cardBackgroundImagePromise;
+        }
+
+        async function renderVisualCard(options) {
             const canvas = document.createElement("canvas");
             canvas.width = 1080;
             canvas.height = 1350;
             const context = canvas.getContext("2d");
-            const gradient = context.createLinearGradient(0, 0, canvas.width, canvas.height);
-            gradient.addColorStop(0, "#100907");
-            gradient.addColorStop(0.55, "#2f190f");
-            gradient.addColorStop(1, "#090605");
-            context.fillStyle = gradient;
+            const backgroundImage = await loadCardBackgroundImage();
+            context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+            const overlay = context.createLinearGradient(0, 0, 0, canvas.height);
+            overlay.addColorStop(0, "rgba(5, 3, 2, 0.34)");
+            overlay.addColorStop(0.45, "rgba(8, 5, 4, 0.54)");
+            overlay.addColorStop(1, "rgba(3, 2, 2, 0.76)");
+            context.fillStyle = overlay;
             context.fillRect(0, 0, canvas.width, canvas.height);
-
-            context.fillStyle = "rgba(224, 187, 117, 0.08)";
-            context.beginPath();
-            context.arc(860, 220, 240, 0, Math.PI * 2);
-            context.fill();
-            context.beginPath();
-            context.arc(180, 1080, 210, 0, Math.PI * 2);
-            context.fill();
 
             context.strokeStyle = "rgba(224, 187, 117, 0.28)";
             context.lineWidth = 2;
@@ -1436,21 +1624,16 @@
             y += 28;
 
             options.sections.forEach((section) => {
-                context.fillStyle = "rgba(17, 11, 8, 0.88)";
-                context.fillRect(88, y, 904, section.lines.length * 38 + 88);
-                context.strokeStyle = "rgba(224, 187, 117, 0.16)";
-                context.strokeRect(88, y, 904, section.lines.length * 38 + 88);
-
                 context.fillStyle = "#e0bb75";
                 context.font = "700 30px 'Plus Jakarta Sans', sans-serif";
-                context.fillText(section.heading, 118, y + 44);
+                context.fillText(section.heading, 88, y + 44);
                 context.font = "500 24px 'Plus Jakarta Sans', sans-serif";
 
                 let sectionY = y + 88;
                 section.lines.forEach((line) => {
-                    sectionY = wrapCanvasText(context, line, 118, sectionY, 844, 34, "#f1e1be");
+                    sectionY = wrapCanvasText(context, line, 88, sectionY, 904, 34, "#f1e1be");
                 });
-                y += section.lines.length * 38 + 116;
+                y = sectionY + 28;
             });
 
             context.font = "500 22px 'Plus Jakarta Sans', sans-serif";
@@ -1471,7 +1654,7 @@
             setActionStatus(statusId, successMessage);
         }
 
-        function downloadPetuangCard() {
+        async function downloadPetuangCard() {
             if (!latestPetuangData) {
                 setActionStatus("resultStatus", "Belum ada hasil petuang untuk diunduh.");
                 return;
@@ -1510,43 +1693,51 @@
                 }
             });
 
-            const canvas = renderVisualCard({
-                title: latestPetuangData.title,
-                badge: latestPetuangData.dominantTerm,
-                subtitle: latestPetuangData.introText,
-                sections
-            });
+            try {
+                const canvas = await renderVisualCard({
+                    title: latestPetuangData.title,
+                    badge: latestPetuangData.dominantTerm,
+                    subtitle: latestPetuangData.introText,
+                    sections
+                });
 
-            triggerCanvasDownload(canvas, "petuang-kejawen-card.png", "resultStatus", "Kartu petuang berhasil diunduh.");
+                triggerCanvasDownload(canvas, "petuang-kejawen-card.png", "resultStatus", "Kartu petuang berhasil diunduh.");
+            } catch (error) {
+                setActionStatus("resultStatus", "Background kartu gagal dimuat, jadi unduhan belum bisa dibuat.");
+            }
         }
 
-        function downloadHoroscopeCard() {
+        async function downloadHoroscopeCard() {
             if (!latestHoroscopeData) {
                 setActionStatus("horoscopeStatus", "Belum ada sorotan horoskop untuk diunduh.");
                 return;
             }
 
-            const canvas = renderVisualCard({
-                title: `Horoskop ${latestHoroscopeData.date}`,
-                badge: "Sorotan Harian",
-                subtitle: latestHoroscopeData.summary,
-                sections: latestHoroscopeData.entries.map((entry) => ({
-                    heading: `${entry.profile.name} (${entry.profile.range})`,
-                    lines: [
-                        `Power Move: ${entry.focus}`,
-                        `Love Meter: ${entry.loveScore}/100`,
-                        `Cuan Meter: ${entry.moneyScore}/100`,
-                        `Tenaga: ${entry.energyScore}/100`,
-                        `Percintaan: ${entry.loveLine}`,
-                        `Keuangan: ${entry.financeLine}`,
-                        `Energi: ${entry.energyLine}. ${entry.timing}`,
-                        `Sosial dan tips: ${entry.socialMode}`,
-                        `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}`
-                    ]
-                }))
-            });
+            try {
+                const canvas = await renderVisualCard({
+                    title: `Horoskop ${latestHoroscopeData.date}`,
+                    badge: "Sorotan Harian",
+                    subtitle: latestHoroscopeData.summary,
+                    sections: latestHoroscopeData.entries.map((entry) => ({
+                        heading: `${entry.profile.name} (${entry.profile.range})`,
+                        lines: [
+                            `Power Move: ${entry.focus}`,
+                            `Love Meter: ${entry.loveScore}/100`,
+                            `Cuan Meter: ${entry.moneyScore}/100`,
+                            `Tenaga: ${entry.energyScore}/100`,
+                            `Percintaan: ${entry.loveLine}`,
+                            `Keuangan: ${entry.financeLine}`,
+                            `Energi: ${entry.energyLine}. ${entry.timing}`,
+                            `Sosial dan tips: ${entry.socialMode}`,
+                            `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}`
+                        ]
+                    }))
+                });
 
-            triggerCanvasDownload(canvas, "horoscope-kejawen-card.png", "horoscopeStatus", "Kartu horoskop berhasil diunduh.");
+                triggerCanvasDownload(canvas, "horoscope-kejawen-card.png", "horoscopeStatus", "Kartu horoskop berhasil diunduh.");
+            } catch (error) {
+                setActionStatus("horoscopeStatus", "Background kartu gagal dimuat, jadi unduhan belum bisa dibuat.");
+            }
         }
 
         function setupAmbientAutoplay() {
