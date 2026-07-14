@@ -1541,6 +1541,18 @@
             return getZodiacDefaultNoteLines(entry).join(" | ");
         }
 
+        function getZodiacDefaultNoteCardLines(entry) {
+            const lines = getZodiacDefaultNoteLines(entry);
+            if (!lines.length) {
+                return [];
+            }
+
+            return [
+                "Note default zodiac:",
+                ...lines.map((line) => `- ${line}`)
+            ];
+        }
+
         function buildHoroscopeCard(entry) {
             return `
                 <article class="horoscope-card">
@@ -1666,6 +1678,28 @@
             return currentY;
         }
 
+        function measureWrappedTextHeight(context, text, maxWidth, lineHeight) {
+            const words = text.split(" ");
+            let line = "";
+            let lineCount = 0;
+
+            words.forEach((word) => {
+                const candidate = line ? `${line} ${word}` : word;
+                if (context.measureText(candidate).width > maxWidth && line) {
+                    lineCount += 1;
+                    line = word;
+                } else {
+                    line = candidate;
+                }
+            });
+
+            if (line) {
+                lineCount += 1;
+            }
+
+            return lineCount * lineHeight;
+        }
+
         function loadCardBackgroundImage() {
             if (!cardBackgroundImagePromise) {
                 cardBackgroundImagePromise = new Promise((resolve, reject) => {
@@ -1679,10 +1713,45 @@
             return cardBackgroundImagePromise;
         }
 
+        function measureVisualCardHeight(context, options) {
+            let y = 110;
+            context.font = "700 28px 'Plus Jakarta Sans', sans-serif";
+            y += 62;
+            context.font = "700 58px 'Cormorant Garamond', serif";
+            y += measureWrappedTextHeight(context, options.title, 900, 66);
+
+            if (options.badge) {
+                y += 96;
+            }
+
+            context.font = "500 28px 'Plus Jakarta Sans', sans-serif";
+            y += measureWrappedTextHeight(context, options.subtitle, 900, 42);
+            y += 28;
+
+            options.sections.forEach((section) => {
+                context.font = "700 30px 'Plus Jakarta Sans', sans-serif";
+                y += 44;
+                context.font = "500 24px 'Plus Jakarta Sans', sans-serif";
+                y += 44;
+                section.lines.forEach((line) => {
+                    y += measureWrappedTextHeight(context, line, 904, 34);
+                });
+                y += 28;
+            });
+
+            return y + 120;
+        }
+
         async function renderVisualCard(options) {
+            const measurementCanvas = document.createElement("canvas");
+            measurementCanvas.width = 1080;
+            measurementCanvas.height = 1350;
+            const measurementContext = measurementCanvas.getContext("2d");
+            const measuredHeight = measureVisualCardHeight(measurementContext, options);
+
             const canvas = document.createElement("canvas");
             canvas.width = 1080;
-            canvas.height = 1350;
+            canvas.height = Math.max(1350, measuredHeight);
             const context = canvas.getContext("2d");
             const backgroundImage = await loadCardBackgroundImage();
             context.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
@@ -1814,21 +1883,25 @@
 
             try {
                 const canvas = await renderVisualCard({
-                    title: `Horoskop ${latestHoroscopeData.date}`,
-                    badge: "Sorotan Harian",
+                    title: latestHoroscopeData.mode === "all"
+                        ? `Horoskop Semua Zodiac - ${latestHoroscopeData.date}`
+                        : `Horoskop ${latestHoroscopeData.entries[0].profile.name} - ${latestHoroscopeData.date}`,
+                    badge: latestHoroscopeData.mode === "all" ? "Semua Zodiac" : "Mode Personal",
                     subtitle: latestHoroscopeData.summary,
                     sections: latestHoroscopeData.entries.map((entry) => ({
                         heading: `${entry.profile.name} (${entry.profile.range})`,
                         lines: [
-                            `Power Move: ${entry.focus}`,
+                            `Vibe ${entry.weekday}: ${getHoroscopeVibeText(entry)}`,
+                            `Power Move: ${getHoroscopePowerMoveText(entry)}`,
                             `Love Meter: ${entry.loveScore}/100`,
                             `Cuan Meter: ${entry.moneyScore}/100`,
                             `Tenaga: ${entry.energyScore}/100`,
-                            `Percintaan: ${entry.loveLine}`,
-                            `Keuangan: ${entry.financeLine}`,
-                            `Energi: ${entry.energyLine}. ${entry.timing}`,
-                            `Sosial dan tips: ${entry.socialMode}`,
-                            `Catatan receh semesta: ${entry.chaosLine}. Bonus warning: ${entry.warning}`
+                            `Percintaan: ${getHoroscopeLoveText(entry)}`,
+                            `Keuangan: ${getHoroscopeFinanceText(entry)}`,
+                            `Energi: ${getHoroscopeEnergyText(entry)}`,
+                            `Sosial dan tips: ${getHoroscopeSocialText(entry)}`,
+                            `Catatan receh semesta: ${getHoroscopeWarningText(entry)}`,
+                            ...getZodiacDefaultNoteCardLines(entry)
                         ]
                     }))
                 });
