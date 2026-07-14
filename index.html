@@ -830,6 +830,81 @@
             }
         };
 
+        const zodiacDefaultNotes = {
+            Aries: {
+                redFlag: "Impulsif, maunya menang sendiri, cemburuan, dan gampang marah.",
+                positive: "Jujur, to the point, dan gak main belakang.",
+                loveStyle: "Cepat naksir, cepat bosen, tapi kalau sudah cinta bisa setia pol.",
+                innerState: "\"I'm fine,\" padahal di kepala sudah jalan 100 skenario perang."
+            },
+            Taurus: {
+                redFlag: "Keras kepala, posesif, gak mau ngalah, dan cenderung dendaman.",
+                positive: "Setia, stabil, bisa diandelin, dan gak plin-plan.",
+                loveStyle: "Sensual, suka rasa nyaman, dan kalau sudah cinta loyal banget.",
+                innerState: "\"Gue gapapa kok,\" padahal di dalem sudah ngebatin tiga hari."
+            },
+            Gemini: {
+                redFlag: "Plin-plan, suka ghosting, banyak alasan, dan susah fokus.",
+                positive: "Pinter ngobrol, seru, dan gak ngebosenin.",
+                loveStyle: "Flirty, suka stimulasi otak, dan gampang kabur kalau sudah bosen.",
+                innerState: "\"Lagi sibuk,\" padahal lagi overthinking di kasur."
+            },
+            Cancer: {
+                redFlag: "Baperan, manipulatif pakai nangis, nempel, dan suka ungkit masa lalu.",
+                positive: "Penyayang, perhatian, tulus, dan vibes-nya rumah banget.",
+                loveStyle: "Butuh rasa aman dulu, tapi kalau sudah cinta jadi ngemong dan setia parah.",
+                innerState: "\"Aku gak kenapa-kenapa,\" sambil nangis di kamar."
+            },
+            Leo: {
+                redFlag: "Drama, haus validasi, gengsi tinggi, dan maunya dipuja.",
+                positive: "Dermawan, loyal, bikin orang semangat, dan punya jiwa pemimpin.",
+                loveStyle: "Suka dikejar dan dipuji, tapi kalau sudah cinta jadi romantis plus royal.",
+                innerState: "\"Terserah,\" padahal nunggu kamu bujuk satu jam."
+            },
+            Virgo: {
+                redFlag: "Perfeksionis, tukang kritik, overthinking, dan susah percaya orang.",
+                positive: "Pekerja keras, detail, dan tulus nolongin orang.",
+                loveStyle: "Kelihatan dingin di awal, tapi kalau sudah trust jadi perhatian sampai detail kecil.",
+                innerState: "\"Aku cuma mau semuanya sempurna,\" padahal capek sendiri."
+            },
+            Libra: {
+                redFlag: "Susah ambil keputusan, people pleaser, takut konflik, dan gampang goyah.",
+                positive: "Diplomatis, enak diajak vibe, dan jago bikin suasana nyaman.",
+                loveStyle: "Flirty, suka hubungan estetik, dan paling senang kalau disayang balik.",
+                innerState: "\"Aku gapapa kok,\" padahal galau sambil nanya ke 10 teman."
+            },
+            Scorpio: {
+                redFlag: "Pendendam, posesif, cemburu, misterius, dan suka ngetes orang.",
+                positive: "Setia, dalam, protektif, dan kalau sayang beneran total.",
+                loveStyle: "Intens, obsesif, butuh koneksi batin plus fisik, dan cinta habis-habisan.",
+                innerState: "\"Aku baik-baik aja,\" padahal lagi nyusun rencana balas dendam."
+            },
+            Sagittarius: {
+                redFlag: "Blak-blakan nyakitin, susah komitmen, kabur kalau dikekang, dan kurang peka.",
+                positive: "Jujur, bebas, optimis, dan seru diajak jalan.",
+                loveStyle: "Gairah tinggi, suka hal baru, dan bisa setia kalau dikasih kebebasan.",
+                innerState: "\"Chill aja kali,\" padahal lagi kabur dari tanggung jawab."
+            },
+            Capricorn: {
+                redFlag: "Dingin, workaholic, kaku, susah buka hati, dan sering keliatan matre.",
+                positive: "Bertanggung jawab, ambisius, dan bisa jadi sandaran.",
+                loveStyle: "Jarang nunjukin, tapi kalau sudah cinta arahnya serius dan dibuktiin lewat aksi.",
+                innerState: "\"Aku sibuk,\" padahal lagi kewalahan tapi gak mau ngeluh."
+            },
+            Aquarius: {
+                redFlag: "Cuek, detached, dingin, susah ditebak, dan gak terlalu peka perasaan.",
+                positive: "Orisinal, pinter, peduli kemanusiaan, dan gak nge-judge.",
+                loveStyle: "Suka eksperimen, butuh kebebasan, dan paling nyaman kalau pasangan juga jadi teman diskusi.",
+                innerState: "\"Gue fine,\" padahal sudah disconnect dari dunia."
+            },
+            Pisces: {
+                redFlag: "Baperan, gampang lari ke dunia khayal, susah bilang tidak, dan sering jadi korban.",
+                positive: "Empatinya tinggi, artistik, intuitif, dan vibes-nya penyembuh.",
+                loveStyle: "Romantis, suka dimanja, dan kalau cinta ngasih seluruh hati plus jiwa.",
+                innerState: "\"Aku capek jadi orang kuat,\" sambil dengerin lagu galau."
+            }
+        };
+
         const termExplanations = {
             Sri: {
                 id: "<strong>Makna utama:</strong> Kecukupan dan ketenangan.<br><br>Orang yang berada di posisi Sri biasanya tidak hidup berlebihan, tetapi kebutuhannya selalu tercukupi. Rezekinya datang sesuai kebutuhan, sehingga jarang mengalami kekurangan yang berat.<br><br><strong>Ciri-ciri:</strong><br>Keuangan cukup dan stabil.<br>Jika ada kebutuhan baru, biasanya harus mengurangi atau menunda kebutuhan lain.<br>Tidak mudah kaya mendadak, tetapi juga tidak mudah jatuh miskin.<br>Hidup cenderung tenang, damai, dan sederhana.<br><br><strong>Inti Sri:</strong><br>\"Tidak berlimpah, tetapi selalu cukup.\""
@@ -1408,7 +1483,8 @@
                     `Keuangan: ${getHoroscopeFinanceText(entry)}`,
                     `Energi: ${getHoroscopeEnergyText(entry)}`,
                     `Sosial dan tips: ${getHoroscopeSocialText(entry)}`,
-                    `Catatan receh semesta: ${getHoroscopeWarningText(entry)}`
+                    `Catatan receh semesta: ${getHoroscopeWarningText(entry)}`,
+                    `Note default zodiac: ${getZodiacDefaultNoteText(entry)}`
                 ]),
                 "",
                 "Sumber: https://numerologi-nama.pages.dev"
@@ -1443,6 +1519,28 @@
             return entry.aiWarning || `${entry.chaosLine}. Bonus warning: ${entry.warning}. ${entry.destinyHint}`;
         }
 
+        function getZodiacDefaultNoteLines(entry) {
+            const note = zodiacDefaultNotes[entry.profile.name];
+            if (!note) {
+                return [];
+            }
+
+            return [
+                `Red flag ${entry.profile.name}: ${note.redFlag}`,
+                `Sisi plus: ${note.positive}`,
+                `Love style: ${note.loveStyle}`,
+                `Catatan default: ${note.innerState}`
+            ];
+        }
+
+        function getZodiacDefaultNoteHtml(entry) {
+            return getZodiacDefaultNoteLines(entry).join("<br>");
+        }
+
+        function getZodiacDefaultNoteText(entry) {
+            return getZodiacDefaultNoteLines(entry).join(" | ");
+        }
+
         function buildHoroscopeCard(entry) {
             return `
                 <article class="horoscope-card">
@@ -1469,6 +1567,7 @@
                     <p><strong>Energi:</strong> ${getHoroscopeEnergyText(entry)}</p>
                     <p><strong>Sosial dan tips:</strong> ${getHoroscopeSocialText(entry)}</p>
                     <p><strong>Catatan receh semesta:</strong> ${getHoroscopeWarningText(entry)}</p>
+                    <p><strong>Note default zodiac:</strong><br>${getZodiacDefaultNoteHtml(entry)}</p>
                 </article>
             `;
         }
